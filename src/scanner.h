@@ -51,14 +51,57 @@ using namespace std;
 enum EToken {
   tDigit=0,                         ///< a digit
   tLetter,                          ///< a letter
+  
+  tString,                          ///< a string
+  
+  tId,                              ///< an identifier
+  tNum,                             ///< a number
+  
+  tBool,                            ///< a boolean value, i.e. true, false.
+  tChar,                            ///< a character value.
+  tConstChar,                       ///< a constant character, i.e. '\t', '\n' and more.
+  tInt,                             ///< an integer value.
+  tComment,                         ///< a single line comment.
+  tWhitespace,                      ///< a whitespace.
+  
+  tType,                            ///< a type
+  
   tPlusMinus,                       ///< '+' or '-'
   tMulDiv,                          ///< '*' or '/'
+  tAnd,                             ///< '&&'
+  tOr,                              ///< '||'
   tRelOp,                           ///< relational operator
   tAssign,                          ///< assignment operator
+  
+  tExclam,                          ///< an exclamination mark
   tSemicolon,                       ///< a semicolon
+  tColon,                           ///< a colon
+  tComma,                           ///< a comma
   tDot,                             ///< a dot
-  tLBrak,                           ///< a left bracket
-  tRBrak,                           ///< a right bracket
+  tLBracketRound,                   ///< a left round bracket '('
+  tRBracketRound,                   ///< a right round bracket ')'
+  tLBrace,                          ///< a left brace '{'
+  tRBrace,                          ///< a right brace '}'
+  tLBracket,                        ///< a left bracket '['
+  tRBracekt,                        ///< a right bracket ']'
+  
+  tModule,                          ///< keyword 'module'
+  tBegin,                           ///< keyword 'begin'
+  tEnd,                             ///< keyword 'end'
+  tTrue,                            ///< keyword 'true',
+  tFalse,                           ///< keyword 'false',
+  tBoolean,                         ///< keyword 'boolean'
+  tCharacter,                       ///< keyword 'character'
+  tInteger,                         ///< keyword 'integer'
+  tIf,                              ///< keyword 'if',
+  tThen,                            ///< keyword 'then',
+  tElse,                            ///< keyword 'else'
+  tWhile,                           ///< keyword 'while'
+  tDo,                              ///< keyword 'do'
+  tReturn,                          ///< keyword 'return'
+  tVar,                             ///< keyword 'var'
+  tProcedure,                       ///< keyword 'procedure'
+  tFunction,                        ///< keyword 'function'
 
   tEOF,                             ///< end of file
   tIOError,                         ///< I/O error
