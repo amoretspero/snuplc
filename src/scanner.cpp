@@ -403,11 +403,11 @@ CToken* CScanner::Scan()
       break;
 
     case '(':
-      token = tLBrak;
+      token = tLBracketRound;
       break;
 
     case ')':
-      token = tRBrak;
+      token = tRBracketRound;
       break;
 
     default:
