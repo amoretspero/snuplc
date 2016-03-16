@@ -67,10 +67,8 @@ char ETokenName[][TOKEN_STRLEN] = {
   
   "tType",                          ///< a type.
   
-  "tPlusMinus",                     ///< '+' or '-'
-  "tMulDiv",                        ///< '*' or '/'
-  "tAnd",                           ///< '&&'
-  "tOr",                            ///< '||'
+  "tTerm",                          ///< '+' or '-' or '||'
+  "tFact",                          ///< '*' or '/' or '&&'
   "tRelOp",                         ///< relational operator, i.e. '=', '#', '<', '<=', '>', '>='
   "tAssign",                        ///< assignment operator, i.e. ':='
   
@@ -132,10 +130,8 @@ char ETokenStr[][TOKEN_STRLEN] = {
   
   "tType (%s)",                     ///< a type.
   
-  "tPlusMinus (%s)",                ///< '+' or '-'
-  "tMulDiv (%s)",                   ///< '*' or '/'
-  "tAnd",                           ///< '&&'
-  "tOr",                            ///< '||'
+  "tTerm (%s)",                     ///< '+' or '-' or '||'
+  "tFact (%s)",                     ///< '*' or '/' or '&&'
   "tRelOp (%s)",                    ///< relational operator
   "tAssign",                        ///< assignment operator
   
@@ -178,8 +174,9 @@ char ETokenStr[][TOKEN_STRLEN] = {
 //------------------------------------------------------------------------------
 // reserved keywords
 //
-pair<const char*, EToken> Keywords[] =
+pair<const char*, EToken> Keywords[1] =
 {
+    {"tModule", tModule}
 };
 
 
@@ -377,21 +374,54 @@ CToken* CScanner::Scan()
         tokval += GetChar();
         token = tAssign;
       }
+      else
+      {
+        token = tColon;
+      }
       break;
 
     case '+':
     case '-':
-      token = tPlusMinus;
+      token = tTerm;
+      break;
+    
+    case '|':
+      if (_in->peek() == '|')
+      {
+        tokval += GetChar();
+        token = tTerm;
+      }
       break;
 
     case '*':
     case '/':
-      token = tMulDiv;
+      token = tFact;
+      break;
+      
+    case '&':
+      if (_in->peek() == '&')
+      {
+        tokval += GetChar();
+        token = tFact;
+      }
       break;
 
     case '=':
     case '#':
       token = tRelOp;
+      break;
+    
+    case '<':
+    case '>':
+      if (_in->peek() == '=')
+      {
+        tokval += GetChar();
+        token = tRelOp;
+      }
+      else
+      {
+        token = tRelOp;
+      }
       break;
 
     case ';':
@@ -401,6 +431,10 @@ CToken* CScanner::Scan()
     case '.':
       token = tDot;
       break;
+      
+    case ',':
+      token = tComma;
+      break;
 
     case '(':
       token = tLBracketRound;
@@ -409,14 +443,65 @@ CToken* CScanner::Scan()
     case ')':
       token = tRBracketRound;
       break;
+    
+    case '{':
+      token = tLBrace;
+      break;
+    
+    case '}':
+      token = tRBrace;
+      break;
+    
+    case '[':
+      token = tLBracket;
+      break;
+    
+    case ']':
+      token = tRBracekt;
+      break;
 
     default:
-      if (('0' <= c) && (c <= '9')) {
-        token = tDigit;
+      if (IsDigit(c)) {
+        while (IsDigit(_in->peek()))
+        {
+          tokval += GetChar();
+        }
+        token = tNum;
       } else
-      if (('a' <= c) && (c <= 'z')) {
-        token = tLetter;
-      } else {
+      if (c == '\'')
+      {
+        tokval = tokval.substr(0, tokval.size() - 1);
+        if (_in->peek() == '\\')
+        {
+          tokval += GetChar();
+          if (IsEscape(_in->peek()))
+          {
+            tokval += GetChar();
+            if (_in->peek() == '\'')
+            {
+              GetChar();
+              token = tConstChar;
+            }
+            else
+            {
+              token = tUndefined;
+            }
+          }
+        }
+        else
+        {
+          if (_in->peek() == '\'')
+          {
+            GetChar();
+            token = tChar;
+          }
+          else
+          {
+            token = tUndefined;
+          }
+        }
+      }
+      else {
         tokval = "invalid character '";
         tokval += c;
         tokval += "'";
@@ -444,4 +529,14 @@ string CScanner::GetChar(int n)
 bool CScanner::IsWhite(char c) const
 {
   return ((c == ' ') || (c == '\n'));
+}
+
+bool CScanner::IsDigit(char c) const
+{
+  return ((c >= '0') && (c <= '9'));
+}
+
+bool CScanner::IsEscape(char c) const
+{
+  return ((c == 'n') || (c == 't') || (c == '0') || (c == '"') || (c == '\'') || (c == '\\'));
 }

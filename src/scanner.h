@@ -66,10 +66,8 @@ enum EToken {
   
   tType,                            ///< a type
   
-  tPlusMinus,                       ///< '+' or '-'
-  tMulDiv,                          ///< '*' or '/'
-  tAnd,                             ///< '&&'
-  tOr,                              ///< '||'
+  tTerm,                            ///< '+' or '-' or '||'
+  tFact,                            ///< '*' or '/' or '&&'
   tRelOp,                           ///< relational operator
   tAssign,                          ///< assignment operator
   
@@ -323,6 +321,20 @@ class CScanner {
     /// @retval true character is white space
     /// @retval false character is not white space
     bool IsWhite(char c) const;
+    
+    /// @brief check if a character is a digit
+    ///
+    /// @param c character
+    /// @retval true character is digit
+    /// @retval false character is not digit
+    bool IsDigit(char c) const;
+    
+    /// @brief check if a character can form escape letter with preceeding "\"
+    ///
+    /// @param c character
+    /// @retval true character can form escape letter
+    /// @retval false character can form escape letter
+    bool IsEscape(char c) const;
 
     /// @}
 
