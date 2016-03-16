@@ -490,6 +490,7 @@ CToken* CScanner::Scan()
         }
         else
         {
+          tokval += GetChar();
           if (_in->peek() == '\'')
           {
             GetChar();
@@ -508,7 +509,6 @@ CToken* CScanner::Scan()
       }
       break;
   }
-
   return NewToken(token, tokval);
 }
 
