@@ -79,8 +79,6 @@ char ETokenName[][TOKEN_STRLEN] = {
   "tDot",                           ///< a dot
   "tLBracketRound",                 ///< a left round bracket '('
   "tRBracketRound",                 ///< a right round bracket ')'
-  "tLBrace",                        ///< a left brace '{'
-  "tRBrace",                        ///< a right brace '}'
   "tLBracket",                      ///< a left bracket '['
   "tRBracket",                      ///< a right bracket ']'
   
@@ -142,8 +140,6 @@ char ETokenStr[][TOKEN_STRLEN] = {
   "tDot",                           ///< a dot
   "tLBracketRound",                 ///< a left round bracket '('
   "tRBracketRound",                 ///< a right round bracket ')'
-  "tLBrace",                        ///< a left brace '{'
-  "tRBrace",                        ///< a right brace '}'
   "tLBracket",                      ///< a left bracket '['
   "tRBracket",                      ///< a right bracket ']'
   
@@ -403,11 +399,10 @@ CToken* CScanner::Scan()
       else
       {
         _in->seekg(-1, _in->cur);
+				break;
       }
     }
   }
-  
-  char temp = '\\\'';
 
   RecordStreamPosition();
 
@@ -521,14 +516,6 @@ CToken* CScanner::Scan()
       token = tRBracketRound;
       break;
     
-    case '{':
-      token = tLBrace;
-      break;
-    
-    case '}':
-      token = tRBrace;
-      break;
-    
     case '[':
       token = tLBracket;
       break;
@@ -567,18 +554,31 @@ CToken* CScanner::Scan()
         }
         else
         {
-          tokval += GetChar();
-          if (_in->peek() == '\'')
-          {
-            tokval = tokval.substr(1, tokval.size() - 1);
-            GetChar();
-            token = tChar;
-          }
-          else
-          {
-            token = tUndefined;
-          }
-        }
+					if (_in->peek() == '\'')
+					{
+						tokval += GetChar();
+						token = tUndefined;
+					}
+					else
+					{
+          	tokval += GetChar();
+          	if (_in->peek() == '\'')
+          	{
+            	tokval = tokval.substr(1, tokval.size() - 1);
+            	GetChar();
+            	token = tChar;
+          	}
+          	else
+          	{
+							while (_in->peek() != '\'' && _in->peek() != EOF)
+							{
+								tokval += GetChar();
+							}
+							GetChar();
+            	token = tUndefined;
+          	}
+        	}
+				}
       }
       else if (c == '\"')
       {

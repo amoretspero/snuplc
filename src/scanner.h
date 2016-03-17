@@ -78,8 +78,6 @@ enum EToken {
   tDot,                             ///< a dot
   tLBracketRound,                   ///< a left round bracket '('
   tRBracketRound,                   ///< a right round bracket ')'
-  tLBrace,                          ///< a left brace '{'
-  tRBrace,                          ///< a right brace '}'
   tLBracket,                        ///< a left bracket '['
   tRBracekt,                        ///< a right bracket ']'
   
