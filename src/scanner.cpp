@@ -174,9 +174,25 @@ char ETokenStr[][TOKEN_STRLEN] = {
 //------------------------------------------------------------------------------
 // reserved keywords
 //
-pair<const char*, EToken> Keywords[1] =
+pair<const char*, EToken> Keywords[17] =
 {
-    {"tModule", tModule}
+    {"module", tModule},
+    {"begin", tBegin},
+    {"end", tEnd},
+    {"true", tTrue},
+    {"false", tFalse},
+    {"boolean", tBoolean},
+    {"character", tCharacter},
+    {"integer", tInteger},
+    {"if", tIf},
+    {"then", tThen},
+    {"else", tElse},
+    {"while", tWhile},
+    {"do", tDo},
+    {"return", tReturn},
+    {"var", tVar},
+    {"procedure", tProcedure},
+    {"function", tFunction}
 };
 
 
@@ -358,6 +374,40 @@ CToken* CScanner::Scan()
   char c;
 
   while (_in->good() && IsWhite(_in->peek())) GetChar();
+  while (_in->peek() == '/')
+  {
+    if (_in->peek() == '/')
+    {
+      _in->seekg(1, _in->cur);
+      if (_in->peek() == '/')
+      {
+        _in->seekg(-1, _in->cur);
+        while (true)
+        {
+          int peek_val = _in->peek();
+          //if (peek_val != '\n' && peek_val != EOF)
+          if (peek_val != '\n' && peek_val != EOF)
+          {
+            GetChar();
+          }
+          else
+          {
+            break;
+          }
+        }
+        while(_in->good() && IsWhite(_in->peek()))
+        {
+          GetChar();
+        }
+      }
+      else
+      {
+        _in->seekg(-1, _in->cur);
+      }
+    }
+  }
+  
+  char temp = '\\\'';
 
   RecordStreamPosition();
 
@@ -367,7 +417,7 @@ CToken* CScanner::Scan()
   c = GetChar();
   tokval = c;
   token = tUndefined;
-
+  
   switch (c) {
     case ':':
       if (_in->peek() == '=') {
@@ -394,9 +444,32 @@ CToken* CScanner::Scan()
       break;
 
     case '*':
-    case '/':
       token = tFact;
       break;
+    case '/':
+      if (_in->peek() == '/')
+      {
+        tokval += GetChar();
+        while (true)
+        {
+          int peek_val = _in->peek();
+          if (peek_val != '\n' && peek_val != EOF)
+          {
+            tokval += GetChar();
+          }
+          else
+          {
+            break;
+          }
+        }
+        token = tComment;
+        break;
+      }
+      else
+      {
+        token = tFact;
+        break;
+      }
       
     case '&':
       if (_in->peek() == '&')
@@ -422,6 +495,10 @@ CToken* CScanner::Scan()
       {
         token = tRelOp;
       }
+      break;
+      
+    case '!':
+      token = tExclam;
       break;
 
     case ';':
@@ -467,12 +544,12 @@ CToken* CScanner::Scan()
           tokval += GetChar();
         }
         token = tNum;
-      } else
-      if (c == '\'')
+      } 
+      else if (c == '\'')
       {
-        tokval = tokval.substr(0, tokval.size() - 1);
         if (_in->peek() == '\\')
         {
+          tokval = tokval.substr(0, tokval.size() - 1);
           tokval += GetChar();
           if (IsEscape(_in->peek()))
           {
@@ -493,6 +570,7 @@ CToken* CScanner::Scan()
           tokval += GetChar();
           if (_in->peek() == '\'')
           {
+            tokval = tokval.substr(1, tokval.size() - 1);
             GetChar();
             token = tChar;
           }
@@ -502,7 +580,53 @@ CToken* CScanner::Scan()
           }
         }
       }
-      else {
+      else if (c == '\"')
+      {
+        tokval = tokval.substr(0, tokval.size() - 1);
+        while (true)
+        {
+          int peek_val = _in->peek();
+          if (peek_val != EOF && peek_val != '\"')
+          {
+            tokval += GetChar();
+          }
+          else
+          {
+            break;
+          }
+        }
+        if (_in->peek() == EOF)
+        {
+          tokval = "Unexpected end of stream";
+        }
+        else
+        {
+          GetChar();
+          token = tString;
+        }
+      }
+      else if (IsLetter(c))
+      {
+          while (true)
+          {
+              int peek_val = _in->peek();
+              if (IsDigit(peek_val) || IsLetter(peek_val))
+              {
+                  tokval += GetChar();
+              }
+              else
+              {
+                  break;
+              }
+          }
+          token = tId;
+          if (keywords.find(tokval) != keywords.end())
+          {
+              token = keywords.find(tokval)->second;
+          }
+      }
+      else 
+      {
         tokval = "invalid character '";
         tokval += c;
         tokval += "'";
@@ -534,6 +658,11 @@ bool CScanner::IsWhite(char c) const
 bool CScanner::IsDigit(char c) const
 {
   return ((c >= '0') && (c <= '9'));
+}
+
+bool CScanner::IsLetter(char c) const
+{
+  return (((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z')) || (c == '_'));
 }
 
 bool CScanner::IsEscape(char c) const

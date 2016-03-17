@@ -7,20 +7,22 @@ OBJ_DIR=obj
 DEPS=scanner.h
 SCANNER=scanner.cpp
 
+TARGET=test_scanner.exe
+
 OBJS=$(OBJ_DIR)/scanner.obj $(OBJ_DIR)/test_scanner.obj
 
-all: test_scanner.exe
+all: $(TARGET)
 
-obj\scanner.obj: src/scanner.cpp src/scanner.h
+$(OBJ_DIR)\scanner.obj: $(SRC_DIR)/scanner.cpp $(SRC_DIR)/scanner.h
     $(CC) $(FLAGS) /Fo$@ /c src/scanner.cpp
     
-obj\test_scanner.obj: src/test_scanner.cpp
+$(OBJ_DIR)\test_scanner.obj: $(SRC_DIR)/test_scanner.cpp
     $(CC) $(FLAGS) /Fo$@ /c src/test_scanner.cpp
 
-test_scanner.exe: $(OBJS) $(SRC_DIR)/$(DEPS)
+$(TARGET): $(OBJS) $(SRC_DIR)/$(DEPS)
     $(CC) $(FLAGS) /Fe: $@ $(OBJS)
 
 clean:
-    del obj\scanner.obj
-    del obj\test_scanner.obj
-    del test_scanner.exe
+    del $(OBJ_DIR)\scanner.obj
+    del $(OBJ_DIR)\test_scanner.obj
+    del $(TARGET)

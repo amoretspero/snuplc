@@ -329,6 +329,13 @@ class CScanner {
     /// @retval false character is not digit
     bool IsDigit(char c) const;
     
+    /// @brief check if a character is a letter
+    ///
+    /// @param c character
+    /// @retval true character is letter
+    /// @retval false character is not letter
+    bool IsLetter(char c) const;
+    
     /// @brief check if a character can form escape letter with preceeding "\"
     ///
     /// @param c character
