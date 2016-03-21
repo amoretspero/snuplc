@@ -517,9 +517,9 @@ CToken* CScanner::Scan()
         }
         token = tNum;
       } 
-      else if (c == '\'') // Possiblility of character.
+      else if (c == '\'') // Possibility of character.
       {
-        if (_in->peek() == '\\') // Possiblility of escape character.
+        if (_in->peek() == '\\') // Possibility of escape character.
         {
           tokval = tokval.substr(0, tokval.size() - 1); // Remove leading single quote.
           tokval += GetChar(); // Get backslash.
@@ -591,7 +591,7 @@ CToken* CScanner::Scan()
             token = tUndefined;
           }
         }
-        else if (IsAscii(_in->peek())) // Possiblility of ASCIIchar ranging from 32 to 126.
+        else if (IsAscii(_in->peek())) // Possibility of ASCIIchar ranging from 32 to 126.
         {
           tokval = tokval.substr(0, tokval.size() - 1); // Remove leading single quote.
 					if (_in->peek() == '\'') // Empty character case.
@@ -599,7 +599,7 @@ CToken* CScanner::Scan()
 						GetChar();
 						token = tUndefined;
 					}
-					else if (IsAscii(_in->peek())) // Possilibity of valid character.
+					else if (IsAscii(_in->peek())) // Possibility of valid character.
 					{
           	tokval += GetChar();
             
@@ -636,7 +636,7 @@ CToken* CScanner::Scan()
             }
           }
 				}
-        /*else if (IsCharacter(_in->peek())) // Possibility of escape characters, not 
+        /*else if (IsCharacter(_in->peek()))
         {
           tokval = tokval.substr(0, tokval.size() - 1);
           if (_in->peek() == '\n')
@@ -682,33 +682,38 @@ CToken* CScanner::Scan()
             GetChar();
           }
         }*/
-        else
+        else // Case when invalid characters.
         {
-          tokval = tokval.substr(0, tokval.size() - 1);
-          token = tUndefined;
-          while (_in->peek() != '\'' && _in->peek() != EOF)
+          tokval = tokval.substr(0, tokval.size() - 1); // Remove leading single quote.
+          token = tUndefined; // Set token to tUndefined.
+          while (_in->peek() != '\'' && _in->peek() != EOF) // Get characters until reached EOF or closing single quote.
           {
             tokval += GetChar();
           }
-          if (_in->peek() == '\'')
+          if (_in->peek() == '\'') // If reached closing single quote, remove it.
           {
             GetChar();
           }
         }
       }
-      else if (c == '\"')
+      else if (c == '\"') // Possibility of string.
       {
-        tokval = tokval.substr(0, tokval.size() - 1);
+        tokval = tokval.substr(0, tokval.size() - 1); // Remove leading double quote.
         while (true)
         {
           int peek_val = _in->peek();
-          if (peek_val != EOF && peek_val != '\"' && IsCharacter(peek_val))
+          
+          // Check if next character is not EOF, closing double quote and is a character.
+          if (peek_val != EOF && peek_val != '\"' && IsCharacter(peek_val)) // Case when next character is not EOF, closing double quote, and is a character.
           {
-            if (peek_val == '\\')
+            if (peek_val == '\\') // Possibility of escape character.
             {
               _in->seekg(1, _in->cur);
-              if (IsEscape(_in->peek()))
+              
+              // Check 2 characters ahead to see if it is valid escape character.
+              if (IsEscape(_in->peek())) // Case when valid escape character.
               {
+                // Set steram pointer to original location and read characters.
                 _in->seekg(-1, _in->cur);
                 GetChar();
                 if (_in->peek() == 'n')
@@ -737,54 +742,55 @@ CToken* CScanner::Scan()
                 }
                 GetChar();
               }
-              else
+              else // Case when invalid escape character. Scanner will just scan as it is.
               {
                 _in->seekg(-1, _in->cur);
                 tokval += GetChar();
               }
             }
-            else
+            else // Case when not an escape character.
             {
               tokval += GetChar();
             }
           }
-          else
+          else // Meet an EOF or double quote or not a character.
           {
             break;
           }
         }
-        if (_in->peek() == EOF)
+        
+        if (_in->peek() == EOF) // Case of not closed string meets End of File.
         {
           tokval = "Unexpected end of stream";
         }
-				else if (!IsCharacter(_in->peek()))
+				else if (!IsCharacter(_in->peek())) // Case when not a character of SnuPL/1 is met.
 				{
 					token = tUndefined;
-          while (_in->peek() != EOF && _in->peek() != '\"')
+          while (_in->peek() != EOF && _in->peek() != '\"') // Reads until EOF or closing double quote is met.
           {
             tokval += GetChar();
           }
-          if (_in->peek() != EOF)
+          if (_in->peek() != EOF) // Case when closing double quote is met.
           {
-            GetChar();
+            GetChar(); // Removes closing double quote and prepare to start scanning again.
           }
-          else
+          else // Case when EOF is met.
           {
             tokval = "Unexpected end of stream";
           }
-				}	
-        else
+				}
+        else // Case when closing double quote is appropriately met.
         {
-          GetChar();
-          token = tString;
+          GetChar(); // Remove closing double quote.
+          token = tString; // Set token.
         }
       }
-      else if (IsLetter(c))
+      else if (IsLetter(c)) // Possibility of identifier.
       {
           while (true)
           {
               int peek_val = _in->peek();
-              if (IsDigit(peek_val) || IsLetter(peek_val))
+              if (IsDigit(peek_val) || IsLetter(peek_val)) // Read until character that should not compose an identifier is met.
               {
                   tokval += GetChar();
               }
@@ -793,13 +799,13 @@ CToken* CScanner::Scan()
                   break;
               }
           }
-          token = tId;
-          if (keywords.find(tokval) != keywords.end())
+          token = tId; // Set token.
+          if (keywords.find(tokval) != keywords.end()) // Check if found identifier is a reserved keyword. If so, set token as that keyword.
           {
               token = keywords.find(tokval)->second;
           }
       }
-      else 
+      else // No token condition is met.
       {
         tokval = "invalid character ";
         tokval += c;
