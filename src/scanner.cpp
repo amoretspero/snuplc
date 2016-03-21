@@ -50,22 +50,12 @@ using namespace std;
 #define TOKEN_STRLEN 49
 
 char ETokenName[][TOKEN_STRLEN] = {
-  "tDigit",                         ///< a digit
-  "tLetter",                        ///< a letter
-  
   "tString",                        ///< a string
   
   "tId",                            ///< an identifier
   "tNum",                           ///< a number.
   
-  "tBool",                          ///< a boolean value, i.e. true, false.
-  "tChar",                          ///< a character value.
   "tConstChar",                     ///< a constant character, i.e. '\t', '\n' and more.
-  "tInt",                           ///< an integer value.
-  "tComment",                       ///< a single line comment.
-  "tWhitespace",                    ///< a whitespace.
-  
-  "tType",                          ///< a type.
   
   "tTerm",                          ///< '+' or '-' or '||'
   "tFact",                          ///< '*' or '/' or '&&'
@@ -88,7 +78,7 @@ char ETokenName[][TOKEN_STRLEN] = {
   "tTrue",                          ///< keyword 'true',
   "tFalse",                         ///< keyword 'false',
   "tBoolean",                       ///< keyword 'boolean'
-  "tCharacter",                     ///< keyword 'character'
+  "tChar",                     ///< keyword 'character'
   "tInteger",                       ///< keyword 'integer'
   "tIf",                            ///< keyword 'if',
   "tThen",                          ///< keyword 'then',
@@ -111,20 +101,12 @@ char ETokenName[][TOKEN_STRLEN] = {
 //
 
 char ETokenStr[][TOKEN_STRLEN] = {
-  "tDigit (%s)",                    ///< a digit
-  "tLetter (%s)",                   ///< a letter
-  
   "tString (%s)",                   ///< a string
   
   "tId (%s)",                       ///< an identifier
   "tNum (%s)",                      ///< a number.
   
-  "tBool (%s)",                     ///< a boolean value, i.e. true, false.
-  "tChar (%s)",                     ///< a character value.
   "tConstChar (%s)",                ///< a constant character, i.e. '\t', '\n' and more.
-  "tInt (%s)",                      ///< an integer value.
-  "tComment (%s)",                  ///< a single line comment.
-  "tWhitespace (%s)",               ///< a whitespace.
   
   "tType (%s)",                     ///< a type.
   
@@ -149,7 +131,7 @@ char ETokenStr[][TOKEN_STRLEN] = {
   "tTrue",                          ///< keyword 'true',
   "tFalse",                         ///< keyword 'false',
   "tBoolean",                       ///< keyword 'boolean'
-  "tCharacter",                     ///< keyword 'character'
+  "tChar",                     ///< keyword 'character'
   "tInteger",                       ///< keyword 'integer'
   "tIf",                            ///< keyword 'if',
   "tThen",                          ///< keyword 'then',
@@ -178,7 +160,7 @@ pair<const char*, EToken> Keywords[17] =
     {"true", tTrue},
     {"false", tFalse},
     {"boolean", tBoolean},
-    {"character", tCharacter},
+    {"char", tChar},
     {"integer", tInteger},
     {"if", tIf},
     {"then", tThen},
@@ -457,7 +439,7 @@ CToken* CScanner::Scan()
             break;
           }
         }
-        token = tComment;
+        //token = tComment;
         break;
       }
       else
@@ -536,14 +518,14 @@ CToken* CScanner::Scan()
       {
         if (_in->peek() == '\\')
         {
-          tokval = tokval.substr(0, tokval.size() - 1);
+          //tokval = tokval.substr(0, tokval.size() - 1);
           tokval += GetChar();
           if (IsEscape(_in->peek()))
           {
             tokval += GetChar();
             if (_in->peek() == '\'')
             {
-              GetChar();
+              tokval += GetChar();
               token = tConstChar;
             }
             else
@@ -564,8 +546,8 @@ CToken* CScanner::Scan()
           	tokval += GetChar();
           	if (_in->peek() == '\'')
           	{
-            	tokval = tokval.substr(1, tokval.size() - 1);
-            	GetChar();
+            	//tokval = tokval.substr(1, tokval.size() - 1);
+            	tokval += GetChar();
             	token = tChar;
           	}
           	else
@@ -574,7 +556,7 @@ CToken* CScanner::Scan()
 							{
 								tokval += GetChar();
 							}
-							GetChar();
+							tokval += GetChar();
             	token = tUndefined;
           	}
         	}
@@ -582,11 +564,11 @@ CToken* CScanner::Scan()
       }
       else if (c == '\"')
       {
-        tokval = tokval.substr(0, tokval.size() - 1);
+        //tokval = tokval.substr(0, tokval.size() - 1);
         while (true)
         {
           int peek_val = _in->peek();
-          if (peek_val != EOF && peek_val != '\"')
+          if (peek_val != EOF && peek_val != '\"' && IsAscii(peek_val))
           {
             tokval += GetChar();
           }
@@ -599,9 +581,13 @@ CToken* CScanner::Scan()
         {
           tokval = "Unexpected end of stream";
         }
+				else if (!IsAscii(_in->peek()))
+				{
+					token = tUndefined;
+				}	
         else
         {
-          GetChar();
+          tokval += GetChar();
           token = tString;
         }
       }
@@ -668,4 +654,9 @@ bool CScanner::IsLetter(char c) const
 bool CScanner::IsEscape(char c) const
 {
   return ((c == 'n') || (c == 't') || (c == '0') || (c == '"') || (c == '\'') || (c == '\\'));
+}
+
+bool CScanner::IsAscii(char c) const
+{
+	return (c >= 32 && c <= 126);
 }

@@ -49,20 +49,12 @@ using namespace std;
 /// each member of this enumeration represents a token in SnuPL/0
 ///
 enum EToken {
-  tDigit=0,                         ///< a digit
-  tLetter,                          ///< a letter
-  
   tString,                          ///< a string
   
   tId,                              ///< an identifier
   tNum,                             ///< a number
   
-  tBool,                            ///< a boolean value, i.e. true, false.
-  tChar,                            ///< a character value.
   tConstChar,                       ///< a constant character, i.e. '\t', '\n' and more.
-  tInt,                             ///< an integer value.
-  tComment,                         ///< a single line comment.
-  tWhitespace,                      ///< a whitespace.
   
   tType,                            ///< a type
   
@@ -87,7 +79,7 @@ enum EToken {
   tTrue,                            ///< keyword 'true',
   tFalse,                           ///< keyword 'false',
   tBoolean,                         ///< keyword 'boolean'
-  tCharacter,                       ///< keyword 'character'
+  tChar,                       ///< keyword 'character'
   tInteger,                         ///< keyword 'integer'
   tIf,                              ///< keyword 'if',
   tThen,                            ///< keyword 'then',
@@ -340,6 +332,13 @@ class CScanner {
     /// @retval true character can form escape letter
     /// @retval false character can form escape letter
     bool IsEscape(char c) const;
+
+		/// @brief check if a character is an ascii character (32 - 126)
+		///
+		/// @param c character
+		/// @retval true character is an ascii character
+		/// @retval false character is not an ascii character
+		bool IsAscii(char c) const;
 
     /// @}
 
