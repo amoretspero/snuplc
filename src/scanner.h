@@ -54,6 +54,7 @@ enum EToken {
   tId,                              ///< an identifier
   tNum,                             ///< a number
   
+  tCharacter,                       ///< a character, for example, 'a', 'b', and more.
   tConstChar,                       ///< a constant character, i.e. '\t', '\n' and more.
   
   tType,                            ///< a type
@@ -339,6 +340,13 @@ class CScanner {
 		/// @retval true character is an ascii character
 		/// @retval false character is not an ascii character
 		bool IsAscii(char c) const;
+    
+    /// @brief check if a character is 'character' of SnuPL/1 language definition
+    ///
+    /// @param c character
+    /// @retval true character is 'character' of SnuPL/1 language definition
+    /// @retval false character is not 'character' of SnuPL/1 language definition
+    bool IsCharacter(char c) const;
 
     /// @}
 

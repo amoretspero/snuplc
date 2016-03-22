@@ -55,6 +55,7 @@ char ETokenName[][TOKEN_STRLEN] = {
   "tId",                            ///< an identifier
   "tNum",                           ///< a number.
   
+  "tCharacter",                     ///< a character, for example, 'a', 'b', and more.
   "tConstChar",                     ///< a constant character, i.e. '\t', '\n' and more.
   
   "tTerm",                          ///< '+' or '-' or '||'
@@ -78,7 +79,7 @@ char ETokenName[][TOKEN_STRLEN] = {
   "tTrue",                          ///< keyword 'true',
   "tFalse",                         ///< keyword 'false',
   "tBoolean",                       ///< keyword 'boolean'
-  "tChar",                     ///< keyword 'character'
+  "tChar",                          ///< keyword 'character'
   "tInteger",                       ///< keyword 'integer'
   "tIf",                            ///< keyword 'if',
   "tThen",                          ///< keyword 'then',
@@ -106,6 +107,7 @@ char ETokenStr[][TOKEN_STRLEN] = {
   "tId (%s)",                       ///< an identifier
   "tNum (%s)",                      ///< a number.
   
+  "tCharacter (%s)",                ///< a character, for example, 'a', 'b, and more.
   "tConstChar (%s)",                ///< a constant character, i.e. '\t', '\n' and more.
   
   "tType (%s)",                     ///< a type.
@@ -507,70 +509,244 @@ CToken* CScanner::Scan()
       break;
 
     default:
-      if (IsDigit(c)) {
+      if (IsDigit(c)) // Number case.
+      {
         while (IsDigit(_in->peek()))
         {
           tokval += GetChar();
         }
         token = tNum;
       } 
-      else if (c == '\'')
+      else if (c == '\'') // Possiblility of character.
       {
-        if (_in->peek() == '\\')
+        if (_in->peek() == '\\') // Possiblility of escape character.
         {
-          //tokval = tokval.substr(0, tokval.size() - 1);
-          tokval += GetChar();
-          if (IsEscape(_in->peek()))
+          tokval = tokval.substr(0, tokval.size() - 1); // Remove leading single quote.
+          tokval += GetChar(); // Get backslash.
+          
+          // Check if valid escape character.
+          if (IsEscape(_in->peek())) // Case when valid escape character.
           {
             tokval += GetChar();
-            if (_in->peek() == '\'')
+            
+            // Check if single quote is appropriately closed
+            if (_in->peek() == '\'') // Case when appropriately closed.
             {
-              tokval += GetChar();
+              GetChar();
               token = tConstChar;
+              
+              // Set token values.
+              if (tokval == "\\n")
+              {
+                tokval = "\n";
+              }
+              else if (tokval == "\\t")
+              {
+                tokval = "\t";
+              }
+              else if (tokval == "\\0")
+              {
+                tokval = "\0";
+              }
+              else if (tokval == "\\\"")
+              {
+                tokval = "\"";
+              }
+              else if (tokval == "\\'")
+              {
+                tokval = "'";
+              }
+              else
+              {
+                tokval = "\\";
+              }
+              
             }
-            else
+            else // Case when not closed appropriately.
             {
               token = tUndefined;
+              
+              // Get characters until the next character(_in->peek()) is EOF or closing single quote.
+              while (_in->peek() != '\'' && _in->peek() != EOF)
+              {
+                tokval += GetChar();
+              }
+              if (_in->peek() == '\'') // If single quote is closed, does not include it in tokval.
+              {
+                GetChar();
+              }
             }
           }
+          else // Case when not a valid escape character.
+          {
+            // Get characters until the next character(_in->peek()) is EOF or closing single quote.
+            while (_in->peek() != EOF && _in->peek() != '\'')
+            {
+              tokval += GetChar();
+            }
+            if (_in->peek() != EOF)
+            {
+              GetChar();
+            }
+            token = tUndefined;
+          }
         }
-        else
+        else if (IsAscii(_in->peek())) // Possiblility of ASCIIchar ranging from 32 to 126.
         {
-					if (_in->peek() == '\'')
+          tokval = tokval.substr(0, tokval.size() - 1); // Remove leading single quote.
+					if (_in->peek() == '\'') // Empty character case.
 					{
-						tokval += GetChar();
+						GetChar();
 						token = tUndefined;
 					}
-					else
+					else if (IsAscii(_in->peek())) // Possilibity of valid character.
 					{
           	tokval += GetChar();
-          	if (_in->peek() == '\'')
+            
+            // Check if single quote is appropriately closed.
+          	if (_in->peek() == '\'') // Case when single quote is appropriately closed.
           	{
             	//tokval = tokval.substr(1, tokval.size() - 1);
-            	tokval += GetChar();
-            	token = tChar;
+            	GetChar();
+            	token = tCharacter;
           	}
-          	else
+          	else // Case when single quote is not appropriately closed.
           	{
 							while (_in->peek() != '\'' && _in->peek() != EOF)
 							{
 								tokval += GetChar();
 							}
-							tokval += GetChar();
+              if (_in->peek() == '\'')
+              {
+							  GetChar();
+              }
             	token = tUndefined;
           	}
         	}
+          else // Case when not a valid character.
+          {
+            token = tUndefined;
+            while (_in->peek() != '\'' && _in->peek() != EOF)
+            {
+              tokval += GetChar();
+            }
+            if (_in->peek() == '\'')
+            {
+              GetChar();
+            }
+          }
 				}
+        /*else if (IsCharacter(_in->peek())) // Possibility of escape characters, not 
+        {
+          tokval = tokval.substr(0, tokval.size() - 1);
+          if (_in->peek() == '\n')
+          {
+            tokval = '\n';
+          }
+          else if (_in->peek() == '\t')
+          {
+            tokval = '\t';
+          }
+          else if (_in->peek() == '\0')
+          {
+            tokval = '\0';
+          }
+          else if (_in->peek() == '\'')
+          {
+            tokval = '\'';
+          }
+          else if (_in->peek() == '"')
+          {
+            tokval = '"';
+          }
+          else
+          {
+            tokval = '\\';
+          }
+          GetChar();
+          if (_in->peek() != '\'')
+          {
+            token = tUndefined;
+            while (_in->peek() != '\'' && _in->peek() != EOF)
+            {
+              tokval += GetChar();
+            }
+            if (_in->peek() != EOF)
+            {
+              GetChar();
+            }
+          }
+          else
+          {
+            token = tConstChar;
+            GetChar();
+          }
+        }*/
+        else
+        {
+          tokval = tokval.substr(0, tokval.size() - 1);
+          token = tUndefined;
+          while (_in->peek() != '\'' && _in->peek() != EOF)
+          {
+            tokval += GetChar();
+          }
+          if (_in->peek() == '\'')
+          {
+            GetChar();
+          }
+        }
       }
       else if (c == '\"')
       {
-        //tokval = tokval.substr(0, tokval.size() - 1);
+        tokval = tokval.substr(0, tokval.size() - 1);
         while (true)
         {
           int peek_val = _in->peek();
-          if (peek_val != EOF && peek_val != '\"' && IsAscii(peek_val))
+          if (peek_val != EOF && peek_val != '\"' && IsCharacter(peek_val))
           {
-            tokval += GetChar();
+            if (peek_val == '\\')
+            {
+              _in->seekg(1, _in->cur);
+              if (IsEscape(_in->peek()))
+              {
+                _in->seekg(-1, _in->cur);
+                GetChar();
+                if (_in->peek() == 'n')
+                {
+                  tokval += '\n';
+                }
+                else if (_in->peek() == 't')
+                {
+                  tokval += '\t';
+                }
+                else if (_in->peek() == '0')
+                {
+                  tokval += '\0';
+                }
+                else if (_in->peek() == '\'')
+                {
+                  tokval += '\'';
+                }
+                else if (_in->peek() == '"')
+                {
+                  tokval += '"';
+                }
+                else
+                {
+                  tokval += '\\';
+                }
+                GetChar();
+              }
+              else
+              {
+                _in->seekg(-1, _in->cur);
+                tokval += GetChar();
+              }
+            }
+            else
+            {
+              tokval += GetChar();
+            }
           }
           else
           {
@@ -581,13 +757,25 @@ CToken* CScanner::Scan()
         {
           tokval = "Unexpected end of stream";
         }
-				else if (!IsAscii(_in->peek()))
+				else if (!IsCharacter(_in->peek()))
 				{
 					token = tUndefined;
+          while (_in->peek() != EOF && _in->peek() != '\"')
+          {
+            tokval += GetChar();
+          }
+          if (_in->peek() != EOF)
+          {
+            GetChar();
+          }
+          else
+          {
+            tokval = "Unexpected end of stream";
+          }
 				}	
         else
         {
-          tokval += GetChar();
+          GetChar();
           token = tString;
         }
       }
@@ -613,9 +801,8 @@ CToken* CScanner::Scan()
       }
       else 
       {
-        tokval = "invalid character '";
+        tokval = "invalid character ";
         tokval += c;
-        tokval += "'";
       }
       break;
   }
@@ -659,4 +846,9 @@ bool CScanner::IsEscape(char c) const
 bool CScanner::IsAscii(char c) const
 {
 	return (c >= 32 && c <= 126);
+}
+
+bool CScanner::IsCharacter(char c) const
+{
+  return (IsAscii(c) || (c == '\n') || (c == '\t') || (c == '\0') || (c == '\"') || (c == '\'') || (c == '\\'));
 }
