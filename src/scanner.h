@@ -334,7 +334,7 @@ class CScanner {
     /// @retval false character can form escape letter
     bool IsEscape(char c) const;
 
-		/// @brief check if a character is an ascii character (32 - 126)
+		/// @brief check if a character is an ascii character (0 - 127)
 		///
 		/// @param c character
 		/// @retval true character is an ascii character
@@ -347,6 +347,18 @@ class CScanner {
     /// @retval true character is 'character' of SnuPL/1 language definition
     /// @retval false character is not 'character' of SnuPL/1 language definition
     bool IsCharacter(char c) const;
+    
+    /// @brief process escape characters in input istream pointer.
+    ///
+    /// @param _in istream pointer
+    /// @retval 0 at current position of input, there is no valid escape letter
+    /// @retval '\n' at current position of input, escape character '\n' is present.
+    /// @retval '\t' at current position of input, escape character '\t' is present.
+    /// @retval '\0' at current position of input, escape character '\0' is present.
+    /// @retval '\"' at current position of input, escape character '\"' is present.
+    /// @retval '\'' at current position of input, escape character '\'' is present.
+    /// @retval '\\' at current position of input, escape character '\\' is present.
+    char ProcessEscape(istream* _in);
 
     /// @}
 

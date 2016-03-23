@@ -47,7 +47,7 @@ using namespace std;
 //------------------------------------------------------------------------------
 // token names
 //
-#define TOKEN_STRLEN 49
+#define TOKEN_STRLEN 38
 
 char ETokenName[][TOKEN_STRLEN] = {
   "tString",                        ///< a string
@@ -133,7 +133,7 @@ char ETokenStr[][TOKEN_STRLEN] = {
   "tTrue",                          ///< keyword 'true',
   "tFalse",                         ///< keyword 'false',
   "tBoolean",                       ///< keyword 'boolean'
-  "tChar",                     ///< keyword 'character'
+  "tChar",                     			///< keyword 'character'
   "tInteger",                       ///< keyword 'integer'
   "tIf",                            ///< keyword 'if',
   "tThen",                          ///< keyword 'then',
@@ -441,7 +441,6 @@ CToken* CScanner::Scan()
             break;
           }
         }
-        //token = tComment;
         break;
       }
       else
@@ -525,7 +524,7 @@ CToken* CScanner::Scan()
           tokval += GetChar(); // Get backslash.
           
           // Check if valid escape character.
-          if (IsEscape(_in->peek())) // Case when valid escape character.
+          if (IsEscape(_in->peek())) // Case of valid escape character.
           {
             tokval += GetChar();
             
@@ -567,28 +566,68 @@ CToken* CScanner::Scan()
               token = tUndefined;
               
               // Get characters until the next character(_in->peek()) is EOF or closing single quote.
-              while (_in->peek() != '\'' && _in->peek() != EOF)
+              // Escape letters in between are processed appropriately.
+              while (true)
               {
-                tokval += GetChar();
+                if (_in->peek() != '\'' && _in->peek() != EOF && _in->peek() != '\\')
+                {
+                  tokval += GetChar();
+                }
+                else if (_in->peek() == '\\') // Possibility of escape character. If so, it is processed.
+                {
+                  char processres = ProcessEscape(_in);
+                  if (processres == 0)
+                  {
+                    tokval += GetChar();
+                  }
+                  else
+                  {
+                    tokval += processres;
+                  }
+                }
+               else
+               {
+                 break;
+               }
               }
               if (_in->peek() == '\'') // If single quote is closed, does not include it in tokval.
               {
                 GetChar();
-              }
+              }      
             }
           }
           else // Case when not a valid escape character.
           {
             // Get characters until the next character(_in->peek()) is EOF or closing single quote.
-            while (_in->peek() != EOF && _in->peek() != '\'')
+            // Escape letters in between are processed appropriately.
+            while (true)
             {
-              tokval += GetChar();
+              if (_in->peek() != '\'' && _in->peek() != EOF && _in->peek() != '\\')
+              {
+                tokval += GetChar();
+              }
+              else if (_in->peek() == '\\') // Possibility of escape character. If so, it is processed.
+              {
+                char processres = ProcessEscape(_in);
+                if (processres == 0)
+                {
+                  tokval += GetChar();
+                }
+                else
+                {
+                  tokval += processres;
+                }
+              }
+              else
+              {
+                break;
+              }
             }
-            if (_in->peek() != EOF)
+            if (_in->peek() == '\'') // If single quote is closed, does not include it in tokval.
             {
               GetChar();
             }
-            token = tUndefined;
+            token = tUndefined; // Set token type as tUndefined.
           }
         }
         else if (IsAscii(_in->peek())) // Possibility of ASCIIchar ranging from 32 to 126.
@@ -612,83 +651,102 @@ CToken* CScanner::Scan()
           	}
           	else // Case when single quote is not appropriately closed.
           	{
-							while (_in->peek() != '\'' && _in->peek() != EOF)
-							{
-								tokval += GetChar();
-							}
-              if (_in->peek() == '\'')
+              // Get characters until the next character(_in->peek()) is EOF or closing single quote.
+              // Escape letters in between are processed appropriately.
+							while (true)
               {
-							  GetChar();
+                if (_in->peek() != '\'' && _in->peek() != EOF && _in->peek() != '\\')
+                {
+                  tokval += GetChar();
+                }
+                else if (_in->peek() == '\\') // Possibility of escape character. If so, it is processed.
+                {
+                  char processres = ProcessEscape(_in);
+                  if (processres == 0)
+                  {
+                    tokval += GetChar();
+                  }
+                  else
+                  {
+                    tokval += processres;
+                  }
+                }
+               else
+               {
+                 break;
+               }
               }
-            	token = tUndefined;
+              if (_in->peek() == '\'') // If single quote is closed, does not include it in tokval.
+              {
+                GetChar();
+              }
+            	token = tUndefined; // Set token type as tUndefined.
           	}
         	}
           else // Case when not a valid character.
           {
             token = tUndefined;
-            while (_in->peek() != '\'' && _in->peek() != EOF)
+
+						// Get characters until the next character(_in->peek()) is EOF or closing single quote.
+            // Escape letters in between are processed appropriately.
+            while (true)
             {
-              tokval += GetChar();
+              if (_in->peek() != '\'' && _in->peek() != EOF && _in->peek() != '\\')
+              {
+                tokval += GetChar();
+              }
+              else if (_in->peek() == '\\') // Possibility of escape character. If so, it is processed.
+              {
+                char processres = ProcessEscape(_in);
+                if (processres == 0)
+                {
+                  tokval += GetChar();
+                }
+                else
+                {
+                  tokval += processres;
+                }
+              }
+              else
+              {
+                break;
+              }
             }
-            if (_in->peek() == '\'')
+            if (_in->peek() == '\'') // If single quote is closed, does not include it in tokval.
             {
               GetChar();
             }
           }
 				}
-        /*else if (IsCharacter(_in->peek()))
-        {
-          tokval = tokval.substr(0, tokval.size() - 1);
-          if (_in->peek() == '\n')
-          {
-            tokval = '\n';
-          }
-          else if (_in->peek() == '\t')
-          {
-            tokval = '\t';
-          }
-          else if (_in->peek() == '\0')
-          {
-            tokval = '\0';
-          }
-          else if (_in->peek() == '\'')
-          {
-            tokval = '\'';
-          }
-          else if (_in->peek() == '"')
-          {
-            tokval = '"';
-          }
-          else
-          {
-            tokval = '\\';
-          }
-          GetChar();
-          if (_in->peek() != '\'')
-          {
-            token = tUndefined;
-            while (_in->peek() != '\'' && _in->peek() != EOF)
-            {
-              tokval += GetChar();
-            }
-            if (_in->peek() != EOF)
-            {
-              GetChar();
-            }
-          }
-          else
-          {
-            token = tConstChar;
-            GetChar();
-          }
-        }*/
         else // Case when invalid characters.
         {
           tokval = tokval.substr(0, tokval.size() - 1); // Remove leading single quote.
           token = tUndefined; // Set token to tUndefined.
-          while (_in->peek() != '\'' && _in->peek() != EOF) // Get characters until reached EOF or closing single quote.
+          
+          // Get characters until the next character(_in->peek()) is EOF or closing single quote.
+          // Escape letters in between are processed appropriately.
+          while (true)
           {
-            tokval += GetChar();
+            if (_in->peek() != '\'' && _in->peek() != EOF && _in->peek() != '\\')
+            {
+              tokval += GetChar();
+            }
+            else if (_in->peek() == '\\') // Possibility of escape character. If so, it is processed.
+            {
+              char processres = ProcessEscape(_in);
+              if (processres == 0)
+              {
+                tokval += GetChar();
+              }
+              else
+              {
+                tokval += processres;
+              }
+            }
+            else
+            {
+              break;
+            }
           }
           if (_in->peek() == '\'') // If reached closing single quote, remove it.
           {
@@ -704,7 +762,7 @@ CToken* CScanner::Scan()
           int peek_val = _in->peek();
           
           // Check if next character is not EOF, closing double quote and is a character.
-          if (peek_val != EOF && peek_val != '\"' && IsCharacter(peek_val)) // Case when next character is not EOF, closing double quote, and is a character.
+          if (peek_val != EOF && peek_val != '\"' && IsAscii(peek_val)) // Case when next character is not EOF, closing double quote, and is a character.
           {
             if (peek_val == '\\') // Possibility of escape character.
             {
@@ -715,7 +773,8 @@ CToken* CScanner::Scan()
               {
                 // Set steram pointer to original location and read characters.
                 _in->seekg(-1, _in->cur);
-                GetChar();
+                GetChar(); // Consume backslash.
+                
                 if (_in->peek() == 'n')
                 {
                   tokval += '\n';
@@ -740,9 +799,9 @@ CToken* CScanner::Scan()
                 {
                   tokval += '\\';
                 }
-                GetChar();
+                GetChar(); // Consume character.
               }
-              else // Case when invalid escape character. Scanner will just scan as it is.
+              else // Case when invalid escape character. Scanner will just scan as it is, i.e. \a as '\\' + 'a'.
               {
                 _in->seekg(-1, _in->cur);
                 tokval += GetChar();
@@ -753,24 +812,46 @@ CToken* CScanner::Scan()
               tokval += GetChar();
             }
           }
-          else // Meet an EOF or double quote or not a character.
+          else // Meet an EOF or double quote or not an ascii character.
           {
             break;
           }
         }
-        
+
         if (_in->peek() == EOF) // Case of not closed string meets End of File.
         {
           tokval = "Unexpected end of stream";
         }
-				else if (!IsCharacter(_in->peek())) // Case when not a character of SnuPL/1 is met.
+				else if (!IsAscii(_in->peek())) // Case when not a character of SnuPL/1 is met.
 				{
-					token = tUndefined;
-          while (_in->peek() != EOF && _in->peek() != '\"') // Reads until EOF or closing double quote is met.
+					token = tUndefined; // Set token type as tUndefined.
+          
+          // Get characters until the next character(_in->peek()) is EOF or closing double quote.
+          // Escape letters in between are processed appropriately.
+          while (true)
           {
-            tokval += GetChar();
+            if (_in->peek() != '\"' && _in->peek() != EOF && _in->peek() != '\\')
+            {
+              tokval += GetChar();
+            }
+            else if (_in->peek() == '\\') // Possibility of escape character. If so, it is processed.
+            {
+              char processres = ProcessEscape(_in);
+              if (processres == 0)
+              {
+                tokval += GetChar();
+              }
+              else
+              {
+                tokval += processres;
+              }
+            }
+            else
+            {
+              break;
+            }
           }
-          if (_in->peek() != EOF) // Case when closing double quote is met.
+          if (_in->peek() == '\"') // Case when closing double quote is met.
           {
             GetChar(); // Removes closing double quote and prepare to start scanning again.
           }
@@ -857,4 +938,62 @@ bool CScanner::IsAscii(char c) const
 bool CScanner::IsCharacter(char c) const
 {
   return (IsAscii(c) || (c == '\n') || (c == '\t') || (c == '\0') || (c == '\"') || (c == '\'') || (c == '\\'));
+}
+
+char CScanner::ProcessEscape(istream* _in)
+{
+  // Seek two step ahead. One step ahead should be done in caller function.
+  _in->seekg(1, _in->cur);
+  
+  // Check if it is valid escape letter. If so, consume backslash and a character indicating escape, and return appropriate value.
+  // If not, return 0. Decision about this should be done in caller function.
+  if (IsEscape(_in->peek()))
+  {
+    if (_in->peek() == 'n')
+    {
+      _in->seekg(-1, _in->cur);
+      GetChar();
+      GetChar();
+      return '\n';
+    }
+    else if (_in->peek() == 't')
+    {
+      _in->seekg(-1, _in->cur);
+      GetChar();
+      GetChar();
+      return '\t';
+    }
+    else if (_in->peek() == '0')
+    {
+      _in->seekg(-1, _in->cur);
+      GetChar();
+      GetChar();
+      return '\0';
+    }
+    else if (_in->peek() == '"')
+    {
+      _in->seekg(-1, _in->cur);
+      GetChar();
+      GetChar();
+      return '\"';
+    }
+    else if (_in->peek() == '\'')
+    {
+      _in->seekg(-1, _in->cur);
+      GetChar();
+      GetChar();
+      return '\'';
+    }
+    else
+    {
+      _in->seekg(-1, _in->cur);
+      GetChar();
+      GetChar();
+      return '\\';
+    }
+  }
+  else
+  {
+    return 0;
+  }
 }

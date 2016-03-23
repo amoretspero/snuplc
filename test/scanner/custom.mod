@@ -9,7 +9,6 @@
 "asdfndiwn\n\t"
 "   "
 "sasdf\nasdf'df"
-"	"
 
 // Valid characters.
 "Now for valid characters: "
@@ -17,15 +16,12 @@
 'b'
 '\n'
 '\t'
-'	'
 '"'
 '\"'
 '\''
 '\0'
 '\\'
 '!'
-' '
-'	'
 
 // Invalid strings, characters.
 "Now for invalid ones: "
@@ -36,6 +32,7 @@
 'asf\ndfsd'
 '			'
 'a	'
+'ABC\'DEF'
 "\
 "
 "adfd\n\t\a
@@ -48,11 +45,14 @@
 "				
 
 "
-'
-'
+"	"
 "asdf			fj		\n	\t	
 
 dfs
 
   
 "
+'	'
+'	'
+'
+'
