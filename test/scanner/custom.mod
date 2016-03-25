@@ -25,6 +25,7 @@
 
 // Invalid strings, characters.
 "Now for invalid ones: "
+"\a"
 '\a'
 '\b'
 '\c'

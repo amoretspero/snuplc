@@ -86,25 +86,15 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:a9093554967c90043b2a4a74c028f3f08"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08">EToken</a> { <br/>
-&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a11db8d531a6a02b5287f75f4371c36b4">tDigit</a> =0, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08acf639aed69669d1a923cc54f0e0283ee">tLetter</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a563fef1333847dcd5b129d94da20e260">tString</a>, 
+&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a563fef1333847dcd5b129d94da20e260">tString</a>, 
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a670a2b6b231e3df11109f0b3f4d0aeec">tId</a>, 
+<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a7362a9c5f6008461436cdc6358868312">tNum</a>, 
+<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ad1d32d46641b20bb5c32b37149e464fc">tCharacter</a>, 
 <br/>
-&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a7362a9c5f6008461436cdc6358868312">tNum</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a7fdb790fb92a84d4e183588f699b67b3">tBool</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a58ee754d09822cfd6a9417f08561f252">tChar</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ab70307c1214000ad9537b3a264e50230">tConstChar</a>, 
-<br/>
-&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a8ffebd089a5c484058a9c695a5615aa2">tInt</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ac3e48b010abcd02270112a93935ed836">tComment</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a62fcae7ebdb38ba78de08576d3b44a02">tWhitespace</a>, 
+&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ab70307c1214000ad9537b3a264e50230">tConstChar</a>, 
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08acc6fc21731b174c314d5bb34662908b2">tType</a>, 
-<br/>
-&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ae6c68b5b5352fb48681dce352980d9df">tPlusMinus</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ac310ea8cd49261a561b1f3bc485a3a89">tMulDiv</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a65473e7fdbb1e6e2a8a40c3c09a13fbb">tAnd</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a601e1ea9005e7c095ccb2e748631049a">tOr</a>, 
+<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08aceed686c858f9754fe425e22115328f1">tTerm</a>, 
+<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08afbc99fff7a30319a97e6dda02b4cc86f">tFact</a>, 
 <br/>
 &#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a7ff40ee5afb5b86c87e93d1c41f60a20">tRelOp</a>, 
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a31be042cf58eb5cddbc7eadedeb2cc0e">tAssign</a>, 
@@ -117,36 +107,33 @@ Enumerations</h2></td></tr>
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ada8614c302155f830b7f80230b11dc0e">tLBracketRound</a>, 
 <br/>
 &#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a0bc1eea0931294a32ef27636854d9676">tRBracketRound</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a5e5cdddf3d042f10fd4a73cab1d8150b">tLBrace</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ab0757e678561f5a32b9070b0766a455f">tRBrace</a>, 
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ad35b0d618e86b8eeb2441e8723973c9d">tLBracket</a>, 
-<br/>
-&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ac52d43199940f8d2aa4aaf5e1804eb1e">tRBracekt</a>, 
+<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ac52d43199940f8d2aa4aaf5e1804eb1e">tRBracekt</a>, 
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ad96e005abb865326d95bcd78a9837ea9">tModule</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08abe557cc99bc01533eaceee30eaf94109">tBegin</a>, 
+<br/>
+&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08abe557cc99bc01533eaceee30eaf94109">tBegin</a>, 
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a8d56402cd74395a2f0731c1971fb7d2e">tEnd</a>, 
-<br/>
-&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08aa5b09f395af4e23ed9481594257c39de">tTrue</a>, 
+<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08aa5b09f395af4e23ed9481594257c39de">tTrue</a>, 
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ac501dc9eaaa9f954d5a9d1bcdf4adea5">tFalse</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a0082dbf47d3c546fe9142d0617edbcc4">tBoolean</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ad1d32d46641b20bb5c32b37149e464fc">tCharacter</a>, 
 <br/>
-&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a0ac27b5ea77651f451c45c9e021988a6">tInteger</a>, 
+&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a0082dbf47d3c546fe9142d0617edbcc4">tBoolean</a>, 
+<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a58ee754d09822cfd6a9417f08561f252">tChar</a>, 
+<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a0ac27b5ea77651f451c45c9e021988a6">tInteger</a>, 
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ae9f5d04c0a96d851caf3c54fd6e21744">tIf</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ae6e7d2100b228fb1fe8b86973ab6a4d9">tThen</a>, 
+<br/>
+&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ae6e7d2100b228fb1fe8b86973ab6a4d9">tThen</a>, 
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a4bef8821926a90cd87aad5c3e4dc6e03">tElse</a>, 
-<br/>
-&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ae39c29f9c276b5379a48e4c43c0c81c6">tWhile</a>, 
+<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ae39c29f9c276b5379a48e4c43c0c81c6">tWhile</a>, 
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a894707ef9dc1bad629de42519f869fe9">tDo</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a8e3934d76821f0e33e170299526439e6">tReturn</a>, 
+<br/>
+&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a8e3934d76821f0e33e170299526439e6">tReturn</a>, 
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08acdf7a278bd62d7df25ded625c4ad7296">tVar</a>, 
-<br/>
-&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08aceaa0040bfc3643551c575d40b833838">tProcedure</a>, 
+<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08aceaa0040bfc3643551c575d40b833838">tProcedure</a>, 
 <a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08ae4bb1408cee9d08f59d7700e7269fa51">tFunction</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a3dbd690d2ab18e24298f74abec8ec6f5">tEOF</a>, 
-<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08adafa2c7f95d45d2e6c46d4e941faa1fe">tIOError</a>, 
 <br/>
-&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a93dd8ba9e5e5dacd46c9e1d8487e072f">tUndefined</a>
+&#160;&#160;<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a3dbd690d2ab18e24298f74abec8ec6f5">tEOF</a>, 
+<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08adafa2c7f95d45d2e6c46d4e941faa1fe">tIOError</a>, 
+<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08a93dd8ba9e5e5dacd46c9e1d8487e072f">tUndefined</a>
 <br/>
  }</td></tr>
 <tr class="memdesc:a9093554967c90043b2a4a74c028f3f08"><td class="mdescLeft">&#160;</td><td class="mdescRight">SnuPL/-1 token type.  <a href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08">More...</a><br/></td></tr>
@@ -176,13 +163,7 @@ Functions</h2></td></tr>
 <p>SnuPL/-1 token type. </p>
 <p>each member of this enumeration represents a token in SnuPL/0 </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a11db8d531a6a02b5287f75f4371c36b4"></a>tDigit</em>&#160;</td><td class="fielddoc">
-<p>a digit </p>
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08acf639aed69669d1a923cc54f0e0283ee"></a>tLetter</em>&#160;</td><td class="fielddoc">
-<p>a letter </p>
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a563fef1333847dcd5b129d94da20e260"></a>tString</em>&#160;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a563fef1333847dcd5b129d94da20e260"></a>tString</em>&#160;</td><td class="fielddoc">
 <p>a string </p>
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a670a2b6b231e3df11109f0b3f4d0aeec"></a>tId</em>&#160;</td><td class="fielddoc">
@@ -191,39 +172,21 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a7362a9c5f6008461436cdc6358868312"></a>tNum</em>&#160;</td><td class="fielddoc">
 <p>a number </p>
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a7fdb790fb92a84d4e183588f699b67b3"></a>tBool</em>&#160;</td><td class="fielddoc">
-<p>a boolean value, i.e. true, false. </p>
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a58ee754d09822cfd6a9417f08561f252"></a>tChar</em>&#160;</td><td class="fielddoc">
-<p>a character value. </p>
+<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08ad1d32d46641b20bb5c32b37149e464fc"></a>tCharacter</em>&#160;</td><td class="fielddoc">
+<p>a character, for example, 'a', 'b', and more. </p>
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08ab70307c1214000ad9537b3a264e50230"></a>tConstChar</em>&#160;</td><td class="fielddoc">
 <p>a constant character, i.e. '', '<br/>
 ' and more. </p>
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a8ffebd089a5c484058a9c695a5615aa2"></a>tInt</em>&#160;</td><td class="fielddoc">
-<p>an integer value. </p>
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08ac3e48b010abcd02270112a93935ed836"></a>tComment</em>&#160;</td><td class="fielddoc">
-<p>a single line comment. </p>
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a62fcae7ebdb38ba78de08576d3b44a02"></a>tWhitespace</em>&#160;</td><td class="fielddoc">
-<p>a whitespace. </p>
-</td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08acc6fc21731b174c314d5bb34662908b2"></a>tType</em>&#160;</td><td class="fielddoc">
 <p>a type </p>
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08ae6c68b5b5352fb48681dce352980d9df"></a>tPlusMinus</em>&#160;</td><td class="fielddoc">
-<p>'+' or '-' </p>
+<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08aceed686c858f9754fe425e22115328f1"></a>tTerm</em>&#160;</td><td class="fielddoc">
+<p>'+' or '-' or '||' </p>
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08ac310ea8cd49261a561b1f3bc485a3a89"></a>tMulDiv</em>&#160;</td><td class="fielddoc">
-<p>'*' or '/' </p>
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a65473e7fdbb1e6e2a8a40c3c09a13fbb"></a>tAnd</em>&#160;</td><td class="fielddoc">
-<p>'&amp;&amp;' </p>
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a601e1ea9005e7c095ccb2e748631049a"></a>tOr</em>&#160;</td><td class="fielddoc">
-<p>'||' </p>
+<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08afbc99fff7a30319a97e6dda02b4cc86f"></a>tFact</em>&#160;</td><td class="fielddoc">
+<p>'*' or '/' or '&amp;&amp;' </p>
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a7ff40ee5afb5b86c87e93d1c41f60a20"></a>tRelOp</em>&#160;</td><td class="fielddoc">
 <p>relational operator </p>
@@ -252,12 +215,6 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a0bc1eea0931294a32ef27636854d9676"></a>tRBracketRound</em>&#160;</td><td class="fielddoc">
 <p>a right round bracket ')' </p>
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a5e5cdddf3d042f10fd4a73cab1d8150b"></a>tLBrace</em>&#160;</td><td class="fielddoc">
-<p>a left brace '{' </p>
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08ab0757e678561f5a32b9070b0766a455f"></a>tRBrace</em>&#160;</td><td class="fielddoc">
-<p>a right brace '}' </p>
-</td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08ad35b0d618e86b8eeb2441e8723973c9d"></a>tLBracket</em>&#160;</td><td class="fielddoc">
 <p>a left bracket '[' </p>
 </td></tr>
@@ -282,7 +239,7 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a0082dbf47d3c546fe9142d0617edbcc4"></a>tBoolean</em>&#160;</td><td class="fielddoc">
 <p>keyword 'boolean' </p>
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08ad1d32d46641b20bb5c32b37149e464fc"></a>tCharacter</em>&#160;</td><td class="fielddoc">
+<tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a58ee754d09822cfd6a9417f08561f252"></a>tChar</em>&#160;</td><td class="fielddoc">
 <p>keyword 'character' </p>
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9093554967c90043b2a4a74c028f3f08a0ac27b5ea77651f451c45c9e021988a6"></a>tInteger</em>&#160;</td><td class="fielddoc">
@@ -370,7 +327,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00267">267</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00256">256</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -413,14 +370,14 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00272">272</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00261">261</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Mar 15 2016 19:49:36 for SnuPL Compiler by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Mar 25 2016 16:08:50 for SnuPL Compiler by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

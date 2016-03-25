@@ -1,0 +1,66 @@
+scanning 'test/scanner/test01.mod'...
+  9:1: tModule
+  10:1: tProcedure
+  11:1: tFunction
+  12:1: tVar
+  13:1: tInteger
+  14:1: tBoolean
+  15:1: tChar
+  16:1: tBegin
+  17:1: tEnd
+  18:1: tIf
+  19:1: tThen
+  20:1: tElse
+  21:1: tWhile
+  22:1: tDo
+  23:1: tReturn
+  24:1: tTrue
+  25:1: tFalse
+  28:1: tAssign
+  29:1: tTerm (+)
+  30:1: tTerm (-)
+  31:1: tFact (*)
+  32:1: tFact (/)
+  33:1: tTerm (||)
+  34:1: tFact (&&)
+  35:1: tExclam
+  38:1: tRelOp (<)
+  39:1: tRelOp (<=)
+  40:1: tRelOp (=)
+  41:1: tRelOp (>=)
+  42:1: tRelOp (>)
+  43:1: tRelOp (#)
+  46:1: tComma
+  47:1: tSemicolon
+  48:1: tColon
+  49:1: tDot
+  50:1: tLBracketRound
+  51:1: tRBracketRound
+  52:1: tLBracket
+  53:1: tRBracket
+  56:1: tId (a)
+  57:1: tId (b)
+  58:1: tId (c)
+  59:1: tId (temp1)
+  60:1: tId (iftemp)
+  61:1: tId (elsetemp)
+  62:1: tId (_tmp1)
+  63:1: tId (_____t)
+  66:1: tNum (0)
+  67:1: tNum (1)
+  68:1: tNum (2147483647)
+  69:1: tNum (2147483648)
+  70:1: tNum (000000000000000000)
+  71:1: tNum (999999999999999999)
+  74:1: tTrue
+  75:1: tFalse
+  78:1: tCharacter (a)
+  79:1: tConstChar (\n)
+  80:1: tConstChar (\t)
+  83:1: tString (hello, world!)
+  84:1: tString (this\tis\ta\ttab!)
+  85:1: tString (a)
+  86:1: tEOF
+
+
+Done.

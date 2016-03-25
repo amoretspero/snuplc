@@ -124,6 +124,24 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a9e5e7e137e37ac090f1199b85fcd3da0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCScanner.html#a9e5e7e137e37ac090f1199b85fcd3da0">IsWhite</a> (char c) const </td></tr>
 <tr class="memdesc:a9e5e7e137e37ac090f1199b85fcd3da0"><td class="mdescLeft">&#160;</td><td class="mdescRight">check if a character is a white character  <a href="#a9e5e7e137e37ac090f1199b85fcd3da0">More...</a><br/></td></tr>
 <tr class="separator:a9e5e7e137e37ac090f1199b85fcd3da0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8282735bcc8b942dee07e87e6eb62f0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCScanner.html#ab8282735bcc8b942dee07e87e6eb62f0">IsDigit</a> (char c) const </td></tr>
+<tr class="memdesc:ab8282735bcc8b942dee07e87e6eb62f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">check if a character is a digit  <a href="#ab8282735bcc8b942dee07e87e6eb62f0">More...</a><br/></td></tr>
+<tr class="separator:ab8282735bcc8b942dee07e87e6eb62f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35f4ad263ced5979c84d17afaf9b8aa0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCScanner.html#a35f4ad263ced5979c84d17afaf9b8aa0">IsLetter</a> (char c) const </td></tr>
+<tr class="memdesc:a35f4ad263ced5979c84d17afaf9b8aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">check if a character is a letter  <a href="#a35f4ad263ced5979c84d17afaf9b8aa0">More...</a><br/></td></tr>
+<tr class="separator:a35f4ad263ced5979c84d17afaf9b8aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3afd7aa0018f431b8857873434076a3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCScanner.html#aa3afd7aa0018f431b8857873434076a3">IsEscape</a> (char c) const </td></tr>
+<tr class="memdesc:aa3afd7aa0018f431b8857873434076a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">check if a character can form escape letter with preceeding "\"  <a href="#aa3afd7aa0018f431b8857873434076a3">More...</a><br/></td></tr>
+<tr class="separator:aa3afd7aa0018f431b8857873434076a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09afce71ce1dc7130f7ba590d8f072c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCScanner.html#a09afce71ce1dc7130f7ba590d8f072c3">IsAscii</a> (char c) const </td></tr>
+<tr class="memdesc:a09afce71ce1dc7130f7ba590d8f072c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">check if a character is an ascii character (0 - 127)  <a href="#a09afce71ce1dc7130f7ba590d8f072c3">More...</a><br/></td></tr>
+<tr class="separator:a09afce71ce1dc7130f7ba590d8f072c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49a661bd0877edb82bf2bc4cb400f105"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCScanner.html#a49a661bd0877edb82bf2bc4cb400f105">IsCharacter</a> (char c) const </td></tr>
+<tr class="memdesc:a49a661bd0877edb82bf2bc4cb400f105"><td class="mdescLeft">&#160;</td><td class="mdescRight">check if a character is 'character' of SnuPL/1 language definition  <a href="#a49a661bd0877edb82bf2bc4cb400f105">More...</a><br/></td></tr>
+<tr class="separator:a49a661bd0877edb82bf2bc4cb400f105"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af247e24e53652d56d2b52aed1578af65"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCScanner.html#af247e24e53652d56d2b52aed1578af65">ProcessEscape</a> (istream *<a class="el" href="classCScanner.html#aa7ccde0962a65ca56de23abb81e77580">_in</a>)</td></tr>
+<tr class="memdesc:af247e24e53652d56d2b52aed1578af65"><td class="mdescLeft">&#160;</td><td class="mdescRight">process escape characters in input istream pointer.  <a href="#af247e24e53652d56d2b52aed1578af65">More...</a><br/></td></tr>
+<tr class="separator:af247e24e53652d56d2b52aed1578af65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -162,7 +180,7 @@ Static Private Attributes</h2></td></tr>
 <div class="textblock"><p>scanner </p>
 <p>used by CParser to scan (tokenize) SnuPL/0 code </p>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00231">231</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00220">220</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aee886a122ba3673ef0f1585c8412497d"></a>
 <div class="memitem">
@@ -186,7 +204,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00283">283</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00272">272</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -212,7 +230,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00294">294</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00283">283</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -231,7 +249,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>destructor </p>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00305">305</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00294">294</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -258,7 +276,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00321">321</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00310">310</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -292,7 +310,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00434">434</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00899">899</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -332,7 +350,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00441">441</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00906">906</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -365,7 +383,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00275">275</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00264">264</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 
 </div>
 </div>
@@ -399,7 +417,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00270">270</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00259">259</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 
 </div>
 </div>
@@ -444,7 +462,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00350">350</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00339">339</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -479,7 +497,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00265">265</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00254">254</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 
 </div>
 </div>
@@ -507,7 +525,212 @@ Static Private Attributes</h2></td></tr>
 
 <p>initialize list of reserved keywords </p>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00311">311</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00300">300</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a09afce71ce1dc7130f7ba590d8f072c3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CScanner::IsAscii </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>check if a character is an ascii character (0 - 127) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>character </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>character is an ascii character </td></tr>
+    <tr><td class="paramname">false</td><td>character is not an ascii character </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00933">933</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a49a661bd0877edb82bf2bc4cb400f105"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CScanner::IsCharacter </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>check if a character is 'character' of SnuPL/1 language definition </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>character </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>character is 'character' of SnuPL/1 language definition </td></tr>
+    <tr><td class="paramname">false</td><td>character is not 'character' of SnuPL/1 language definition </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00938">938</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab8282735bcc8b942dee07e87e6eb62f0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CScanner::IsDigit </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>check if a character is a digit </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>character </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>character is digit </td></tr>
+    <tr><td class="paramname">false</td><td>character is not digit </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00918">918</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa3afd7aa0018f431b8857873434076a3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CScanner::IsEscape </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>check if a character can form escape letter with preceeding "\" </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>character </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>character can form escape letter </td></tr>
+    <tr><td class="paramname">false</td><td>character can form escape letter </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00928">928</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a35f4ad263ced5979c84d17afaf9b8aa0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CScanner::IsLetter </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>check if a character is a letter </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>character </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>character is letter </td></tr>
+    <tr><td class="paramname">false</td><td>character is not letter </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00923">923</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -548,7 +771,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00448">448</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00913">913</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -599,7 +822,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00356">356</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00345">345</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -627,7 +850,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>scan the next token </p>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00337">337</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00326">326</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -653,7 +876,54 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00332">332</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00321">321</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af247e24e53652d56d2b52aed1578af65"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char CScanner::ProcessEscape </td>
+          <td>(</td>
+          <td class="paramtype">istream *&#160;</td>
+          <td class="paramname"><em>_in</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>process escape characters in input istream pointer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_in</td><td>istream pointer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>at current position of input, there is no valid escape letter </td></tr>
+    <tr><td class="paramname">'\n'</td><td>at current position of input, escape character '<br/>
+' is present. </td></tr>
+    <tr><td class="paramname">'\t'</td><td>at current position of input, escape character '' is present. </td></tr>
+    <tr><td class="paramname">'\0'</td><td>at current position of input, escape character '\0' is present. </td></tr>
+    <tr><td class="paramname">'\"'</td><td>at current position of input, escape character '"' is present. </td></tr>
+    <tr><td class="paramname">'\''</td><td>at current position of input, escape character '\'' is present. </td></tr>
+    <tr><td class="paramname">'\\'</td><td>at current position of input, escape character '\' is present. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00943">943</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -680,7 +950,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>store the current position of the input stream internally </p>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00344">344</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00333">333</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -714,7 +984,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00361">361</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8cpp_source.html#l00350">350</a> of file <a class="el" href="scanner_8cpp_source.html">scanner.cpp</a>.</p>
 
 </div>
 </div>
@@ -739,7 +1009,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>current stream position (character pos) </p>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00336">336</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00372">372</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 
 </div>
 </div>
@@ -763,7 +1033,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>delete input stream upon destruction </p>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00333">333</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00369">369</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 
 </div>
 </div>
@@ -787,7 +1057,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>scanner status flag </p>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00334">334</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00370">370</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 
 </div>
 </div>
@@ -811,7 +1081,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>input stream </p>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00332">332</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00368">368</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 
 </div>
 </div>
@@ -835,7 +1105,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>current stream position (line) </p>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00335">335</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00371">371</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 
 </div>
 </div>
@@ -859,7 +1129,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>saved stream position (character pos) </p>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00338">338</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00374">374</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 
 </div>
 </div>
@@ -883,7 +1153,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>saved stream position (line) </p>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00337">337</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00373">373</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 
 </div>
 </div>
@@ -907,7 +1177,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>next token in input stream </p>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00339">339</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00375">375</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 
 </div>
 </div>
@@ -931,7 +1201,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>reserved keywords with corr. tokens </p>
 
-<p>Definition at line <a class="el" href="scanner_8h_source.html#l00331">331</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
+<p>Definition at line <a class="el" href="scanner_8h_source.html#l00367">367</a> of file <a class="el" href="scanner_8h_source.html">scanner.h</a>.</p>
 
 </div>
 </div>
@@ -942,7 +1212,7 @@ Static Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Mar 15 2016 19:49:36 for SnuPL Compiler by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Mar 25 2016 16:08:50 for SnuPL Compiler by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
