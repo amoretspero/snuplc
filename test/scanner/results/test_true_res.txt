@@ -1,0 +1,32 @@
+scanning 'test/scanner/test_true.mod'...
+  1:1: tNum (777)
+  2:1: tNum (83)
+  3:1: tNum (1)
+  4:1: tCharacter (c)
+  5:1: tCharacter ( )
+  6:1: tConstChar (\n)
+  7:1: tTerm (+)
+  8:1: tTerm (-)
+  9:1: tFact (*)
+  10:1: tFact (/)
+  11:1: tRelOp (<)
+  12:1: tRelOp (>)
+  13:1: tRelOp (#)
+  14:1: tRelOp (>=)
+  15:1: tAssign
+  16:1: tString ()
+  17:1: tString (abc)
+  18:1: tString (From Visual Studio Code)
+  19:1: tString (This should be passed...)
+  20:1: tModule
+  21:1: tBegin
+  22:1: tVar
+  22:5: tBoolean
+  22:13: tTrue
+  23:1: tId (code)
+  24:1: tString (This should not be passed...)
+  25:1: tCharacter (f)
+  26:1: tEOF
+
+
+Done.

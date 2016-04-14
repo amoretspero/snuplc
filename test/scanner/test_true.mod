@@ -3,7 +3,6 @@
 1
 'c'
 ' '
-''
 '\n'
 +
 -
@@ -23,4 +22,4 @@ begin
 var boolean true
 code
 "This should not be passed..."
-'f
+'f'

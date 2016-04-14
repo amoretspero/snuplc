@@ -1,0 +1,6 @@
+scanning 'test/scanner/test_comment.mod'...
+  5:1: tUndefined (\\p)
+  6:1: tEOF
+
+
+Done.
