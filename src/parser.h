@@ -4,7 +4,7 @@
 /// @section changelog Change Log
 /// 2012/09/14 Bernhard Egger created
 /// 2013/03/07 Bernhard Egger adapted to SnuPL/0
-/// 2016/03/09 Bernhard Egger adapted to SnuPL/!
+/// 2016/03/09 Bernhard Egger adapted to SnuPL/1
 /// 2016/04/08 Bernhard Egger assignment 2: parser for SnuPL/-1
 ///
 /// @section license_section License
@@ -107,6 +107,7 @@ class CParser {
     CAstExpression*   factor(CAstScope *s);
 
     CAstConstant*     number(void);
+    CAstStringConstant* id(CAstScope* s);
 
     /// @}
 

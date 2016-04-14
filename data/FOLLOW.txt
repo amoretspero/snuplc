@@ -1,0 +1,44 @@
+--- FOLLOW of SnuPL/ keywords ---
+module              : $ | ";" | "procedure" | "function" | "begin" | "end" | "."
+letter              : "A".."Z" | "a".."z" | "_" | "0".."9"
+digit               : "A".."Z" | "a".."z" | "_" | "0".."9"
+character           : ASCIIchar | "\n" | "\t" | "\"" | "\'" | "\\" | "\0" | '"' 
+char                : "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
+string              : 
+ident               :
+number              :
+boolean             :
+type                :
+basetype            :
+qualident           :
+factOp              :
+termOp              :
+relOp               :
+factor              :
+term                :
+simpleexpr          :
+expression          :
+assignment          :
+subroutineCall      :
+ifStatement         :
+whileStatement      :
+returnStatement     :
+statement           :
+statSequence        :
+varDeclaration      :
+varDeclSequence     :
+varDecl             :
+subroutineDecl      :
+functionDecl        :
+formalParam         :
+subroutineBody      :
+
+
+======
+X의 FOLLOW를 찾자.
+1. X가 나오는 production을 찾는다.
+2. 해당 production에서 X의 뒷부분에 non-terminal이 나오는 경우
+그 non-terminal의 FIRST에서 epsilon을 뺀 것을 X의 FOLLOW에 추가.
+non-terminal의 FIRST에 epsilon이 들어가면 A의 FOLLOW를 X의 FOLLOW에 추가.
+terminal이 나오는 경우 그 terminal을 X의 FOLLOW에 추가.
+X가 마지막 symbol인 경우에는 A의 FOLLOW를 X의 FOLLOW에 추가.

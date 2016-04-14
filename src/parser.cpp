@@ -45,6 +45,128 @@
 #include "parser.h"
 using namespace std;
 
+/*
+
+--- SnuPL/1 EBNF definitions ---
+
+module              = "module" ident ";" varDeclaration { subroutineDecl } "begin" statSequence "end" ident ".".
+letter              = "A”.."Z" | "a".."z" | "_".
+digit               = "0".."9".
+character           = ASCIIchar | "\n" | "\t" | "\"" | "\'" | "\\" | "\0"
+char                = "'" character "'"
+string              = '"' { character } '"'.
+ident               = letter { letter | digit }.
+number              = digit { digit }.
+boolean             = "true" | "false".
+type                = basetype | type "[" [ number ] "]".
+basetype            = "boolean" | "character" | "integer".
+qualident           = ident { "[" expression "]" }.
+factOp              = "*" | "/" | "&&".
+termOp              = "+" | "-" | "||".
+relOp               = "=" | "#" | "<" | "<=" | ">" | ">=".
+factor              = qualident | number | boolean | char | string | "(" expression ")" | subroutineCall | "!" factor.
+term                = factor { factOp factor }.
+simpleexpr          = ["+"|"-"] term { termOp term }.
+expression          = simpleexpr [ relOp simplexpr ].
+assignment          = qualident ":=" expression.
+subroutineCall      = ident "(" [ expression {"," expression} ] ")".
+ifStatement         = "if" "(" expression ")" "then" statSequence [ "else" statSequence ] "end".
+whileStatement      = "while" "(" expression ")" "do" statSequence "end".
+returnStatement     = "return" [ expression ].
+statement           = assignment | subroutineCall | ifStatement | whileStatement | returnStatement.
+statSequence        = [ statement { ";" statement } ].
+varDeclaration      = [ "var" varDeclSequence ";" ].
+varDeclSequence     = varDecl { ";" varDecl }.
+varDecl             = ident { "," ident } ":" type.
+subroutineDecl      = (procedureDecl | functionDecl) subroutineBody ident ";".
+procedureDecl       = "procedure" ident [ formalParam ] ";".
+functionDecl        = "function" ident [ formalParam ] ":" type ";".
+formalParam         = "(" [ varDeclSequence ] ")".
+subroutineBody      = varDeclaration "begin" statSequence "end".
+comment             = "//" {[^\n]} \n
+whitespace          = { " " | \t | \n }
+
+--- FIRST of SnuPL/1 keywords ---
+
+module              : "module"
+letter              : "A".."Z" | "a".."z" | "_"
+digit               : "0".."9"
+character           : ASCIIchar | "\n" | "\t" | "\"" | "\'" | "\\" | "\0"
+char                : "'"
+string              : """
+ident               : "A".."Z" | "a".."z" | "_"
+number              : "0".."9"
+boolean             : "true" | "false"
+type                : "boolean" | "character" | "integer"
+basetype            : "boolean" | "character" | "integer"
+qualident           : "A".."Z" | "a".."z" | "_"
+factOp              : "*" | "/" | "&&".
+termOp              : "+" | "-" | "||".
+relOp               : "=" | "#" | "<" | "<=" | ">" | ">=".
+factor              : "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
+  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'qualident' and 'subroutineCall')
+term                : "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
+  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'qualident' and 'subroutineCall')
+simpleexpr          : "+" | "-" | "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
+  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'qualident' and 'subroutineCall')
+expression          : "+" | "-" | "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
+  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'qualident' and 'subroutineCall')
+assignment          : "A".."Z" | "a".."z" | "_"
+subroutineCall      : "A".."Z" | "a".."z" | "_"
+ifStatement         : "if"
+whileStatement      : "while"
+returnStatement     : "return"
+statement           : "A".."Z" | "a".."z" | "_" | "if" | "while" | "return"
+  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'assignment' and 'subroutineCall')
+statSequence        : epsilon | "A".."Z" | "a".."z" | "_" | "if" | "while" | "return"
+  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'assignment' and 'subroutineCall')
+varDeclaration      : epsilon | "var"
+varDeclSequence     : "A".."Z" | "a".."z" | "_"
+varDecl             : "A".."Z" | "a".."z" | "_"
+subroutineDecl      : "procedure" | "function"
+procedureDecl       : "procedure"
+functionDecl        : "function"
+formalParam         : "("
+subroutineBody      : "var" | "begin"
+
+--- FOLLOW of SnuPL/1 keywords ---
+
+
+module              : $ | 
+letter              :
+digit               :
+character           :
+char                :
+string              :
+ident               :
+number              :
+boolean             :
+type                :
+basetype            :
+qualident           :
+factOp              :
+termOp              :
+relOp               :
+factor              :
+term                :
+simpleexpr          :
+expression          :
+assignment          :
+subroutineCall      :
+ifStatement         :
+whileStatement      :
+returnStatement     :
+statement           :
+statSequence        :
+varDeclaration      :
+varDeclSequence     :
+varDecl             :
+subroutineDecl      :
+functionDecl        :
+formalParam         :
+subroutineBody      :
+
+*/
 
 //------------------------------------------------------------------------------
 // CParser
@@ -141,7 +263,7 @@ CAstStatement* CParser::statSequence(CAstScope *s)
   //
   // statSequence ::= [ statement { ";" statement } ].
   // statement ::= assignment.
-  // FIRST(statSequence) = { tNumber }
+  // FIRST(statSequence) = { tNum }
   // FOLLOW(statSequence) = { tDot }
   //
   CAstStatement *head = NULL;
@@ -157,7 +279,7 @@ CAstStatement* CParser::statSequence(CAstScope *s)
 
       switch (tt) {
         // statement ::= assignment
-        case tNumber:
+        case tNum:
           st = assignment(s);
           break;
 
@@ -230,11 +352,11 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
 
   n = term(s);
 
-  while (_scanner->Peek().GetType() == tPlusMinus) {
+  while (_scanner->Peek().GetType() == tTerm) {
     CToken t;
     CAstExpression *l = n, *r;
 
-    Consume(tPlusMinus, &t);
+    Consume(tTerm, &t);
 
     r = term(s);
 
@@ -256,11 +378,11 @@ CAstExpression* CParser::term(CAstScope *s)
 
   EToken tt = _scanner->Peek().GetType();
 
-  while ((tt == tMulDiv)) {
+  while ((tt == tFact)) {
     CToken t;
     CAstExpression *l = n, *r;
 
-    Consume(tMulDiv, &t);
+    Consume(tFact, &t);
 
     r = factor(s);
 
@@ -277,7 +399,7 @@ CAstExpression* CParser::factor(CAstScope *s)
   //
   // factor ::= number | "(" expression ")"
   //
-  // FIRST(factor) = { tNumber, tLBrak }
+  // FIRST(factor) = { tNum, tLBrak }
   //
 
   CToken t;
@@ -286,15 +408,15 @@ CAstExpression* CParser::factor(CAstScope *s)
 
   switch (tt) {
     // factor ::= number
-    case tNumber:
+    case tNum:
       n = number();
       break;
 
     // factor ::= "(" expression ")"
-    case tLParens:
-      Consume(tLParens);
+    case tLBracketRound:
+      Consume(tLBracketRound);
       n = expression(s);
-      Consume(tRParens);
+      Consume(tRBracketRound);
       break;
 
     default:
@@ -311,12 +433,12 @@ CAstConstant* CParser::number(void)
   //
   // number ::= digit { digit }.
   //
-  // "digit { digit }" is scanned as one token (tNumber)
+  // "digit { digit }" is scanned as one token (tNum)
   //
 
   CToken t;
 
-  Consume(tNumber, &t);
+  Consume(tNum, &t);
 
   errno = 0;
   long long v = strtoll(t.GetValue().c_str(), NULL, 10);
@@ -325,3 +447,18 @@ CAstConstant* CParser::number(void)
   return new CAstConstant(t, CTypeManager::Get()->GetInt(), v);
 }
 
+CAstStringConstant* CParser::id(CAstScope* s)
+{
+  //
+  // ident ::= letter { letter | digit }.
+  //
+  // "letter { letter | digit }" is scanned as one token (tId)
+  //
+  
+  CToken t;
+  
+  Consume(tId, &t);
+  
+  errno = 0;
+  return new CAstStringConstant(t, t.GetValue(), s);
+}
