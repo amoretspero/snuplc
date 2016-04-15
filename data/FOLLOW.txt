@@ -1,5 +1,6 @@
---- FOLLOW of SnuPL/ keywords ---
+--- FOLLOW of SnuPL/1 keywords ---
 (letter, digit, character, char, string, number, ident will be treated as terminals)
+(Set based)
 module              : $ |
 boolean             : FOLLOW(factor) |
 type                : "[" | FOLLOW(varDecl) | ";" | 
@@ -28,6 +29,36 @@ functionDecl        : FIRST(subroutineBody) - epsilon |
 formalParam         : ";" | ":" | 
 subroutineBody      : ident | 
 
+--- FOLLOW of SnuPL/1 keywords ---
+(letter, digit, character, char, string, number, ident will be treated as terminals)
+(terminal based)
+module              : $ |
+boolean             : "*" | "/" | "&&" | "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" | 
+type                : "[" | ")" | ";" | 
+basetype            : "[" | ")" | ";" |
+qualident           : "*" | "/" | "&&" | "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" | ":=" | 
+factOp              : ident | number | "true" | "false" | char | string | "(" | "!" | 
+termOp              : ident | number | "true" | "false" | char | string | "(" | "!" | 
+relOp               : "+" | "-" | ident | number | "true" | "false" | char | string | "(" | "!" | 
+factor              : "*" | "/" | "&&" | "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" | 
+term                : "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" | 
+simpleexpr          : "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" |
+expression          : "]" | ")" | "," | "end" | "else" | ";" |
+assignment          : "end" | "else" | ";" | 
+subroutineCall      : "*" | "/" | "&&" | "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" | 
+ifStatement         : "end" | "else" | ";" |
+whileStatement      : "end" | "else" | ";" |
+returnStatement     : "end" | "else" | ";" |
+statement           : "end" | "else" | ";" | 
+statSequence        : "end" | "else" | 
+varDeclaration      : "begin" | "procedure" | "function" | 
+varDeclSequence     : ";" | ")" |
+varDecl             : ";" | ")" |
+subroutineDecl      : "begin" | 
+procedureDecl       : "var" | "begin" |
+functionDecl        : "var" | "begin" |
+formalParam         : ";" | ":" | 
+subroutineBody      : ident | 
 
 ======
 X의 FOLLOW를 찾자.
