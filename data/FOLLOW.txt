@@ -1,14 +1,15 @@
 --- FOLLOW of SnuPL/ keywords ---
-module              : $ | ";" | "procedure" | "function" | "begin" | "end" | "."
-letter              : "A".."Z" | "a".."z" | "_" | "0".."9"
-digit               : "A".."Z" | "a".."z" | "_" | "0".."9"
-character           : ASCIIchar | "\n" | "\t" | "\"" | "\'" | "\\" | "\0" | '"' 
-char                : "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
+(letter, digit, character, char, string, number, ident will be treated as terminals)
+module              : 
+letter              : 
+digit               : 
+character           : 
+char                : 
 string              : 
-ident               :
-number              :
-boolean             :
-type                :
+ident               : 
+number              : 
+boolean             : 
+type                : 
 basetype            :
 qualident           :
 factOp              :

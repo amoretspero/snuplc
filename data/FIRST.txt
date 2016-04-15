@@ -1,39 +1,32 @@
 --- FIRST of SnuPL/1 keywords ---
+(letter, digit, character, char, string, number, ident will be treated as terminals)
 module              : "module"
-letter              : "A".."Z" | "a".."z" | "_"
-digit               : "0".."9"
-character           : ASCIIchar | "\n" | "\t" | "\"" | "\'" | "\\" | "\0"
-char                : "'"
-string              : """
-ident               : "A".."Z" | "a".."z" | "_"
-number              : "0".."9"
 boolean             : "true" | "false"
 type                : "boolean" | "char" | "integer"
-basetype            : "boolean" | "char" | "integer"
-qualident           : "A".."Z" | "a".."z" | "_"
-factOp              : "*" | "/" | "&&".
-termOp              : "+" | "-" | "||".
-relOp               : "=" | "#" | "<" | "<=" | ">" | ">=".
-factor              : "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
-  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'qualident' and 'subroutineCall')
-term                : "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
-  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'qualident' and 'subroutineCall')
-simpleexpr          : "+" | "-" | "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
-  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'qualident' and 'subroutineCall')
-expression          : "+" | "-" | "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
-  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'qualident' and 'subroutineCall')
-assignment          : "A".."Z" | "a".."z" | "_"
-subroutineCall      : "A".."Z" | "a".."z" | "_"
+qualident           : ident
+factOp              : "*" | "/" | "&&"
+termOp              : "+" | "-" | "||"
+relOp               : "=" | "#" | "<" | "<=" | ">" | ">="
+factor              : ident | number | "true" | "false" | char | string | "(" | "!"
+  (CAUTION : ident is from both 'qualident' and 'subroutineCall')
+term                : ident | number | "true" | "false" | char | string | "(" | "!"
+  (CAUTION : ident is from both 'qualident' and 'subroutineCall')
+simpleexpr          : "+" | "-" | ident | number | "true" | "false" | char | string | "(" | "!"
+  (CAUTION : ident is from both 'qualident' and 'subroutineCall')
+expression          : "+" | "-" | ident | number | "true" | "false" | char | string | "(" | "!"
+  (CAUTION : ident is from both 'qualident' and 'subroutineCall')
+assignment          : ident
+subroutineCall      : ident
 ifStatement         : "if"
 whileStatement      : "while"
 returnStatement     : "return"
-statement           : "A".."Z" | "a".."z" | "_" | "if" | "while" | "return"
-  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'assignment' and 'subroutineCall')
-statSequence        : epsilon | "A".."Z" | "a".."z" | "_" | "if" | "while" | "return"
-  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'assignment' and 'subroutineCall')
+statement           : ident | "if" | "while" | "return"
+  (CAUTION : ident is from both 'assignment' and 'subroutineCall')
+statSequence        : epsilon | ident | "if" | "while" | "return"
+  (CAUTION : ident is from both 'assignment' and 'subroutineCall')
 varDeclaration      : epsilon | "var"
-varDeclSequence     : "A".."Z" | "a".."z" | "_"
-varDecl             : "A".."Z" | "a".."z" | "_"
+varDeclSequence     : ident
+varDecl             : ident
 subroutineDecl      : "procedure" | "function"
 procedureDecl       : "procedure"
 functionDecl        : "function"
