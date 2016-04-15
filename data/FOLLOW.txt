@@ -1,45 +1,40 @@
 --- FOLLOW of SnuPL/ keywords ---
 (letter, digit, character, char, string, number, ident will be treated as terminals)
-module              : 
-letter              : 
-digit               : 
-character           : 
-char                : 
-string              : 
-ident               : 
-number              : 
-boolean             : 
-type                : 
-basetype            :
-qualident           :
-factOp              :
-termOp              :
-relOp               :
-factor              :
-term                :
-simpleexpr          :
-expression          :
-assignment          :
-subroutineCall      :
-ifStatement         :
-whileStatement      :
-returnStatement     :
-statement           :
-statSequence        :
-varDeclaration      :
-varDeclSequence     :
-varDecl             :
-subroutineDecl      :
-functionDecl        :
-formalParam         :
-subroutineBody      :
+module              : $ |
+boolean             : FOLLOW(factor) |
+type                : "[" | FOLLOW(varDecl) | ";" | 
+basetype            : FOLLOW(type)
+qualident           : FOLLOW(factor) | ":=" | 
+factOp              : FIRST(factor) - epsilon | 
+termOp              : FIRST(term) - epsilon | 
+relOp               : FIRST(simpleexpr) - epsilon | 
+factor              : FOLLOW(factor) | FIRST(factOp) - epsilon | FOLLOW(term) | 
+term                : FOLLOW(simpleexpr) | FIRST(termOp) - epsilon | 
+simpleexpr          : FOLLOW(expression) | FIRST(relOp) - epsilon |
+expression          : "]" | ")" | FOLLOW(assignment) | "," | FOLLOW(returnStatement) | 
+assignment          : FOLLOW(statement) | 
+subroutineCall      : FOLLOW(factor) | FOLLOW(statement) | 
+ifStatement         : FOLLOW(statement) | 
+whileStatement      : FOLLOW(statement) | 
+returnStatement     : FOLLOW(statement) | 
+statement           : FOLLOW(statSequence) | ";" | 
+statSequence        : "end" | "else" | 
+varDeclaration      : "begin" | FIRST(subroutineDecl) - epsilon | 
+varDeclSequence     : ";" | ")" |
+varDecl             : FOLLOW(varDeclSequence) | ";" | 
+subroutineDecl      : "begin" | 
+procedureDecl       : FIRST(subroutineBody) - epsilon |
+functionDecl        : FIRST(subroutineBody) - epsilon | 
+formalParam         : ";" | ":" | 
+subroutineBody      : ident | 
 
 
 ======
 X의 FOLLOW를 찾자.
-1. X가 나오는 production을 찾는다.
+1. X가 RHS에 나오는 production을 찾는다.
 2. 해당 production에서 X의 뒷부분에 non-terminal이 나오는 경우
 그 non-terminal의 FIRST에서 epsilon을 뺀 것을 X의 FOLLOW에 추가.
 non-terminal의 FIRST에 epsilon이 들어가면 A의 FOLLOW를 X의 FOLLOW에 추가.
 terminal이 나오는 경우 그 terminal을 X의 FOLLOW에 추가.
 X가 마지막 symbol인 경우에는 A의 FOLLOW를 X의 FOLLOW에 추가.
+X가 가장 처음 starting symbol인 경우 $를 추가.

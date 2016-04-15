@@ -1,6 +1,10 @@
 --- FIRST of SnuPL/1 keywords ---
 (letter, digit, character, char, string, number, ident will be treated as terminals)
 module              : "module"
+char                : char
+string              : string
+number              : number
+ident               : ident
 boolean             : "true" | "false"
 type                : "boolean" | "char" | "integer"
 qualident           : ident

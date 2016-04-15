@@ -17,7 +17,7 @@ relOp               = "=" | "#" | "<" | "<=" | ">" | ">=".
 factor              = qualident | number | boolean | char | string | "(" expression ")" | subroutineCall | "!" factor.
 term                = factor { factOp factor }.
 simpleexpr          = ["+"|"-"] term { termOp term }.
-expression          = simpleexpr [ relOp simplexpr ].
+expression          = simpleexpr [ relOp simpleexpr ].
 assignment          = qualident ":=" expression.
 subroutineCall      = ident "(" [ expression {"," expression} ] ")".
 ifStatement         = "if" "(" expression ")" "then" statSequence [ "else" statSequence ] "end".
