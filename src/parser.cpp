@@ -48,18 +48,18 @@ using namespace std;
 /*
 
 --- SnuPL/1 EBNF definitions ---
-
+(letter, digit, character, char, string, number, ident will be treated as terminals)
 module              = "module" ident ";" varDeclaration { subroutineDecl } "begin" statSequence "end" ident ".".
-letter              = "A”.."Z" | "a".."z" | "_".
+letter              = "A".."Z" | "a".."z" | "_".
 digit               = "0".."9".
 character           = ASCIIchar | "\n" | "\t" | "\"" | "\'" | "\\" | "\0"
 char                = "'" character "'"
-string              = '"' { character } '"'.
+string              = '"' {character} '"'.
 ident               = letter { letter | digit }.
 number              = digit { digit }.
 boolean             = "true" | "false".
 type                = basetype | type "[" [ number ] "]".
-basetype            = "boolean" | "character" | "integer".
+basetype            = "boolean" | "char" | "integer".
 qualident           = ident { "[" expression "]" }.
 factOp              = "*" | "/" | "&&".
 termOp              = "+" | "-" | "||".
@@ -67,7 +67,7 @@ relOp               = "=" | "#" | "<" | "<=" | ">" | ">=".
 factor              = qualident | number | boolean | char | string | "(" expression ")" | subroutineCall | "!" factor.
 term                = factor { factOp factor }.
 simpleexpr          = ["+"|"-"] term { termOp term }.
-expression          = simpleexpr [ relOp simplexpr ].
+expression          = simpleexpr [ relOp simpleexpr ].
 assignment          = qualident ":=" expression.
 subroutineCall      = ident "(" [ expression {"," expression} ] ")".
 ifStatement         = "if" "(" expression ")" "then" statSequence [ "else" statSequence ] "end".
@@ -87,42 +87,38 @@ comment             = "//" {[^\n]} \n
 whitespace          = { " " | \t | \n }
 
 --- FIRST of SnuPL/1 keywords ---
-
+(letter, digit, character, char, string, number, ident will be treated as terminals)
 module              : "module"
-letter              : "A".."Z" | "a".."z" | "_"
-digit               : "0".."9"
-character           : ASCIIchar | "\n" | "\t" | "\"" | "\'" | "\\" | "\0"
-char                : "'"
-string              : """
-ident               : "A".."Z" | "a".."z" | "_"
-number              : "0".."9"
+char                : char
+string              : string
+number              : number
+ident               : ident
 boolean             : "true" | "false"
-type                : "boolean" | "character" | "integer"
-basetype            : "boolean" | "character" | "integer"
-qualident           : "A".."Z" | "a".."z" | "_"
-factOp              : "*" | "/" | "&&".
-termOp              : "+" | "-" | "||".
-relOp               : "=" | "#" | "<" | "<=" | ">" | ">=".
-factor              : "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
-  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'qualident' and 'subroutineCall')
-term                : "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
-  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'qualident' and 'subroutineCall')
-simpleexpr          : "+" | "-" | "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
-  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'qualident' and 'subroutineCall')
-expression          : "+" | "-" | "A".."Z" | "a".."z" | "_" | "0".."9" | "true" | "false" | "'" | """ | "(" | "!"
-  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'qualident' and 'subroutineCall')
-assignment          : "A".."Z" | "a".."z" | "_"
-subroutineCall      : "A".."Z" | "a".."z" | "_"
+type                : "boolean" | "char" | "integer"
+qualident           : ident
+factOp              : "*" | "/" | "&&"
+termOp              : "+" | "-" | "||"
+relOp               : "=" | "#" | "<" | "<=" | ">" | ">="
+factor              : ident | number | "true" | "false" | char | string | "(" | "!"
+  (CAUTION : ident is from both 'qualident' and 'subroutineCall')
+term                : ident | number | "true" | "false" | char | string | "(" | "!"
+  (CAUTION : ident is from both 'qualident' and 'subroutineCall')
+simpleexpr          : "+" | "-" | ident | number | "true" | "false" | char | string | "(" | "!"
+  (CAUTION : ident is from both 'qualident' and 'subroutineCall')
+expression          : "+" | "-" | ident | number | "true" | "false" | char | string | "(" | "!"
+  (CAUTION : ident is from both 'qualident' and 'subroutineCall')
+assignment          : ident
+subroutineCall      : ident
 ifStatement         : "if"
 whileStatement      : "while"
 returnStatement     : "return"
-statement           : "A".."Z" | "a".."z" | "_" | "if" | "while" | "return"
-  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'assignment' and 'subroutineCall')
-statSequence        : epsilon | "A".."Z" | "a".."z" | "_" | "if" | "while" | "return"
-  (CAUTION : "A".."Z" | "a".."z" | "_" is from both 'assignment' and 'subroutineCall')
+statement           : ident | "if" | "while" | "return"
+  (CAUTION : ident is from both 'assignment' and 'subroutineCall')
+statSequence        : epsilon | ident | "if" | "while" | "return"
+  (CAUTION : ident is from both 'assignment' and 'subroutineCall')
 varDeclaration      : epsilon | "var"
-varDeclSequence     : "A".."Z" | "a".."z" | "_"
-varDecl             : "A".."Z" | "a".."z" | "_"
+varDeclSequence     : ident
+varDecl             : ident
 subroutineDecl      : "procedure" | "function"
 procedureDecl       : "procedure"
 functionDecl        : "function"
@@ -130,41 +126,66 @@ formalParam         : "("
 subroutineBody      : "var" | "begin"
 
 --- FOLLOW of SnuPL/1 keywords ---
+(letter, digit, character, char, string, number, ident will be treated as terminals)
+(Set based)
+module              : $ |
+boolean             : FOLLOW(factor) |
+type                : "[" | FOLLOW(varDecl) | ";" | 
+basetype            : FOLLOW(type)
+qualident           : FOLLOW(factor) | ":=" | 
+factOp              : FIRST(factor) - epsilon | 
+termOp              : FIRST(term) - epsilon | 
+relOp               : FIRST(simpleexpr) - epsilon | 
+factor              : FOLLOW(factor) | FIRST(factOp) - epsilon | FOLLOW(term) | 
+term                : FOLLOW(simpleexpr) | FIRST(termOp) - epsilon | 
+simpleexpr          : FOLLOW(expression) | FIRST(relOp) - epsilon |
+expression          : "]" | ")" | FOLLOW(assignment) | "," | FOLLOW(returnStatement) | 
+assignment          : FOLLOW(statement) | 
+subroutineCall      : FOLLOW(factor) | FOLLOW(statement) | 
+ifStatement         : FOLLOW(statement) | 
+whileStatement      : FOLLOW(statement) | 
+returnStatement     : FOLLOW(statement) | 
+statement           : FOLLOW(statSequence) | ";" | 
+statSequence        : "end" | "else" | 
+varDeclaration      : "begin" | FIRST(subroutineDecl) - epsilon | 
+varDeclSequence     : ";" | ")" |
+varDecl             : FOLLOW(varDeclSequence) | ";" | 
+subroutineDecl      : "begin" | 
+procedureDecl       : FIRST(subroutineBody) - epsilon |
+functionDecl        : FIRST(subroutineBody) - epsilon | 
+formalParam         : ";" | ":" | 
+subroutineBody      : ident | 
 
-
-module              : $ | 
-letter              :
-digit               :
-character           :
-char                :
-string              :
-ident               :
-number              :
-boolean             :
-type                :
-basetype            :
-qualident           :
-factOp              :
-termOp              :
-relOp               :
-factor              :
-term                :
-simpleexpr          :
-expression          :
-assignment          :
-subroutineCall      :
-ifStatement         :
-whileStatement      :
-returnStatement     :
-statement           :
-statSequence        :
-varDeclaration      :
-varDeclSequence     :
-varDecl             :
-subroutineDecl      :
-functionDecl        :
-formalParam         :
-subroutineBody      :
+--- FOLLOW of SnuPL/1 keywords ---
+(letter, digit, character, char, string, number, ident will be treated as terminals)
+(terminal based)
+module              : $ |
+boolean             : "*" | "/" | "&&" | "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" | 
+type                : "[" | ")" | ";" | 
+basetype            : "[" | ")" | ";" |
+qualident           : "*" | "/" | "&&" | "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" | ":=" | 
+factOp              : ident | number | "true" | "false" | char | string | "(" | "!" | 
+termOp              : ident | number | "true" | "false" | char | string | "(" | "!" | 
+relOp               : "+" | "-" | ident | number | "true" | "false" | char | string | "(" | "!" | 
+factor              : "*" | "/" | "&&" | "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" | 
+term                : "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" | 
+simpleexpr          : "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" |
+expression          : "]" | ")" | "," | "end" | "else" | ";" |
+assignment          : "end" | "else" | ";" | 
+subroutineCall      : "*" | "/" | "&&" | "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" | 
+ifStatement         : "end" | "else" | ";" |
+whileStatement      : "end" | "else" | ";" |
+returnStatement     : "end" | "else" | ";" |
+statement           : "end" | "else" | ";" | 
+statSequence        : "end" | "else" | 
+varDeclaration      : "begin" | "procedure" | "function" | 
+varDeclSequence     : ";" | ")" |
+varDecl             : ";" | ")" |
+subroutineDecl      : "begin" | 
+procedureDecl       : "var" | "begin" |
+functionDecl        : "var" | "begin" |
+formalParam         : ";" | ":" | 
+subroutineBody      : ident | 
 
 */
 

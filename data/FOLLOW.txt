@@ -61,11 +61,11 @@ formalParam         : ";" | ":" |
 subroutineBody      : ident | 
 
 ======
-X의 FOLLOW를 찾자.
-1. X가 RHS에 나오는 production을 찾는다.
-2. 해당 production에서 X의 뒷부분에 non-terminal이 나오는 경우
-그 non-terminal의 FIRST에서 epsilon을 뺀 것을 X의 FOLLOW에 추가.
-non-terminal의 FIRST에 epsilon이 들어가면 A의 FOLLOW를 X의 FOLLOW에 추가.
-terminal이 나오는 경우 그 terminal을 X의 FOLLOW에 추가.
-X가 마지막 symbol인 경우에는 A의 FOLLOW를 X의 FOLLOW에 추가.
-X가 가장 처음 starting symbol인 경우 $를 추가.
+FIND the FOLLOW of X.
+1. Find a production that X is on RHS.
+2. If a non-terminal appears right next of X,
+then add FIRST of that non-terminal to FOLLOW of X, except epsilon.
+If that non-terminal has epsilon in its FIRST, add FOLLOW of A to FOLLOW of X.
+If a terminal appears right next of X, add that terminal to FOLLOW of X.
+If X is the last symbol of this production, add FOLLOW of A to FOLLOW of X.
+If X is starting symbol, add $ to FOLLOW of X.

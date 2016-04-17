@@ -1,6 +1,6 @@
 --- SnuPL/1 EBNF definitions ---
 module              = "module" ident ";" varDeclaration { subroutineDecl } "begin" statSequence "end" ident ".".
-letter              = "A¡±.."Z" | "a".."z" | "_".
+letter              = "A".."Z" | "a".."z" | "_".
 digit               = "0".."9".
 character           = ASCIIchar | "\n" | "\t" | "\"" | "\'" | "\\" | "\0"
 char                = "'" character "'"

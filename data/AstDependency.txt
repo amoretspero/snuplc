@@ -1,0 +1,110 @@
+=== AstDependency ===
+
+CAstNode - CAstExpression - CAstFunctionCall
+                          - CAstOperand - CAstConstant
+                                        - CAstDesignator - CAstArrayDesignator
+                                        - CAstStringConstant
+                          - CAstOperation - CAstBinaryOp
+                                          - CAstSpecialOp
+                                          - CAstUnaryOp
+         - CAstScope - CAstModule
+                     - CAstProcedure
+         - CAstStatement - CAstStatAssign
+                         - CAstStatCall
+                         - CAstStatIf
+                         - CAstStatReturn
+                         - CAstStatWhile
+         - CAstType
+         
+--- Keyword and its corresponding Ast classes ---
+
+module              : CAstModule
+char                : CAstConstant(Type : CCharType)
+string              : CAstStringConstant
+ident               : CAstDesignator
+number              : CAstConstant(Type : CIntType)
+boolean             : CAstConstant(Type : CBoolType)
+type                : CType (*)
+qualident           : CAstArrayDesignator (*)
+factOp              : CAstBinaryOp
+termOp              : CAstBinaryOp
+relOp               : CAstBinaryOp (*)
+assignment          : CAstStatAssign
+
+subroutineCall      : CAstStatCall (**)
+expression          : CAstExpression
+simpleexpr          : CAstExpression
+term                : CAstExpression
+factor              : CAstExpression
+
+statSequence        : CAstStatement
+statement           : CAstStatement
+ifStatement         : CAstStatIf
+whileStatement      : CAstStatWhile
+returnStatement     : CAstStatReturn
+
+varDeclaration      : (**)
+varDeclSequence     : (**)
+varDecl             : (**)
+
+subroutineDecl      : (**)
+procedureDecl       : CAstProcedure
+function            : CAstProcedure
+formalParam         : (**)
+subroutineBody      : (**)
+
+- (**) : Not yet determined, or making new AST node is not needed.
+
+
+
+         
+=== Appendix ===
+
+--- Type ---
+
+CType - CArrayType
+      - CScalarType - CBoolType
+                    - CCharType
+                    - CIntType
+                    - CNullType
+                    - CPointerType
+
+
+--- SnuPL/1 EBNF definitions ---
+(letter, digit, character, char, string, number, ident will be treated as terminals)
+module              = "module" ident ";" varDeclaration { subroutineDecl } "begin" statSequence "end" ident ".".
+letter              = "A".."Z" | "a".."z" | "_".
+digit               = "0".."9".
+character           = ASCIIchar | "\n" | "\t" | "\"" | "\'" | "\\" | "\0"
+char                = "'" character "'"
+string              = '"' {character} '"'.
+ident               = letter { letter | digit }.
+number              = digit { digit }.
+boolean             = "true" | "false".
+type                = basetype | type "[" [ number ] "]".
+basetype            = "boolean" | "char" | "integer".
+qualident           = ident { "[" expression "]" }.
+factOp              = "*" | "/" | "&&".
+termOp              = "+" | "-" | "||".
+relOp               = "=" | "#" | "<" | "<=" | ">" | ">=".
+factor              = qualident | number | boolean | char | string | "(" expression ")" | subroutineCall | "!" factor.
+term                = factor { factOp factor }.
+simpleexpr          = ["+"|"-"] term { termOp term }.
+expression          = simpleexpr [ relOp simpleexpr ].
+assignment          = qualident ":=" expression.
+subroutineCall      = ident "(" [ expression {"," expression} ] ")".
+ifStatement         = "if" "(" expression ")" "then" statSequence [ "else" statSequence ] "end".
+whileStatement      = "while" "(" expression ")" "do" statSequence "end".
+returnStatement     = "return" [ expression ].
+statement           = assignment | subroutineCall | ifStatement | whileStatement | returnStatement.
+statSequence        = [ statement { ";" statement } ].
+varDeclaration      = [ "var" varDeclSequence ";" ].
+varDeclSequence     = varDecl { ";" varDecl }.
+varDecl             = ident { "," ident } ":" type.
+subroutineDecl      = (procedureDecl | functionDecl) subroutineBody ident ";".
+procedureDecl       = "procedure" ident [ formalParam ] ";".
+functionDecl        = "function" ident [ formalParam ] ":" type ";".
+formalParam         = "(" [ varDeclSequence ] ")".
+subroutineBody      = varDeclaration "begin" statSequence "end".
+comment             = "//" {[^\n]} \n
+whitespace          = { " " | \t | \n }
