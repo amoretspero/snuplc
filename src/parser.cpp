@@ -268,43 +268,31 @@ CAstModule* CParser::module(void)
   // module              = "module" ident ";" varDeclaration { subroutineDecl } "begin" 
   //                       statSequence "end" ident ".".
   //
-  /*
-  CToken dummy;
-  CAstModule *m = new CAstModule(dummy, "placeholder");
-  CAstStatement *statseq = NULL;
-
-  statseq = statSequence(m);
-  Consume(tDot);
-
-  m->SetStatementSequence(statseq);
-
-  return m;
-  */
   
   CSymtab moduleSymTab = new CSymtab();
   
-  CToken t;
-  Consume(tModule);
+  CToken t; // For error indication.
+  Consume(tModule); 
   
-  CToken* module_id = new CToken();
+  CToken* module_id = new CToken(); // Module name.
   Consume(tId, module_id);
   Consume(tSemicolon);
   
-  CAstModule* m = new CAstModule(t, module_id->GetValue());
+  CAstModule* m = new CAstModule(t, module_id->GetValue()); // Scope for module.
   
-  CTypeManager* typeManager = CTypeManager::Get();
+  CTypeManager* typeManager = CTypeManager::Get(); // Typemanager to deal with types.
   
-  CToken checkIfVar = _scanner->Peek();
-  if (checkIfVar.GetType() == tVar)
+  CToken checkIfVar = _scanner->Peek(); // Check if there are global variables.
+  if (checkIfVar.GetType() == tVar) // Global variable exists.
   {
     Consume(tVar);
    
     while (true)
     {
-      GetVariables(_scanner, m, typeManager);
+      GetVariables(_scanner, m, typeManager); // Get one type of variables at a time.
       printf("End get variables.\n");
       cout << "Next token is : " << _scanner->Peek().GetValue() << endl;
-      Consume(tSemicolon);
+      Consume(tSemicolon); // Semicolon separates one type of variables from other ones.
       printf("Got semicolon of end of var decl.\n");
       if (_scanner->Peek().GetType() != tId)
       {
@@ -313,61 +301,53 @@ CAstModule* CParser::module(void)
     }
   }
   // TODO: Support for multiple functions.
-  while (_scanner->Peek() == tProcedure)
+  while (_scanner->Peek() == tProcedure) // Procedure definitions. May be multiple of them.
   {
     Consume(tProcedure);
     
-    CToken* procName = new CToken();
+    CToken* procName = new CToken(); // For procedure name.
     Consume(tId, procName);
     
-    CSymProc* procSymbol = new CSymProc(procName->GetValue(), NULL);
-    m->GetSymbolTable()->AddSymbol(procSymbol);
+    CSymProc* procSymbol = new CSymProc(procName->GetValue(), NULL); // Symbol for procedure. Procedure returns NULL.
+    m->GetSymbolTable()->AddSymbol(procSymbol); // Add procedure symbol to module's symbol table.
     
-    CAstProcedure* procScope = new CAstProcedure(procName, procName->GetValue(), m, procSymbol);
+    CAstProcedure* procScope = new CAstProcedure(procName, procName->GetValue(), m, procSymbol); // Scope for procedure.
     
-    if (_scanner->Peek() == tLBracketRound)
+    if (_scanner->Peek() == tLBracketRound) // When procedure has parameters.
     {
       Consume(tLBracketRound);
-      /*
-      while (true)
+      
+      GetParams(_scanner, typeManager, procSymbol); // Get parameters for procedure.
+      
+      Consume(tRBracketRound);
+    }
+    Consume(tSemicolon); 
+    
+    if (_scanner->Peek() == tVar) // When procedure has its local variables.
+    {
+      Consume(tVar);
+      while (true) // Iterates until there is no variable to declare.
       {
-        GetParams(_scanner, typeManager, procSymbol);
-        if (_scanner->Peek() != tSemicolon)
+        GetVariables(_scanner, procScope, typeManager); // Get one type of variables.
+        Consume(tSemicolon);
+        if (_scanner->Peek().GetType() != tId) // If there is no more, stop.
         {
           break;
         }
-        else
-        {
-          Consume(tSemicolon);
-        }
-      }*/
-      GetParams(_scanner, typeManager, procSymbol);
-      Consume(tRBracketRound);
-    }
-    Consume(tSemicolon);
-    
-    Consume(tVar);
-    while (true)
-    {
-      GetVariables(_scanner, procScope, typeManager);
-      Consume(tSemicolon);
-      if (_scanner->Peek().GetType() != tId)
-      {
-        break;
       }
     }
     
     Consume(tBegin);
     
     CAstStatement* procStatSeq = NULL;
-    procStatSeq = statSequence(procScope);
+    procStatSeq = statSequence(procScope); // Get sequence of statements for this procedure.
     
     Consume(tEnd);
-    procScope->SetStatementSequence(procStatSeq);
+    procScope->SetStatementSequence(procStatSeq); // Set procedure's statement sequence.
     
     CToken* procNameCheck = NULL;
-    Consume(tId, procNameCheck);
-    if (procNameCheck->GetValue() != procName->GetValue())
+    Consume(tId, procNameCheck); // Ending name of procedure. Must match starting name.
+    if (procNameCheck->GetValue() != procName->GetValue()) // Check if name matches.
     {
       SetError(procNameCheck, "Procedure name mismatch.");
     }
@@ -376,13 +356,15 @@ CAstModule* CParser::module(void)
   
   Consume(tBegin);
   printf("Got begin keyword!\n");
+  
+  // TODO: Support for statements in module.
   //CAstStatement* statseq = statSequence(m);
   
   Consume(tEnd);
   CToken* module_id_check = new CToken();
-  Consume(tId, module_id_check);
+  Consume(tId, module_id_check); // Ending name of module. Must match starting name.
 
-  if (module_id->GetValue() != module_id_check->GetValue())
+  if (module_id->GetValue() != module_id_check->GetValue()) // Check if name matches.
   {
     SetError(t, "module name mismatch.");
   }
@@ -394,40 +376,40 @@ CAstModule* CParser::module(void)
 CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, CSymProc* _ps, int idx)
 {
   CToken* paramId = new CToken();
-  Consume(tId, paramId);
+  Consume(tId, paramId); // Get identifier for parameter.
   
   CType* paramType = NULL;
   
-  if (_scanner->Peek().GetType() == tComma)
+  if (_scanner->Peek().GetType() == tComma) // When there are more identifier(s) of same type.
   {
     Consume(tComma);
-    paramType = GetOneTypeParams(_scanner, _tm, _ps, i+1);
-    _ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType));
+    paramType = GetOneTypeParams(_scanner, _tm, _ps, i+1); // Recursive call.
+    _ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType)); // When above recursive call returns type, add parameter to procedure symbol. 
   }
-  else
+  else // When there are no more identifier(s) of same type.
   {
     Consume(tColon);
-    paramType = type(_tm, true);
-    if (!paramType->IsBoolean() && !paramType->IsChar() && !paramType->IsInt() && !paramType->IsArray() && !paramType->IsPointer())
+    paramType = type(_tm, true); // Set Parameter type.
+    if (!paramType->IsBoolean() && !paramType->IsChar() && !paramType->IsInt() && !paramType->IsArray() && !paramType->IsPointer()) // Check for type.
     {
       printf("Type error!\n");
     }
-    _ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType));
+    _ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType)); // Add parameter to procedure symbol.
   }
-  return paramType;
+  return paramType; // Return the type for recursive call.
 }
 
 CType* CParser::GetParams (CScanner* _scanner, CTypeManager* _tm, CSymProc* _ps)
 {
-  CType* oneTypeResult = GetOneTypeParams(_scanner, _tm, _ps, 0);
-  if (_scanner->Peek().GetType() == tSemicolon)
+  CType* oneTypeResult = GetOneTypeParams(_scanner, _tm, _ps, 0); // Adds one type of parameters.
+  if (_scanner->Peek().GetType() == tSemicolon) // When there are more variables.
   {
     Consume(tSemicolon);
-    GetParams(_scanner, _tm, _ps);
+    GetParams(_scanner, _tm, _ps); // Recursive call.
   }
   else
   {
-    return oneTypeResult;
+    return oneTypeResult; // Return the type for recursive call.
   }
 }
 
@@ -436,58 +418,57 @@ CType* CParser::GetVariables (CScanner* _scanner, CAstScope* s, CTypeManager* _t
   printf("In GetVariables function!\n");
   cout << "Current scanner peek : " << _scanner->Peek().GetValue() << endl;
   CToken* varId = new CToken();
-  Consume(tId, varId);
+  Consume(tId, varId); // Gets identifier for variable.
   
   CType* identType = NULL;
   
-  if (_scanner->Peek().GetType() == tComma)
+  if (_scanner->Peek().GetType() == tComma) // When there are more variable of same type.
   {
     Consume(tComma);
-    identType = GetVariables(_scanner, s, _tm);
-    s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType));
+    identType = GetVariables(_scanner, s, _tm); // Recursive call.
+    s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType)); // When above recursive call gives type, add variable to scope's symbol table. 
   }
-  else
+  else // When there are no more variable of same type.
   {
     Consume(tColon);
-    identType = type(_tm, false);
+    identType = type(_tm, false); // Get type.
     printf("Got type!\n");
-    if (!identType->IsBoolean() && !identType->IsChar() && !identType->IsInt())
+    if (!identType->IsBoolean() && !identType->IsChar() && !identType->IsInt() && !paramType->IsArray() && !paramType->IsPointer()) // Check for type.
     {
       printf("Type error!\n");
     }
-    s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType));
+    s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType)); // Add variable to scope's symbol table.
   }
-  return identType;
+  return identType; // Return the type for recursive call.
 }
 
 CType* CParser::GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType)
 {
-  //Consume(tLBracket);
   CToken* elemCount = NULL;
-  Consume(tNum, elemCount);
+  Consume(tNum, elemCount); // Gets number of element in this dimension.
   Consume(tRBracket);
-  char* endPtr = 0;
-  if (_scanner->Peek().GetType() == tLBracket)
+  char* endPtr = 0; // For string to integer conversion.
+  if (_scanner->Peek().GetType() == tLBracket) // When more dimensions exist.
   {
     Consume(tLBracket);
-    return _tm->GetArray(strtol(elemCount->GetValue().c_str(), &endPtr, 10), GenerateArrayType(_scanner, _tm));
+    return _tm->GetArray(strtol(elemCount->GetValue().c_str(), &endPtr, 10), GenerateArrayType(_scanner, _tm)); // Type for this dimension will be array of array by recursive call.
   }
-  else
+  else // When there are no more dimensions exist. i.e., 1st dimension.
   {
-    return _tm->GetArray(strtol(elemCount->GetValue().c_str(), &endPtr, 10), _baseType);
+    return _tm->GetArray(strtol(elemCount->GetValue().c_str(), &endPtr, 10), _baseType); // Type of this dimension will be array of _baseType.
   }
 }
 
 CType* CParser::GeneratePointerType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType)
 {
-  if (_scanner->Peek().GetType() == tLBracket)
+  if (_scanner->Peek().GetType() == tLBracket) // When more dimensions exist.
   {
     Consume(tLBracket);
-    return _tm->GetPointer(GeneratePointerType(_scanner, _tm, _baseType));
+    return _tm->GetPointer(GeneratePointerType(_scanner, _tm, _baseType)); // Type of this dimension will be pointer to pointer by recursive call.
   }
-  else
+  else // When there are no more dimensions exist.
   {
-    return _tm->GetPointer(_baseType);
+    return _tm->GetPointer(_baseType); // Type of this dimension will be pointer to _baseType.
   }
 }
 
@@ -496,67 +477,67 @@ CType* CParser::type(CTypeManager* _tm, bool _isParam)
   //
   // type                = basetype | type "[" [ number ] "]".
   //
-  if (_scanner->Peek().GetType() == tBoolean)
+  if (_scanner->Peek().GetType() == tBoolean) // Boolean basetype, array or pointer type.
   {
     Consume(tBoolean);
-    if (_scanner->Peek().GetType() == tLBracket)
+    if (_scanner->Peek().GetType() == tLBracket) // Possibility of boolean array or pointer type.
     {
       Consume(tLBracket);
-      if (_scanner->Peek().GetType() == tRBracket)
+      if (_scanner->Peek().GetType() == tRBracket) // Boolean pointer type.
       {
         return (CType*)GeneratePointerType(_scanner, _tm, (CType*)_tm->GetBool());
       }
-      else
+      else // Boolean array type.
       {
         return (CType*)GenerateArrayType(_scanner, _tm, (CType*)_tm->GetBool());
       }
     }
-    else
+    else // Boolean basetype.
     {
       return (CType*)_tm->GetBool();
     }
   }
-  else if (_scanner->Peek().GetType() == tChar)
+  else if (_scanner->Peek().GetType() == tChar) // Character basetype, array or pointer type.
   {
     Consume(tChar);
-    if (_scanner->Peek().GetType() == tLBracket)
+    if (_scanner->Peek().GetType() == tLBracket) // Possibility of character array or pointer type.
     {
       Consume(tLBracket);
-      if (_scanner->Peek().GetType() == tRBracket)
+      if (_scanner->Peek().GetType() == tRBracket) // Character pointer type.
       {
         return (CType*)GeneratePointerType(_scanner, _tm, (CType*)_tm->GetChar());
       }
-      else
+      else // Character array type.
       {
         return (CType*)GenerateArrayType(_scanner, _tm, (CType*)_tm->GetChar());
       }
     }
-    else
+    else // Character basetype.
     {
       return (CType*)_tm->GetChar();
     }
   }
-  else if (_scanner->Peek().GetType() == tInteger)
+  else if (_scanner->Peek().GetType() == tInteger) // Integer basetype, array or pointer type.
   {
     Consume(tInteger);
-    if (_scanner->Peek().GetType() == tLBracket)
+    if (_scanner->Peek().GetType() == tLBracket) // Possibility of integer array or pointer type.
     {
       Consume(tLBracket);
-      if (_scanner->Peek().GetType() == tRBracket)
+      if (_scanner->Peek().GetType() == tRBracket) // Integer pointer type.
       {
         return (CType*)GeneratePointerType(_scanner, _tm, (CType*)_tm->GetInt());
       }
-      else
+      else // Integer array type.
       {
         return (CType*)GenerateArrayType(_scanner, _tm, (CType*)_tm->GetInt());
       }
     }
-    else
+    else // Integer basetype.
     {
       return (CType*)_tm->GetInt();
     }
   }
-  else 
+  else // Invalid type.
   {
     return NULL;
   }
@@ -576,76 +557,76 @@ CAstStatement* CParser::statSequence(CAstScope *s)
   //      (CAUTION : ident is from both 'assignment' and 'subroutineCall')
   // FOLLOW(statSequence) = "end" | "else"
 
-  CAstStatement *head = NULL;
+  CAstStatement *head = NULL; // Head of statement sequence. Statements are accessed as linked list.
   
-  CTypeManager* typeManager = CTypeManager::Get();
+  CTypeManager* typeManager = CTypeManager::Get(); // Global type manager.
 
-  EToken statSeqFirstType = _scanner->Peek().GetType();
+  EToken statSeqFirstType = _scanner->Peek().GetType(); // Token type to check if statement is empty.
   
-  if (statSeqFirstType != tEnd && statSeqFirstType != tElse)
+  if (statSeqFirstType != tEnd && statSeqFirstType != tElse) // When statement is not empty.
   {
-    CAstStatement* tail = NULL;
+    CAstStatement* tail = NULL; // Tail of statement sequence.
     
-    while(!_abort)
+    while(!_abort) // Repeat until error.
     {
-      EToken statFirstType = _scanner->Peek().GetType();
+      EToken statFirstType = _scanner->Peek().GetType(); // Token type to check what type of statement is being processed.
       CAstStatement* st = NULL;
       
-      if (statFirstType == tId)
+      if (statFirstType == tId) // Assignment or subroutineCall.
       {
         CToken* commonFirst = NULL;
-        Consume(tId, commonFirst);
+        Consume(tId, commonFirst); // Consume common FIRST.
         
-        if (_scanner->Peek() == tAssign)
+        if (_scanner->Peek() == tAssign) // Case of assignment.
         {
           st = assignment(s, commonFirst);
         }
-        else if (_scanner->Peek() == tLBracketRound)
+        else if (_scanner->Peek() == tLBracketRound) // Case of subroutineCall.
         {
           st = subroutineCall(s, commonFirst, typeManager);
         }
-        else
+        else // Error.
         {
           SetError(_scanner->Peek(), "Call for function/procedure or assignment expected.");
         }
       }
-      else if (statFirstType == tIf)
+      else if (statFirstType == tIf) // Case of ifStatement.
       {
         st = ifStatement(s);
       }
-      else if (statFirstType == tWhile)
+      else if (statFirstType == tWhile) // Case of whileStatement.
       {
         st = whileStatement(s);
       }
-      else if (statFirstType == tReturn)
+      else if (statFirstType == tReturn) // Case of returnStatement.
       {
         st = returnStatement(s);
       }
-      else
+      else // Error.
       {
         SetError(_scanner->Peek(), "Statement expected.");
       }
       
       assert(st != NULL);
-      if (head == NULL)
+      if (head == NULL) // When first statement is processed.
       {
         head = st;
       }
-      else
+      else // When not first.
       {
         tail->SetNext(st);
       }
       tail = st;
       
-      statSeqFirstType = _scanner->Peek().GetType();
-      if (statSeqFirstType == tEnd || statSeqFirstType == tElse)
+      statSeqFirstType = _scanner->Peek().GetType(); // Ready for next statement.
+      if (statSeqFirstType == tEnd || statSeqFirstType == tElse) // When FOLLOW of statSequence is met. Indicates end of sequence.
       {
         break;
       }
-      Consume(tSemicolon);
+      Consume(tSemicolon); // Repeat processing statement.
     }
   }
-  return head;
+  return head; // Return the first statement of sequence.
 }
 
 CAstStatCall* CParser::subroutineCall(CAstScope* s, CToken* prevToken, CTypeManager* _tm)
@@ -653,11 +634,11 @@ CAstStatCall* CParser::subroutineCall(CAstScope* s, CToken* prevToken, CTypeMana
   //
   // subroutineCall      = ident "(" [ expression {"," expression} ] ")".
   //
-  CSymbol* funcSymbol = s->GetSymbolTable()->FindSymbol(prevToken->GetName());
+  CSymbol* funcSymbol = s->GetSymbolTable()->FindSymbol(prevToken->GetName()); // Find symbol for procedure/function.
   //CType* funcDataType = funcSymbol->GetDataType()
-  CAstFunctionCall* funcCall = new CAstFunctionCall(prevToken, funcSymbol);
+  CAstFunctionCall* funcCall = new CAstFunctionCall(prevToken, funcSymbol); // Make functionCall AST node.
   
-  AddArguments(s, _scanner, _tm, funcCall);
+  AddArguments(s, _scanner, _tm, funcCall); // Add arguments to procedure/function.
   
   return new CAstStatCall(prevToken, funcCall);
 }
@@ -666,19 +647,19 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
 {
   Comsume(tLBracketRound);
   
-  if (_scanner->Peek() == tRBracketRound)
+  if (_scanner->Peek() == tRBracketRound) // No argument to add.
   {
     return;
   }
-  else
+  else // Argument(s) exist(s).
   {
-    CAstExpression* exp = expression(s);
-    _fc->AddArg(exp);
-    while(_scanner->Peek().GetType() == tComma)
+    CAstExpression* exp = expression(s); // Get argument.
+    _fc->AddArg(exp); // Add argument to functionCall.
+    while(_scanner->Peek().GetType() == tComma) // Until there are no more argument left, iterate.
     {
       Consume(tComma);
-      exp = expression(s);
-      _fc->AddArg(exp);
+      exp = expression(s); // Get argument.
+      _fc->AddArg(exp); // Add argument to functionCall.
     }
   }
 }
@@ -720,33 +701,33 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
   // qualident is either an (multi-dimensional)array or basetype identifier.
   //
   CToken t;
-  CSymbol* symbol = s->GetSymbolTable()->FindSymbol(lhs->GetName());
+  CSymbol* symbol = s->GetSymbolTable()->FindSymbol(lhs->GetName()); // Fins symbol for LHS, which is qualident or ident.
 
-  if (_scanner->Peek()->GetType() == tLBracket)
+  if (_scanner->Peek()->GetType() == tLBracket) // When LHS is qualident.
   {
-    CAstArrayDesignator* qualid = CAstArrayDesignator(lhs, symbol);
-    while(_scanner->Peek() == tLBracket)
+    CAstArrayDesignator* qualid = CAstArrayDesignator(lhs, symbol); // Make qualident object.
+    while(_scanner->Peek() == tLBracket) // Gets all indices.
     {
       Consume(tLBracket);
-      CAstExpression* idxExp = expression(s);
-      qualid->AddIndex(idxExp);
+      CAstExpression* idxExp = expression(s); // Get index.
+      qualid->AddIndex(idxExp); // Set index of qualident.
       Consume(tRBracket);
     }
-    qualid->IndicesComplete();
+    qualid->IndicesComplete(); // Declare that indexing is finished.
     
     Consume(tAssign, &t);
     
-    CAstExpression* rhs = expression(s);
+    CAstExpression* rhs = expression(s); // Gets RHS.
     
     return new CAstStatAssign(t, qualid, rhs);
   }
-  else
+  else // When LHS is ident.
   {
-    CAstDesignator* id = CAstDesignator(lhs, symbol);
+    CAstDesignator* id = CAstDesignator(lhs, symbol); // Make ident object.
     
     Consume(tAssign, &t);
     
-    CAstExpression *rhs = expression(s);
+    CAstExpression *rhs = expression(s); // Gets RHS.
     
     return new CAstStatAssign(t, id, rhs);
   }
@@ -765,43 +746,43 @@ CAstExpression* CParser::expression(CAstScope* s)
 
   left = simpleexpr(s);
 
-  if (_scanner->Peek().GetType() == tRelOp) 
+  if (_scanner->Peek().GetType() == tRelOp) // When form of simpleexpr relOp simpleexpr.
   {
     Consume(tRelOp, &t);
     right = simpleexpr(s);
 
-    if (t.GetValue() == "=")
+    if (t.GetValue() == "=") // Equality.
     {
       relop = opEqual;
     }
-    else if (t.GetValue() == "#")
+    else if (t.GetValue() == "#") // Inequality.
     {
       relop = opNotEqual;
     }
-    else if (t.GetValue() == "<")
+    else if (t.GetValue() == "<") // Less than.
     {
       relop = opLessThan;
     }
-    else if (t.GetValue() == "<=")
+    else if (t.GetValue() == "<=") // Less than or equal to.
     {
       relop = opLessEqual;
     }
-    else if (t.GetValue() == ">")
+    else if (t.GetValue() == ">") // Greater than.
     {
       relop = opBiggerThan;
     }
-    else if (t.GetValue() == ">=")
+    else if (t.GetValue() == ">=") // Greater than or equal to.
     {
       relop = opBiggerEqual;
     }
-    else 
+    else // Invalid relation operator.
     {
       SetError(t, "invalid relation.");
     }
 
     return new CAstBinaryOp(t, relop, left, right);
   } 
-  else 
+  else // When form of simpleexpr.
   {
     return left;
   }
