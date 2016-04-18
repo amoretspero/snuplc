@@ -26,12 +26,12 @@ number              : CAstConstant(Type : CIntType)
 boolean             : CAstConstant(Type : CBoolType)
 type                : CType (*)
 qualident           : CAstArrayDesignator (*)
-factOp              : CAstBinaryOp
-termOp              : CAstBinaryOp
+factOp              : CAstBinaryOp (*)
+termOp              : CAstBinaryOp (*)
 relOp               : CAstBinaryOp (*)
 assignment          : CAstStatAssign
 
-subroutineCall      : CAstStatCall (**)
+subroutineCall      : CAstFunctionCall (**)
 expression          : CAstExpression
 simpleexpr          : CAstExpression
 term                : CAstExpression
@@ -49,7 +49,7 @@ varDecl             : (**)
 
 subroutineDecl      : (**)
 procedureDecl       : CAstProcedure
-function            : CAstProcedure
+functionDecl        : CAstProcedure
 formalParam         : (**)
 subroutineBody      : (**)
 

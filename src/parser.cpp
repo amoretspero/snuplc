@@ -265,8 +265,10 @@ void CParser::InitSymbolTable(CSymtab *s)
 CAstModule* CParser::module(void)
 {
   //
-  // module ::= statSequence  ".".
+  // module              = "module" ident ";" varDeclaration { subroutineDecl } "begin" 
+  //                       statSequence "end" ident ".".
   //
+  /*
   CToken dummy;
   CAstModule *m = new CAstModule(dummy, "placeholder");
   CAstStatement *statseq = NULL;
@@ -277,6 +279,109 @@ CAstModule* CParser::module(void)
   m->SetStatementSequence(statseq);
 
   return m;
+  */
+  
+  CSymtab moduleSymTab = new CSymtab();
+  
+  CToken t;
+  Consume(tModule);
+  
+  CToken* module_id = new CToken();
+  Consume(tId, module_id);
+  Consume(tSemicolon);
+  
+  CAstModule* m = new CAstModule(t, module_id->GetValue());
+  
+  CTypeManager* typeManager = CTypeManager::Get();
+  
+  CToken checkIfVar = _scanner->Peek();
+  if (checkIfVar.GetType() == tVar)
+  {
+    Consume(tVar);
+   
+    while (true)
+    {
+      GetVariables(_scanner, m, typeManager);
+      printf("End get variables.\n");
+      cout << "Next token is : " << _scanner->Peek().GetValue() << endl;
+      Consume(tSemicolon);
+      printf("Got semicolon of end of var decl.\n");
+      if (_scanner->Peek().GetType() != tId)
+      {
+        break;
+      }
+    }
+  }
+  // TODO: Support for multiple subroutineDecl.
+  
+  Consume(tBegin);
+  printf("Got begin keyword!\n");
+  //CAstStatement* statseq = statSequence(m);
+  
+  Consume(tEnd);
+  CToken* module_id_check = new CToken();
+  Consume(tId, module_id_check);
+
+  if (module_id->GetValue() != module_id_check->GetValue())
+  {
+    SetError(t, "module name mismatch.");
+  }
+  Consume(tDot);
+  
+  return m;
+}
+
+CType* CParser::GetVariables (CScanner* _scanner, CAstModule* s, CTypeManager* _tm)
+{
+  printf("In GetVariables function!\n");
+  cout << "Current scanner peek : " << _scanner->Peek().GetValue() << endl;
+  CToken* varId = new CToken();
+  Consume(tId, varId);
+  
+  CType* identType = NULL;
+  
+  if (_scanner->Peek().GetType() == tComma)
+  {
+    Consume(tComma);
+    identType = GetVariables(_scanner, s, _tm);
+    s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType));
+  }
+  else
+  {
+    Consume(tColon);
+    identType = type(_tm);
+    printf("Got type!\n");
+    if (!identType->IsBoolean() && !identType->IsChar() && !identType->IsInt())
+    {
+      printf("Type error!\n");
+    }
+    s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType));
+  }
+  return identType;
+}
+
+CType* CParser::type(CTypeManager* _tm)
+{
+  // TODO: Need to support array types.
+  if (_scanner->Peek().GetType() == tBoolean)
+  {
+    Consume(tBoolean);
+    return (CType*)_tm->GetBool();
+  }
+  else if (_scanner->Peek().GetType() == tChar)
+  {
+    Consume(tChar);
+    return (CType*)_tm->GetChar();
+  }
+  else if (_scanner->Peek().GetType() == tInteger)
+  {
+    Consume(tInteger);
+    return (CType*)_tm->GetInt();
+  }
+  else 
+  {
+    return NULL;
+  }
 }
 
 CAstStatement* CParser::statSequence(CAstScope *s)
@@ -468,6 +573,7 @@ CAstConstant* CParser::number(void)
   return new CAstConstant(t, CTypeManager::Get()->GetInt(), v);
 }
 
+/*
 CAstStringConstant* CParser::id(CAstScope* s)
 {
   //
@@ -483,3 +589,4 @@ CAstStringConstant* CParser::id(CAstScope* s)
   errno = 0;
   return new CAstStringConstant(t, t.GetValue(), s);
 }
+*/
