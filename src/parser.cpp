@@ -407,8 +407,8 @@ CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, CSymPro
   else
   {
     Consume(tColon);
-    paramType = type(_tm);
-    if (!paramType->IsBoolean() && !paramType->IsChar() && !paramType->IsInt())
+    paramType = type(_tm, true);
+    if (!paramType->IsBoolean() && !paramType->IsChar() && !paramType->IsInt() && !paramType->IsArray() && !paramType->IsPointer())
     {
       printf("Type error!\n");
     }
@@ -449,7 +449,7 @@ CType* CParser::GetVariables (CScanner* _scanner, CAstScope* s, CTypeManager* _t
   else
   {
     Consume(tColon);
-    identType = type(_tm);
+    identType = type(_tm, false);
     printf("Got type!\n");
     if (!identType->IsBoolean() && !identType->IsChar() && !identType->IsInt())
     {
@@ -460,26 +460,101 @@ CType* CParser::GetVariables (CScanner* _scanner, CAstScope* s, CTypeManager* _t
   return identType;
 }
 
-CType* CParser::type(CTypeManager* _tm)
+CType* CParser::GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType)
+{
+  //Consume(tLBracket);
+  CToken* elemCount = NULL;
+  Consume(tNum, elemCount);
+  Consume(tRBracket);
+  char* endPtr = 0;
+  if (_scanner->Peek().GetType() == tLBracket)
+  {
+    Consume(tLBracket);
+    return _tm->GetArray(strtol(elemCount->GetValue().c_str(), &endPtr, 10), GenerateArrayType(_scanner, _tm));
+  }
+  else
+  {
+    return _tm->GetArray(strtol(elemCount->GetValue().c_str(), &endPtr, 10), _baseType);
+  }
+}
+
+CType* CParser::GeneratePointerType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType)
+{
+  if (_scanner->Peek().GetType() == tLBracket)
+  {
+    Consume(tLBracket);
+    return _tm->GetPointer(GeneratePointerType(_scanner, _tm, _baseType));
+  }
+  else
+  {
+    return _tm->GetPointer(_baseType);
+  }
+}
+
+CType* CParser::type(CTypeManager* _tm, bool _isParam)
 {
   //
   // type                = basetype | type "[" [ number ] "]".
   //
-  // TODO: Need to support array types.
   if (_scanner->Peek().GetType() == tBoolean)
   {
     Consume(tBoolean);
-    return (CType*)_tm->GetBool();
+    if (_scanner->Peek().GetType() == tLBracket)
+    {
+      Consume(tLBracket);
+      if (_scanner->Peek().GetType() == tRBracket)
+      {
+        return (CType*)GeneratePointerType(_scanner, _tm, (CType*)_tm->GetBool());
+      }
+      else
+      {
+        return (CType*)GenerateArrayType(_scanner, _tm, (CType*)_tm->GetBool());
+      }
+    }
+    else
+    {
+      return (CType*)_tm->GetBool();
+    }
   }
   else if (_scanner->Peek().GetType() == tChar)
   {
     Consume(tChar);
-    return (CType*)_tm->GetChar();
+    if (_scanner->Peek().GetType() == tLBracket)
+    {
+      Consume(tLBracket);
+      if (_scanner->Peek().GetType() == tRBracket)
+      {
+        return (CType*)GeneratePointerType(_scanner, _tm, (CType*)_tm->GetChar());
+      }
+      else
+      {
+        return (CType*)GenerateArrayType(_scanner, _tm, (CType*)_tm->GetChar());
+      }
+    }
+    else
+    {
+      return (CType*)_tm->GetChar();
+    }
   }
   else if (_scanner->Peek().GetType() == tInteger)
   {
     Consume(tInteger);
-    return (CType*)_tm->GetInt();
+    if (_scanner->Peek().GetType() == tLBracket)
+    {
+      Consume(tLBracket);
+      if (_scanner->Peek().GetType() == tRBracket)
+      {
+        return (CType*)GeneratePointerType(_scanner, _tm, (CType*)_tm->GetInt());
+      }
+      else
+      {
+        return (CType*)GenerateArrayType(_scanner, _tm, (CType*)_tm->GetInt());
+      }
+    }
+    else
+    {
+      return (CType*)_tm->GetInt();
+    }
   }
   else 
   {
@@ -570,38 +645,6 @@ CAstStatement* CParser::statSequence(CAstScope *s)
       Consume(tSemicolon);
     }
   }
-  /*
-  if (!(tt == tDot)) {
-    CAstStatement *tail = NULL;
-
-    do {
-      CToken t;
-      EToken tt = _scanner->Peek().GetType();
-      CAstStatement *st = NULL;
-
-      switch (tt) {
-        // statement ::= assignment
-        case tNum:
-          st = assignment(s);
-          break;
-
-        default:
-          SetError(_scanner->Peek(), "statement expected.");
-          break;
-      }
-
-      assert(st != NULL);
-      if (head == NULL) head = st;
-      else tail->SetNext(st);
-      tail = st;
-
-      tt = _scanner->Peek().GetType();
-      if (tt == tDot) break;
-
-      Consume(tSemicolon);
-    } while (!_abort);
-  }
-*/
   return head;
 }
 
@@ -614,7 +657,30 @@ CAstStatCall* CParser::subroutineCall(CAstScope* s, CToken* prevToken, CTypeMana
   //CType* funcDataType = funcSymbol->GetDataType()
   CAstFunctionCall* funcCall = new CAstFunctionCall(prevToken, funcSymbol);
   
+  AddArguments(s, _scanner, _tm, funcCall);
+  
   return new CAstStatCall(prevToken, funcCall);
+}
+
+void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, CAstFunctionCall* _fc)
+{
+  Comsume(tLBracketRound);
+  
+  if (_scanner->Peek() == tRBracketRound)
+  {
+    return;
+  }
+  else
+  {
+    CAstExpression* exp = expression(s);
+    _fc->AddArg(exp);
+    while(_scanner->Peek().GetType() == tComma)
+    {
+      Consume(tComma);
+      exp = expression(s);
+      _fc->AddArg(exp);
+    }
+  }
 }
 
 CAstStatIf* ifStatement(CAstScope* s)
@@ -649,14 +715,41 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
   //
   // assignment ::= number ":=" expression.
   //
+  // assignment          = qualident ":=" expression.
+  //
+  // qualident is either an (multi-dimensional)array or basetype identifier.
+  //
   CToken t;
+  CSymbol* symbol = s->GetSymbolTable()->FindSymbol(lhs->GetName());
 
-  //CAstConstant *lhs = number();
-  Consume(tAssign, &t);
-
-  CAstExpression *rhs = expression(s);
-
-  return new CAstStatAssign(t, lhs, rhs);
+  if (_scanner->Peek()->GetType() == tLBracket)
+  {
+    CAstArrayDesignator* qualid = CAstArrayDesignator(lhs, symbol);
+    while(_scanner->Peek() == tLBracket)
+    {
+      Consume(tLBracket);
+      CAstExpression* idxExp = expression(s);
+      qualid->AddIndex(idxExp);
+      Consume(tRBracket);
+    }
+    qualid->IndicesComplete();
+    
+    Consume(tAssign, &t);
+    
+    CAstExpression* rhs = expression(s);
+    
+    return new CAstStatAssign(t, qualid, rhs);
+  }
+  else
+  {
+    CAstDesignator* id = CAstDesignator(lhs, symbol);
+    
+    Consume(tAssign, &t);
+    
+    CAstExpression *rhs = expression(s);
+    
+    return new CAstStatAssign(t, id, rhs);
+  }
 }
 
 CAstExpression* CParser::expression(CAstScope* s)

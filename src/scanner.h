@@ -72,7 +72,7 @@ enum EToken {
   tLBracketRound,                   ///< a left round bracket '('
   tRBracketRound,                   ///< a right round bracket ')'
   tLBracket,                        ///< a left bracket '['
-  tRBracekt,                        ///< a right bracket ']'
+  tRBracket,                        ///< a right bracket ']'
   
   tModule,                          ///< keyword 'module'
   tBegin,                           ///< keyword 'begin'
