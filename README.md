@@ -40,3 +40,8 @@ Fixed a bug in module() function that local variables ALWAYS have to exist in pr
   
 **2016-04-19 02:45 KST**
 Implemented simpleexpr, term for SnuPL/1.
+
+**2016-04-19 04:02 KST**
+Commented simpleexpr, term and added some TODOs.  
+Implemented factor and commented it. May need some more thinking about escape characters.  
+Need code review and (if needed) additional function or bug fixes.

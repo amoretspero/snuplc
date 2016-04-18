@@ -577,6 +577,7 @@ CAstStatement* CParser::statSequence(CAstScope *s)
         CToken* commonFirst = NULL;
         Consume(tId, commonFirst); // Consume common FIRST.
         
+        // TODO: qualident is not properly handled.
         if (_scanner->Peek() == tAssign) // Case of assignment.
         {
           st = assignment(s, commonFirst);
@@ -701,7 +702,7 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
   // qualident is either an (multi-dimensional)array or basetype identifier.
   //
   CToken t;
-  CSymbol* symbol = s->GetSymbolTable()->FindSymbol(lhs->GetName()); // Fins symbol for LHS, which is qualident or ident.
+  CSymbol* symbol = s->GetSymbolTable()->FindSymbol(lhs->GetName()); // Find symbol for LHS, which is qualident or ident.
 
   if (_scanner->Peek()->GetType() == tLBracket) // When LHS is qualident.
   {
@@ -797,39 +798,40 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
   //
   CAstExpression *n = NULL;
   
-  if (_scanner->Peek().GetValue() == "+")
+  if (_scanner->Peek().GetValue() == "+") // Unary positive operator.
   {
     CToken* unaryOp = NULL;
-    Consume(tTerm, unaryOp);
-    n = term(s);
+    Consume(tTerm, unaryOp); // Get unary operator token.
+    n = new CAstUnaryOp(unaryOp, opPos, term(s)); // Construct term with unary operator included.
   }
-  else if (_scanner->Peek().GetValue() == "-")
+  else if (_scanner->Peek().GetValue() == "-") // Unary negative operator.
   {
     CToken* unaryOp = NULL;
-    Consume(tTerm, unaryOp);
-    n = new CAstUnaryOp(unaryOp, opNeg, term(s));
+    Consume(tTerm, unaryOp); // Get unary operator token.
+    n = new CAstUnaryOp(unaryOp, opNeg, term(s)); // Construct term with unary operator included.
   }
-  else
+  else // When no unary operator prefixed.
   {
-    n = term(s);
+    n = term(s); // Construct term.
   }
 
-  while (_scanner->Peek().GetType() == tTerm) {
+  while (_scanner->Peek().GetType() == tTerm) // Until there are no term left, iterate and construct simpleexpr.
+  {
     CToken t;
     CAstExpression *l = n, *r;
 
-    Consume(tTerm, &t);
+    Consume(tTerm, &t); // Get termOp token.
 
-    r = term(s);
-    if (t.GetValue() == "+")
+    r = term(s); // Get RHS term.
+    if (t.GetValue() == "+") // Case of binary addition operator.
     {
       n = new CAstBinaryOp(t, opAdd, l, r);
     }
-    else if (t.GetValue() == "-")
+    else if (t.GetValue() == "-") // Case of binary subtraction operator.
     {
       n = new CAstBinaryOp(t, opSub, l, r);
     }
-    else
+    else // Case of boolean OR operator.
     {
       n = new CAstBinaryOp(t, opOr, l, r);  
     }
@@ -847,32 +849,33 @@ CAstExpression* CParser::term(CAstScope *s)
   //
   CAstExpression *n = NULL;
 
-  n = factor(s);
+  n = factor(s); // Since no prefix exists before factor and at least one factor always exist, construct factor.
 
-  EToken tt = _scanner->Peek().GetType();
+  EToken tt = _scanner->Peek().GetType(); // Get token enumerator for next token. Used for classfication.
 
-  while ((tt == tFact)) {
+  while (tt == tFact) // Until there are no factor left, iterate and construct term. 
+  {
     CToken t;
     CAstExpression *l = n, *r;
 
-    Consume(tFact, &t);
+    Consume(tFact, &t); // Get factOp operator.
 
-    r = factor(s);
+    r = factor(s); // Construct term.
 
-    if (t.GetValue() == "*")
+    if (t.GetValue() == "*") // Case of binary multiplication operator.
     {
       n = new CAstBinaryOp(t, opMul, l, r);
     }
-    else if (t.GetValue() == "/");
+    else if (t.GetValue() == "/"); // Case of binary division operator.
     {
       n = new CAstBinaryOp(t, opDiv, l, r);
     }
-    else
+    else // Case of boolean AND operator.
     {
       n = new CAstBinaryOp(t, opAnd, l, r);
     }
 
-    tt = _scanner->Peek().GetType();
+    tt = _scanner->Peek().GetType(); // Ready for next iteration.
   }
 
   return n;
@@ -893,11 +896,98 @@ CAstExpression* CParser::factor(CAstScope *s)
   //
   // FOLLOW(factor) = "*" | "/" | "&&" | "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" |
   //
+  // FOLLOW(qualident) = "*" | "/" | "&&" | "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" | ":=" |
+  //
 
   CToken t;
-  EToken tt = _scanner->Peek().GetType();
+  CTypeManager* typeManager = CTypeManager::Get(); // Type manager.
+  EToken tt = _scanner->Peek().GetType(); // Token enumerator for next token. Used for classification.
   CAstExpression *unary = NULL, *n = NULL;
+  
+  if (tt == tId) // Possibility of qualident or subroutineCall
+  {
+    CToken* factorId = NULL;
+    Consume(tId, factorId); // Get common FIRST.
+    tt = _scanner->Peek().GetType(); // Peek the next.
+    if (tt == tLBracketRound) // Case of subroutineCall.
+    {
+      n = subroutineCall(s, factorId, typeManager);
+    }
+    else if (tt == tLBracket) // Case of qualident (not ident).
+    {
+      CSymbol* qualIdSymbol = s->GetSymbolTable()->FindSymbol(factorId->GetName()); // Find symbol for qualident.
+      CAstArrayDesignator* qualid = new CAstArrayDesignator(factorId, qualIdSymbol); // Construct qualident variable.
+      while(tt == tLBracket) // Set indices of qualident variable.
+      {
+        Consume(tLBracket);
+        CAstExpression* idxExp = expression(s);
+        qualid->AddIndex(idxExp);
+        Consume(tRBracket);
+        tt = _scanner->Peek().GetType();
+      }
+      n = qualid;
+    }
+    else if (tt == tFact || tt == tRBracket || tt == tRBracketRound || tt == tComma || tt == tEnd || tt == tElse || tt == tSemicolon || tt == tRelOp || tt == tTerm || tt == tAssign) // Case of ident.
+    {
+      CSymbol* idSymbol = s->GetSymbolTable()->FindSymbol(factorId->GetName()); // Find symbol for ident.
+      n = new CAstDesignator(factorId, idSymbol); // Construct ident variable.
+    }
+  }
+  else if (tt == tNum) // Case of number.
+  {
+    CToken* num = NULL;
+    Consume(tNum, num); // Get number token.
+    char* endPtr = 0;
+    long long numValue = strtoll(num->GetValue().c_str(), &endPtr, 10); // Parse number value.
+    n = new CAstConstant(num, typeManager->GetInt(), numValue); // Construct number constant.
+  }
+  else if (tt == tTrue) // Case of boolean TRUE.
+  {
+    CToken* booleanTrue = NULL;
+    Consume(tTrue, booleanTrue); // Get boolean TRUE token.
+    long long numValue = 1; // 1 for TRUE, 0 for FALSE.
+    n = new CAstConstant(booleanTrue, typeManager->GetBool(), numValue); // Construct boolean constant.
+  }
+  else if (tt == tFalse) // Case of boolean FALSE.
+  {
+    CToken* booleanFalse = NULL;
+    Consume(tFalse, booleanFalse); // Get boolean FALSE token.
+    long long numValue = 0; // 1 for TRUE, 0 for FALSE.
+    n = new CAstConstant(booleanFalse, typeManager->GetBool(), numValue); // Construct boolean constant.
+  }
+  else if (tt == tCharacter) // Case of character.
+  {
+    // TODO: Check for escape characters.
+    CToken* ch = NULL;
+    Consume(tCharacter, ch); // Get character token.
+    long long charValue = ch->GetValue().c_str()[0]; // Parse character value to integer value.
+    n = new CAstConstant(ch, typeManager->GetChar(), charValue); // Construct character constant.
+  }
+  else if (tt = tString) // Case of string.
+  {
+    CToken* str = NULL;
+    Consume(tString, str); // Get string token.
+    n = new CAstStringConstant(str, str->GetValue(), s); // Construct string constant.
+  }
+  else if (tt = tLBracketRound) // Case of expression.
+  {
+    Consume(tLBracketRound)
+    n = expression(s); // Get expression.
+    Consume(tRBracketRound);
+  }
+  else if (tt == tExclam) // Case of binary negation.
+  {
+    CToken* exclam = NULL;
+    Consume(tExclam, exclam); // Get exclamanation token, which represents binary negation.
+    n = new CAstUnaryOp(exclam, opNot, factor(s)); // Construct negation of factor.(recursive call)
+  }
+  else // Invalid factor.
+  {
+    cout << "got " << _scanner->Peek() << endl;
+    SetError(_scanner->Peek(), "factor expected.");
+  }
 
+  /*
   switch (tt) {
     // factor ::= number
     case tNum:
@@ -916,6 +1006,7 @@ CAstExpression* CParser::factor(CAstScope *s)
       SetError(_scanner->Peek(), "factor expected.");
       break;
   }
+  */
 
   return n;
 }
