@@ -312,7 +312,67 @@ CAstModule* CParser::module(void)
       }
     }
   }
-  // TODO: Support for multiple subroutineDecl.
+  // TODO: Support for multiple functions.
+  while (_scanner->Peek() == tProcedure)
+  {
+    Consume(tProcedure);
+    
+    CToken* procName = new CToken();
+    Consume(tId, procName);
+    
+    CSymProc* procSymbol = new CSymProc(procName->GetValue(), NULL);
+    m->GetSymbolTable()->AddSymbol(procSymbol);
+    
+    CAstProcedure* procScope = new CAstProcedure(procName, procName->GetValue(), m, procSymbol);
+    
+    if (_scanner->Peek() == tLBracketRound)
+    {
+      Consume(tLBracketRound);
+      /*
+      while (true)
+      {
+        GetParams(_scanner, typeManager, procSymbol);
+        if (_scanner->Peek() != tSemicolon)
+        {
+          break;
+        }
+        else
+        {
+          Consume(tSemicolon);
+        }
+      }*/
+      GetParams(_scanner, typeManager, procSymbol);
+      Consume(tRBracketRound);
+    }
+    Consume(tSemicolon);
+    
+    Consume(tVar);
+    while (true)
+    {
+      GetVariables(_scanner, procScope, typeManager);
+      Consume(tSemicolon);
+      if (_scanner->Peek().GetType() != tId)
+      {
+        break;
+      }
+    }
+    
+    Consume(tBegin);
+    
+    CAstStatement* procStatSeq = NULL;
+    procStatSeq = statSequence(procScope);
+    
+    Consume(tEnd);
+    procScope->SetStatementSequence(procStatSeq);
+    
+    CToken* procNameCheck = NULL;
+    Consume(tId, procNameCheck);
+    if (procNameCheck->GetValue() != procName->GetValue())
+    {
+      SetError(procNameCheck, "Procedure name mismatch.");
+    }
+    Consume(tSemicolon);
+  }
   
   Consume(tBegin);
   printf("Got begin keyword!\n");
@@ -331,7 +391,47 @@ CAstModule* CParser::module(void)
   return m;
 }
 
-CType* CParser::GetVariables (CScanner* _scanner, CAstModule* s, CTypeManager* _tm)
+CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, CSymProc* _ps, int idx)
+{
+  CToken* paramId = new CToken();
+  Consume(tId, paramId);
+  
+  CType* paramType = NULL;
+  
+  if (_scanner->Peek().GetType() == tComma)
+  {
+    Consume(tComma);
+    paramType = GetOneTypeParams(_scanner, _tm, _ps, i+1);
+    _ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType));
+  }
+  else
+  {
+    Consume(tColon);
+    paramType = type(_tm);
+    if (!paramType->IsBoolean() && !paramType->IsChar() && !paramType->IsInt())
+    {
+      printf("Type error!\n");
+    }
+    _ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType));
+  }
+  return paramType;
+}
+
+CType* CParser::GetParams (CScanner* _scanner, CTypeManager* _tm, CSymProc* _ps)
+{
+  CType* oneTypeResult = GetOneTypeParams(_scanner, _tm, _ps, 0);
+  if (_scanner->Peek().GetType() == tSemicolon)
+  {
+    Consume(tSemicolon);
+    GetParams(_scanner, _tm, _ps);
+  }
+  else
+  {
+    return oneTypeResult;
+  }
+}
+
+CType* CParser::GetVariables (CScanner* _scanner, CAstScope* s, CTypeManager* _tm)
 {
   printf("In GetVariables function!\n");
   cout << "Current scanner peek : " << _scanner->Peek().GetValue() << endl;
@@ -362,6 +462,9 @@ CType* CParser::GetVariables (CScanner* _scanner, CAstModule* s, CTypeManager* _
 
 CType* CParser::type(CTypeManager* _tm)
 {
+  //
+  // type                = basetype | type "[" [ number ] "]".
+  //
   // TODO: Need to support array types.
   if (_scanner->Peek().GetType() == tBoolean)
   {
@@ -392,9 +495,82 @@ CAstStatement* CParser::statSequence(CAstScope *s)
   // FIRST(statSequence) = { tNum }
   // FOLLOW(statSequence) = { tDot }
   //
-  CAstStatement *head = NULL;
+  // statement           = assignment | subroutineCall | ifStatement | whileStatement | returnStatement.
+  // statSequence        = [ statement { ";" statement } ].
+  // FIRST(statSequence) = epsilon | ident | "if" | "while" | "return"
+  //      (CAUTION : ident is from both 'assignment' and 'subroutineCall')
+  // FOLLOW(statSequence) = "end" | "else"
 
-  EToken tt = _scanner->Peek().GetType();
+  CAstStatement *head = NULL;
+  
+  CTypeManager* typeManager = CTypeManager::Get();
+
+  EToken statSeqFirstType = _scanner->Peek().GetType();
+  
+  if (statSeqFirstType != tEnd && statSeqFirstType != tElse)
+  {
+    CAstStatement* tail = NULL;
+    
+    while(!_abort)
+    {
+      EToken statFirstType = _scanner->Peek().GetType();
+      CAstStatement* st = NULL;
+      
+      if (statFirstType == tId)
+      {
+        CToken* commonFirst = NULL;
+        Consume(tId, commonFirst);
+        
+        if (_scanner->Peek() == tAssign)
+        {
+          st = assignment(s, commonFirst);
+        }
+        else if (_scanner->Peek() == tLBracketRound)
+        {
+          st = subroutineCall(s, commonFirst, typeManager);
+        }
+        else
+        {
+          SetError(_scanner->Peek(), "Call for function/procedure or assignment expected.");
+        }
+      }
+      else if (statFirstType == tIf)
+      {
+        st = ifStatement(s);
+      }
+      else if (statFirstType == tWhile)
+      {
+        st = whileStatement(s);
+      }
+      else if (statFirstType == tReturn)
+      {
+        st = returnStatement(s);
+      }
+      else
+      {
+        SetError(_scanner->Peek(), "Statement expected.");
+      }
+      
+      assert(st != NULL);
+      if (head == NULL)
+      {
+        head = st;
+      }
+      else
+      {
+        tail->SetNext(st);
+      }
+      tail = st;
+      
+      statSeqFirstType = _scanner->Peek().GetType();
+      if (statSeqFirstType == tEnd || statSeqFirstType == tElse)
+      {
+        break;
+      }
+      Consume(tSemicolon);
+    }
+  }
+  /*
   if (!(tt == tDot)) {
     CAstStatement *tail = NULL;
 
@@ -425,18 +601,57 @@ CAstStatement* CParser::statSequence(CAstScope *s)
       Consume(tSemicolon);
     } while (!_abort);
   }
-
+*/
   return head;
 }
 
-CAstStatAssign* CParser::assignment(CAstScope *s)
+CAstStatCall* CParser::subroutineCall(CAstScope* s, CToken* prevToken, CTypeManager* _tm)
+{
+  //
+  // subroutineCall      = ident "(" [ expression {"," expression} ] ")".
+  //
+  CSymbol* funcSymbol = s->GetSymbolTable()->FindSymbol(prevToken->GetName());
+  //CType* funcDataType = funcSymbol->GetDataType()
+  CAstFunctionCall* funcCall = new CAstFunctionCall(prevToken, funcSymbol);
+  
+  return new CAstStatCall(prevToken, funcCall);
+}
+
+CAstStatIf* ifStatement(CAstScope* s)
+{
+  //
+  // ifStatement         = "if" "(" expression ")" "then" statSequence [ "else" statSequence ] "end".
+  //
+  // TODO: Implement ifStatement.
+  return NULL;
+}
+
+CAstStatWhile* whileStatement(CAstScope* s)
+{
+  //
+  // whileStatement      = "while" "(" expression ")" "do" statSequence "end".
+  //
+  // TODO: Implement whileStatement.
+  return NULL;
+}
+
+CAstStatReturn* returnStatement(CAstScope* s)
+{
+  //
+  // returnStatement     = "return" [ expression ].
+  //
+  // TODO: Implement returnStatement.
+  return NULL;
+}
+
+CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
 {
   //
   // assignment ::= number ":=" expression.
   //
   CToken t;
 
-  CAstConstant *lhs = number();
+  //CAstConstant *lhs = number();
   Consume(tAssign, &t);
 
   CAstExpression *rhs = expression(s);
@@ -449,22 +664,52 @@ CAstExpression* CParser::expression(CAstScope* s)
   //
   // expression ::= simpleexpr [ relOp simpleexpression ].
   //
+  // expression          = simpleexpr [ relOp simpleexpr ].
+  //
   CToken t;
   EOperation relop;
   CAstExpression *left = NULL, *right = NULL;
 
   left = simpleexpr(s);
 
-  if (_scanner->Peek().GetType() == tRelOp) {
+  if (_scanner->Peek().GetType() == tRelOp) 
+  {
     Consume(tRelOp, &t);
     right = simpleexpr(s);
 
-    if (t.GetValue() == "=")       relop = opEqual;
-    else if (t.GetValue() == "#")  relop = opNotEqual;
-    else SetError(t, "invalid relation.");
+    if (t.GetValue() == "=")
+    {
+      relop = opEqual;
+    }
+    else if (t.GetValue() == "#")
+    {
+      relop = opNotEqual;
+    }
+    else if (t.GetValue() == "<")
+    {
+      relop = opLessThan;
+    }
+    else if (t.GetValue() == "<=")
+    {
+      relop = opLessEqual;
+    }
+    else if (t.GetValue() == ">")
+    {
+      relop = opBiggerThan;
+    }
+    else if (t.GetValue() == ">=")
+    {
+      relop = opBiggerEqual;
+    }
+    else 
+    {
+      SetError(t, "invalid relation.");
+    }
 
     return new CAstBinaryOp(t, relop, left, right);
-  } else {
+  } 
+  else 
+  {
     return left;
   }
 }
@@ -473,6 +718,8 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
 {
   //
   // simpleexpr ::= term { termOp term }.
+  //
+  // simpleexpr          = ["+"|"-"] term { termOp term }.
   //
   CAstExpression *n = NULL;
 
@@ -572,21 +819,3 @@ CAstConstant* CParser::number(void)
 
   return new CAstConstant(t, CTypeManager::Get()->GetInt(), v);
 }
-
-/*
-CAstStringConstant* CParser::id(CAstScope* s)
-{
-  //
-  // ident ::= letter { letter | digit }.
-  //
-  // "letter { letter | digit }" is scanned as one token (tId)
-  //
-  
-  CToken t;
-  
-  Consume(tId, &t);
-  
-  errno = 0;
-  return new CAstStringConstant(t, t.GetValue(), s);
-}
-*/

@@ -98,13 +98,13 @@ class CParser {
     CAstModule*           module(void);
 
     CAstStatement*        statSequence(CAstScope *s);
-    //CAstStatIf*           ifStatement(CAstScope* s);
-    //CAstStatWhile*        whileStatement(CAstScope* s);
-    //CAstStatReturn*       returnStatement(CAstScope* s);
+    CAstStatIf*           ifStatement(CAstScope* s);
+    CAstStatWhile*        whileStatement(CAstScope* s);
+    CAstStatReturn*       returnStatement(CAstScope* s);
 
     CAstStatAssign*       assignment(CAstScope *s);
 
-    //CAstStatCall*         subroutineCall(CAstScope* s);
+    CAstStatCall*         subroutineCall(CAstScope* s, CToken* prevToken, CTypeManager* _tm);
     CAstExpression*       expression(CAstScope *s);
     CAstExpression*       simpleexpr(CAstScope *s);
     CAstExpression*       term(CAstScope *s);
@@ -119,7 +119,9 @@ class CParser {
     
     CType*                type(CTypeManager* _tm);
     
-    CType* GetVariables(CScanner* _scanner, CAstModule* s, CTypeManager* _tm);
+    CType* GetVariables(CScanner* _scanner, CAstScope* s, CTypeManager* _tm);
+    CType* GetOneTypeParams(CScanner* _scanner, CTypeManager* _tm, CSymProc* _ps, int idx);
+    CType* GetParams(CScanner* _scanner, CTypeManager* _tm, CSymProc* _ps);
     
     
         

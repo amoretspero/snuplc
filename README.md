@@ -16,6 +16,8 @@ class project for one semester.
 Parser phase.
 
 ### Detailed status
-Implemented basic features for type, module. 
-Support module and global variable declaration. 
-Bool, Char, Int types are supported.
+Added support for procedure decl in module.
+Might not be correct implementation, so need verification. 
+Method for subroutineCall implemented.
+Call for function or procedure might not be correct.
+Started to implement statements for if, while, return.
