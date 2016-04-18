@@ -796,8 +796,23 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
   // simpleexpr          = ["+"|"-"] term { termOp term }.
   //
   CAstExpression *n = NULL;
-
-  n = term(s);
+  
+  if (_scanner->Peek().GetValue() == "+")
+  {
+    CToken* unaryOp = NULL;
+    Consume(tTerm, unaryOp);
+    n = term(s);
+  }
+  else if (_scanner->Peek().GetValue() == "-")
+  {
+    CToken* unaryOp = NULL;
+    Consume(tTerm, unaryOp);
+    n = new CAstUnaryOp(unaryOp, opNeg, term(s));
+  }
+  else
+  {
+    n = term(s);
+  }
 
   while (_scanner->Peek().GetType() == tTerm) {
     CToken t;
@@ -806,10 +821,19 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
     Consume(tTerm, &t);
 
     r = term(s);
-
-    n = new CAstBinaryOp(t, t.GetValue() == "+" ? opAdd : opSub, l, r);
+    if (t.GetValue() == "+")
+    {
+      n = new CAstBinaryOp(t, opAdd, l, r);
+    }
+    else if (t.GetValue() == "-")
+    {
+      n = new CAstBinaryOp(t, opSub, l, r);
+    }
+    else
+    {
+      n = new CAstBinaryOp(t, opOr, l, r);  
+    }
   }
-
 
   return n;
 }
@@ -818,6 +842,8 @@ CAstExpression* CParser::term(CAstScope *s)
 {
   //
   // term ::= factor { ("*"|"/") factor }.
+  //
+  // term                = factor { factOp factor }.
   //
   CAstExpression *n = NULL;
 
@@ -833,7 +859,18 @@ CAstExpression* CParser::term(CAstScope *s)
 
     r = factor(s);
 
-    n = new CAstBinaryOp(t, t.GetValue() == "*" ? opMul : opDiv, l, r);
+    if (t.GetValue() == "*")
+    {
+      n = new CAstBinaryOp(t, opMul, l, r);
+    }
+    else if (t.GetValue() == "/");
+    {
+      n = new CAstBinaryOp(t, opDiv, l, r);
+    }
+    else
+    {
+      n = new CAstBinaryOp(t, opAnd, l, r);
+    }
 
     tt = _scanner->Peek().GetType();
   }
@@ -847,6 +884,14 @@ CAstExpression* CParser::factor(CAstScope *s)
   // factor ::= number | "(" expression ")"
   //
   // FIRST(factor) = { tNum, tLBrak }
+  //
+  // factor              = qualident | number | boolean | char | string | 
+  //                       "(" expression ")" | subroutineCall | "!" factor.
+  //
+  // FIRST(factor) = ident | number | "true" | "false" | char | string | "(" | "!"
+  //      (CAUTION : ident is from both 'qualident' and 'subroutineCall')
+  //
+  // FOLLOW(factor) = "*" | "/" | "&&" | "]" | ")" | "," | "end" | "else" | ";" | "=" | "#" | "<" | "<=" | ">" | ">=" | "+" | "-" | "||" |
   //
 
   CToken t;

@@ -33,7 +33,10 @@ Added support for array and pointer type.
 Function subroutineCall now deals with procedure/function arguments.  
 Now assignment function generates assignment as written in SnuPL/1 grammar.  
 This makes LHS of assignment to be qualident, not number as before.  
-
-**2016-04-10 01:55 KST**  
+  
+**2016-04-19 01:55 KST**  
 Comment current work and improved README.md.  
-Fixed a bug in module() function that local variables ALWAYS have to exist in procedure. 
+Fixed a bug in module() function that local variables ALWAYS have to exist in procedure.  
+  
+**2016-04-19 02:45 KST**
+Implemented simpleexpr, term for SnuPL/1.
