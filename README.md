@@ -17,31 +17,46 @@ Parser phase.
 
 ### Detailed status
 **2016-04-18 18:05 KST**  
-Implemented basic features for type, module.     
+Implemented basic features for <code>type</code>, <code>module</code>.     
 Support module and global variable declaration.  
-Bool, Char, Int types are supported.  
+Basic types(<code>boolean</code>, <code>char</code>, <code>integer</code>) are supported.  
   
 **2016-04-18 22:48 KST**  
-Added support for procedure decl in module.  
+Added support for procedure declaration in module.  
 Might not be correct implementation, so need verification.   
-Method for subroutineCall implemented.  
+Method for <code>subroutineCall</code> implemented.  
 Call for function or procedure might not be correct.  
 Started to implement statements for if, while, return.  
   
 **2016-04-19 01:10 KST**  
 Added support for array and pointer type.  
-Function subroutineCall now deals with procedure/function arguments.  
-Now assignment function generates assignment as written in SnuPL/1 grammar.  
-This makes LHS of assignment to be qualident, not number as before.  
+Function <code>subroutineCall</code> now deals with procedure/function arguments.  
+Now <code>assignment</code> function generates assignment as written in SnuPL/1 grammar.  
+This makes LHS of assignment to be <code>qualident</code>, not <code>number</code> as before.  
   
 **2016-04-19 01:55 KST**  
-Comment current work and improved README.md.  
-Fixed a bug in module() function that local variables ALWAYS have to exist in procedure.  
+Comment current work and improved <code>README.md</code>.  
+Fixed a bug in <code>module()</code> function that local variables ALWAYS have to exist in procedure.  
   
-**2016-04-19 02:45 KST**
-Implemented simpleexpr, term for SnuPL/1.
-
-**2016-04-19 04:02 KST**
-Commented simpleexpr, term and added some TODOs.  
-Implemented factor and commented it. May need some more thinking about escape characters.  
-Need code review and (if needed) additional function or bug fixes.
+**2016-04-19 02:45 KST**  
+Implemented <code>simpleexpr</code>, <code>term</code> for SnuPL/1.  
+  
+**2016-04-19 04:02 KST**  
+Commented <code>simpleexpr</code>, <code>term</code> and added some TODOs.  
+Implemented <code>factor</code> and commented it. May need some more thinking about escape characters.  
+Need code review and (if needed) additional function or bug fixes.  
+  
+**2016-04-21 17:37 KST**
+Implemented <code>if</code>, <code>while</code>, <code>return</code> statements.  
+Added support for multiple function declaration in module.  
+Revised functions related to fetching parameters for procedure/function. Now they use <code>vector</code> types.  
+  
+  
+### Notice
+Arrays do not have to support array assignments.  
+(Of course, its syntatically correct, but type checking phase will deal with it.)  
+Array parameters are passed as references.  
+(This needs adding ptr type for array.)  
+Ptr to array and array itself will differ when assigning value to its element.  
+When Ptr to array is being passed, we do not have to cast it once more to ptr.  
+<code>WriteLn()</code> does not take parameter.  

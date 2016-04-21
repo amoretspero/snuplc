@@ -258,7 +258,17 @@ bool CParser::Consume(EToken type, CToken *token)
 void CParser::InitSymbolTable(CSymtab *s)
 {
   CTypeManager *tm = CTypeManager::Get();
-
+  CSymProc* f;
+  
+  f = new CSymProc("DIM", tm->GetInt());
+  f->AddParam(new CSymParam(0, "array", tm->GetPointer(tm->GetArray())));
+  f->AddParam(new CSymParam(1, "dim", tm->GetInt()));
+  s->AddSymbol(f);
+  
+  // When adding p/f symbol to symtab, use above 'tm' and 'f'.
+  // DIM's first param will take type of void ptr,
+  // WriteStr's first param will take type of ptr to array of char.
+  
   // TODO: add predefined functions here
 }
 
@@ -301,58 +311,146 @@ CAstModule* CParser::module(void)
     }
   }
   // TODO: Support for multiple functions.
-  while (_scanner->Peek() == tProcedure) // Procedure definitions. May be multiple of them.
+  // Part for processing multiple procedure/function. ===START===
+  while (_scanner->Peek() == tProcedure || _scanner->Peek() == tFunction) // Procedure/Function definitions. May be multiple of them.
   {
-    Consume(tProcedure);
-    
-    CToken* procName = new CToken(); // For procedure name.
-    Consume(tId, procName);
-    
-    CSymProc* procSymbol = new CSymProc(procName->GetValue(), NULL); // Symbol for procedure. Procedure returns NULL.
-    m->GetSymbolTable()->AddSymbol(procSymbol); // Add procedure symbol to module's symbol table.
-    
-    CAstProcedure* procScope = new CAstProcedure(procName, procName->GetValue(), m, procSymbol); // Scope for procedure.
-    
-    if (_scanner->Peek() == tLBracketRound) // When procedure has parameters.
+    if (_scanner->Peek() == tProcedure) // Procedure case.
     {
-      Consume(tLBracketRound);
+      Consume(tProcedure);
       
-      GetParams(_scanner, typeManager, procSymbol); // Get parameters for procedure.
+      CToken* procName = new CToken(); // For procedure name.
+      Consume(tId, procName);
       
-      Consume(tRBracketRound);
-    }
-    Consume(tSemicolon); 
-    
-    if (_scanner->Peek() == tVar) // When procedure has its local variables.
-    {
-      Consume(tVar);
-      while (true) // Iterates until there is no variable to declare.
+      vector<vector<CSymParam*> > parameterVector; // Vector for temporarily containing parameters.
+      
+      if (_scanner->Peek() == tLBracketRound) // When procedure has parameters.
       {
-        GetVariables(_scanner, procScope, typeManager); // Get one type of variables.
-        Consume(tSemicolon);
-        if (_scanner->Peek().GetType() != tId) // If there is no more, stop.
+        Consume(tLBracketRound);
+        
+        GetParams(_scanner, typeManager, parameterVector, 0); // Get parameters for procedure.
+        
+        Consume(tRBracketRound);
+      }
+      Consume(tSemicolon); 
+      
+      CSymProc* procSymbol = new CSymProc(procName->GetValue(), NULL); // Symbol for procedure. Procedure returns NULL.
+      
+      while(parameterVector.size() > 0) // Add symbols to procedure symbol.
+      {
+        vector<CSymParam*> oneTypeParamVec = parameterVector.pop_back();
+        while(oneTypeParamVec.size() > 0)
         {
-          break;
+          CSymParam* param = oneTypeParamVec.pop_back();
+          procSymbol->AddParam(param);
         }
       }
+      
+      CAstProcedure* procScope = new CAstProcedure(procName, procName->GetValue(), m, procSymbol); // Scope for procedure.
+      
+      m->GetSymbolTable()->AddSymbol(procSymbol); // Add procedure symbol to module's symbol table.
+      
+      
+      if (_scanner->Peek() == tVar) // When procedure has its local variables.
+      {
+        Consume(tVar);
+        while (true) // Iterates until there is no variable to declare.
+        {
+          GetVariables(_scanner, procScope, typeManager); // Get one type of variables.
+          Consume(tSemicolon);
+          if (_scanner->Peek().GetType() != tId) // If there is no more, stop.
+          {
+            break;
+          }
+        }
+      }
+      
+      Consume(tBegin);
+      
+      CAstStatement* procStatSeq = NULL;
+      procStatSeq = statSequence(procScope); // Get sequence of statements for this procedure.
+      
+      Consume(tEnd);
+      procScope->SetStatementSequence(procStatSeq); // Set procedure's statement sequence.
+      
+      CToken* procNameCheck = NULL;
+      Consume(tId, procNameCheck); // Ending name of procedure. Must match starting name.
+      if (procNameCheck->GetValue() != procName->GetValue()) // Check if name matches.
+      {
+        SetError(procNameCheck, "Procedure name mismatch.");
+      }
+      Consume(tSemicolon);
     }
-    
-    Consume(tBegin);
-    
-    CAstStatement* procStatSeq = NULL;
-    procStatSeq = statSequence(procScope); // Get sequence of statements for this procedure.
-    
-    Consume(tEnd);
-    procScope->SetStatementSequence(procStatSeq); // Set procedure's statement sequence.
-    
-    CToken* procNameCheck = NULL;
-    Consume(tId, procNameCheck); // Ending name of procedure. Must match starting name.
-    if (procNameCheck->GetValue() != procName->GetValue()) // Check if name matches.
+    else // Function case.
     {
-      SetError(procNameCheck, "Procedure name mismatch.");
+      Consume(tFunction); // Function case.
+      
+      CToken* funcName = new CToken(); // For function name.
+      Consume(tId, funcName);
+      
+      vector<vector<CSymParam*> > parameterVector; // Vector for temporarily containing parameters.
+      
+      if (_scanner->Peek() == tLBracketRound) // When function has parameters.
+      {
+        Consume(tLBracketRound);
+        
+        GetParams(_scanner, typeManager, parameterVector, 0); // Get parameters for function.
+        
+        Consume(tRBracketRound);
+      }
+      Consume(tColon);
+      
+      CType* funcReturnType = type(typeManager); // Gets return type of function.
+      
+      Consume(tSemicolon);
+      
+      CSymProc* funcSymbol = new CSymProc(funcName->GetValue(), funcReturnType); // Symbol for function. Return type is funcReturnType.
+      
+      while(parameterVector.size() > 0) // Add parameters to function symbol.
+      {
+        vector<CSymParam*> oneTypeParamVec = parameterVector.pop_back();
+        while(oneTypeParamVec.size() > 0)
+        {
+          CSymParam* param = oneTypeParamVec.pop_back();
+          funcSymbol->AddParam(param);
+        }
+      }
+      
+      CAstProcedure* funcScope = new CAstProcedure(funcName, funcName->GetValue(), m, funcSymbol); // Scope for function.
+      
+      m->GetSymbolTable()->AddSymbol(funcSymbol); // Add function symbol to module's symbol table.
+      
+      if (_scanner->Peek() == tVar) // When function has its local variables.
+      {
+        Consume(tVar);
+        while (true) // Iterates until there is no variable to declare.
+        {
+          GetVariables(_scanner, funcScope, typeManager); // Get one type of variables.
+          Consume(tSemicolon);
+          if (_scanner->Peek().GetType() != tId) // If there is no more, stop.
+          {
+            break;
+          }
+        }
+      }
+      
+      Consume(tBegin);
+      
+      CAstStatement* funcStatSeq = NULL;
+      funcStatSeq = statSequence(funcScope); // Get sequence of statements for this function.
+      
+      Consume(tEnd);
+      funcScope->SetStatementSequence(funcStatSeq); // Set procedure's statement sequence.
+      
+      CToken* funcNameCheck = NULL;
+      Consume(tId, funcNameCheck); // Ending name of procedure. Must match starting name.
+      if (funcNameCheck->GetValue() != funcName->GetValue()) // Check if name matches.
+      {
+        SetError(funcNameCheck, "Function name mismatch.");
+      }
+      Consume(tSemicolon);
     }
-    Consume(tSemicolon);
   }
+  // Part for processing multiple procedures/functions. ===END===
   
   Consume(tBegin);
   printf("Got begin keyword!\n");
@@ -373,7 +471,7 @@ CAstModule* CParser::module(void)
   return m;
 }
 
-CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, CSymProc* _ps, int idx)
+CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<CSymParam*> paramVec, int idx)
 {
   CToken* paramId = new CToken();
   Consume(tId, paramId); // Get identifier for parameter.
@@ -383,8 +481,9 @@ CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, CSymPro
   if (_scanner->Peek().GetType() == tComma) // When there are more identifier(s) of same type.
   {
     Consume(tComma);
-    paramType = GetOneTypeParams(_scanner, _tm, _ps, i+1); // Recursive call.
-    _ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType)); // When above recursive call returns type, add parameter to procedure symbol. 
+    paramType = GetOneTypeParams(_scanner, _tm, paramVec, idx+1); // Recursive call.
+    paramVec.push_back(new CSymParam(idx, paramId->GetValue(), paramType)); // When above recursive call returns type, add parameter to procedure symbol.
+    //_ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType)); // When above recursive call returns type, add parameter to procedure symbol. 
   }
   else // When there are no more identifier(s) of same type.
   {
@@ -394,18 +493,20 @@ CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, CSymPro
     {
       printf("Type error!\n");
     }
-    _ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType)); // Add parameter to procedure symbol.
+    paramVec.push_back(new CSymParam(idx, paramId->GetValue(), paramType)); // Add parameter to CSymParam* vector.
+    //_ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType)); // Add parameter to procedure symbol.
   }
   return paramType; // Return the type for recursive call.
 }
 
-CType* CParser::GetParams (CScanner* _scanner, CTypeManager* _tm, CSymProc* _ps)
+CType* CParser::GetParams (CScanner* _scanner, CTypeManager* _tm, vector<vector<CSymParam*> > paramVec, int lastIdx)
 {
-  CType* oneTypeResult = GetOneTypeParams(_scanner, _tm, _ps, 0); // Adds one type of parameters.
+  paramVec.resize(paramVec.size() + 1);
+  CType* oneTypeResult = GetOneTypeParams(_scanner, _tm, paramVec.at(paramVec.size() - 1), lastIdx+1); // Adds one type of parameters.
   if (_scanner->Peek().GetType() == tSemicolon) // When there are more variables.
   {
     Consume(tSemicolon);
-    GetParams(_scanner, _tm, _ps); // Recursive call.
+    return GetParams(_scanner, _tm, paramVec, paramVec.at(paramVec.size() - 1).size() + lastIdx - 1); // Recursive call.
   }
   else
   {
@@ -665,30 +766,83 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
   }
 }
 
-CAstStatIf* ifStatement(CAstScope* s)
+CAstStatIf* CParser::ifStatement(CAstScope* s)
 {
   //
   // ifStatement         = "if" "(" expression ")" "then" statSequence [ "else" statSequence ] "end".
   //
   // TODO: Implement ifStatement.
-  return NULL;
+  CToken t;
+  
+  Consume(tIf, &t);
+  Consume(tLBracketRound);
+  
+  CAstExpression* exp = expression(s);
+  
+  Consume(tRBracketRound);
+  Consume(tThen);
+  
+  CAstStatement* statSeq = statSequence(s);
+  
+  if (_scanner->Peek().GetType() == tEnd)
+  {
+    Consume(tEnd);
+    return new CAstStatIf(t, exp, statSeq, NULL);
+  }
+  else
+  {
+    Consume(tElse);
+    CAstStatement* elseStatSeq = statSequence(s);
+    Consume(tEnd);
+    return new CAstStatIf(t, exp, statSeq, elseStatSeq);
+  }
 }
 
-CAstStatWhile* whileStatement(CAstScope* s)
+CAstStatWhile* CParser::whileStatement(CAstScope* s)
 {
   //
   // whileStatement      = "while" "(" expression ")" "do" statSequence "end".
   //
   // TODO: Implement whileStatement.
+  
+  CToken t;
+  
+  Consume(tWhile, &t);
+  Consume(tLBracketRound);
+  
+  CAstExpression* exp = expression(s);
+  
+  Consume(tRBracketRound);
+  Consume(tDo);
+  
+  CAstStatement* statSeq = statSequence(s);
+  Consume(tEnd);
+  
+  return new CAstStatWhile(t, exp, statSeq);
+  
   return NULL;
 }
 
-CAstStatReturn* returnStatement(CAstScope* s)
+CAstStatReturn* CParser::returnStatement(CAstScope* s)
 {
   //
   // returnStatement     = "return" [ expression ].
   //
   // TODO: Implement returnStatement.
+  
+  CToken t;
+  
+  Consume(tReturn, &t);
+  EToken checkExp = _scanner->Peek();
+  if (checkExp == tEnd || checkExp == tElse || checkExp == tSemicolon)
+  {
+    return new CAstStatReturn(t, s, NULL);
+  }
+  else
+  {
+    CAstExpression* exp = expression(s);
+    return new CAstStatReturn(t, s, exp);
+  }
   return NULL;
 }
 

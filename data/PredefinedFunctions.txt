@@ -1,0 +1,22 @@
+DIM(array: ptr to array; dim: integer): integer
+-> Returns the size of the 'dim'-th array dimension of 'array'
+
+DOFS(array: ptr to array): integer
+-> Returns the number of bytes from the starting address of the
+   array to the first data element.
+
+ReadInt(): integer
+-> Read and return an integer value from stdin.
+
+WriteInt(i: integer)
+-> Print integer value 'i' to stdout.
+
+WriteChar(c: char)
+-> Write a single character to stdout.
+
+WriteStr(str: char[])
+-> Write string 'str' to stdout.
+   No new line is added.
+
+WriteLn()
+-> Write a new line sequence to stdout.

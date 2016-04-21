@@ -518,7 +518,7 @@ class CAstStatAssign : public CAstStatement {
 
 
   private:
-    CAstConstant   *_lhs;           ///< LHS (designator)
+    CAstDesignator *_lhs;           ///< LHS (designator)
     CAstExpression *_rhs;           ///< RHS (expression)
 };
 

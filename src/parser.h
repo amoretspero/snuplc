@@ -120,8 +120,8 @@ class CParser {
     CType*                type(CTypeManager* _tm);
     
     CType* GetVariables(CScanner* _scanner, CAstScope* s, CTypeManager* _tm);
-    CType* GetOneTypeParams(CScanner* _scanner, CTypeManager* _tm, CSymProc* _ps, int idx);
-    CType* GetParams(CScanner* _scanner, CTypeManager* _tm, CSymProc* _ps);
+    CType* GetOneTypeParams(CScanner* _scanner, CTypeManager* _tm, vector<CSymParam*> paramVec, int idx);
+    CType* GetParams(CScanner* _scanner, CTypeManager* _tm, vector<vector<CSymParam*> > paramVec1, int lastIdx);
     CType* GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType);
     CType* GeneratePointerType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType);
     
