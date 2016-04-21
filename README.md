@@ -51,6 +51,11 @@ Implemented <code>if</code>, <code>while</code>, <code>return</code> statements.
 Added support for multiple function declaration in module.  
 Revised functions related to fetching parameters for procedure/function. Now they use <code>vector</code> types.  
   
+**2016-04-21 18:52 KST**
+Added predefined functions in <code>InitSymbolTable()</code> function.
+Changed <code>type()</code> function to provide pointer to array when <code>_isParam</code> is <code>true</code>,
+and array when <code>_isParam</code> is <code>false</code>.  
+  
   
 ### Notice
 Arrays do not have to support array assignments.  

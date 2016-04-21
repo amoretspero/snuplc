@@ -260,16 +260,34 @@ void CParser::InitSymbolTable(CSymtab *s)
   CTypeManager *tm = CTypeManager::Get();
   CSymProc* f;
   
+  // For info of predefined functions, please refer to data/PredefinedFunctions.txt file.
+  
   f = new CSymProc("DIM", tm->GetInt());
   f->AddParam(new CSymParam(0, "array", tm->GetPointer(tm->GetArray())));
   f->AddParam(new CSymParam(1, "dim", tm->GetInt()));
   s->AddSymbol(f);
   
-  // When adding p/f symbol to symtab, use above 'tm' and 'f'.
-  // DIM's first param will take type of void ptr,
-  // WriteStr's first param will take type of ptr to array of char.
+  f = new CSymProc("DOFS", tm->GetInt());
+  f->AddParam(new CSymParam(0, "array", tm->GetPointer(tm->GetArray())));
+  s->AddSymbol(f);
   
-  // TODO: add predefined functions here
+  f = new CSymProc("ReadInt", tm->GetInt());
+  s->AddSymbol(f);
+  
+  f = new CSymProc("WriteInt", tm->GetNull());
+  f->AddParam(new CSymParam(0, "i", tm->GetInt()));
+  s->AddSymbol(f);
+  
+  f = new CSymProc("WriteChar", tm->GetNull());
+  f->AddParam(new CSymParam(0, "c", tm->GetChar()));
+  s->AddSymbol(f);
+  
+  f = new CSymProc("WriteStr", tm->GetNull());
+  f->AddParam(new CSymParam(0, "str", tm->GetArray(-1, tm->GetChar())));
+  s->AddSymbol(f);
+  
+  f = new CSymProc("WriteLn", tm->GetNull());
+  s->AddSymbol(f);
 }
 
 CAstModule* CParser::module(void)
@@ -546,22 +564,31 @@ CType* CParser::GetVariables (CScanner* _scanner, CAstScope* s, CTypeManager* _t
 CType* CParser::GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType)
 {
   CToken* elemCount = NULL;
-  Consume(tNum, elemCount); // Gets number of element in this dimension.
+  if (_scanner->Peek() != tRBracket)
+  {
+    Consume(tNum, elemCount); // Gets number of element in this dimension.
+  }
   Consume(tRBracket);
   char* endPtr = 0; // For string to integer conversion.
+  int nelem = -1; // Number of elements in this dimension.
+  if (elemCount != NULL)
+  {
+    nelem = strtol(elemCount->GetValue().c_str(), &endPtr, 10);
+  }
   if (_scanner->Peek().GetType() == tLBracket) // When more dimensions exist.
   {
     Consume(tLBracket);
-    return _tm->GetArray(strtol(elemCount->GetValue().c_str(), &endPtr, 10), GenerateArrayType(_scanner, _tm)); // Type for this dimension will be array of array by recursive call.
+    return _tm->GetArray(nelem, GenerateArrayType(_scanner, _tm)); // Type for this dimension will be array of array by recursive call.
   }
   else // When there are no more dimensions exist. i.e., 1st dimension.
   {
-    return _tm->GetArray(strtol(elemCount->GetValue().c_str(), &endPtr, 10), _baseType); // Type of this dimension will be array of _baseType.
+    return _tm->GetArray(nelem, _baseType); // Type of this dimension will be array of _baseType.
   }
 }
 
 CType* CParser::GeneratePointerType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType)
 {
+  // This function is not used any more.
   if (_scanner->Peek().GetType() == tLBracket) // When more dimensions exist.
   {
     Consume(tLBracket);
@@ -578,17 +605,17 @@ CType* CParser::type(CTypeManager* _tm, bool _isParam)
   //
   // type                = basetype | type "[" [ number ] "]".
   //
-  if (_scanner->Peek().GetType() == tBoolean) // Boolean basetype, array or pointer type.
+  if (_scanner->Peek().GetType() == tBoolean) // Boolean basetype, (multi-dimensional) array or pointer type.
   {
     Consume(tBoolean);
-    if (_scanner->Peek().GetType() == tLBracket) // Possibility of boolean array or pointer type.
+    if (_scanner->Peek().GetType() == tLBracket) // Possibility of boolean (multi-dimensional) array or pointer to (multi-dimensional) boolean array type.
     {
       Consume(tLBracket);
-      if (_scanner->Peek().GetType() == tRBracket) // Boolean pointer type.
+      if (_isParam) // Pointer to boolean (multi-dimensional) array type.
       {
-        return (CType*)GeneratePointerType(_scanner, _tm, (CType*)_tm->GetBool());
+        return (CType*)_tm->GetPointer(GenerateArrayType(_scanner, _tm, (CType*)_tm->GetBool()));
       }
-      else // Boolean array type.
+      else // Boolean (multi-dimensional) array type.
       {
         return (CType*)GenerateArrayType(_scanner, _tm, (CType*)_tm->GetBool());
       }
@@ -598,17 +625,17 @@ CType* CParser::type(CTypeManager* _tm, bool _isParam)
       return (CType*)_tm->GetBool();
     }
   }
-  else if (_scanner->Peek().GetType() == tChar) // Character basetype, array or pointer type.
+  else if (_scanner->Peek().GetType() == tChar) // Character basetype, (multi-dimensional) array or pointer type.
   {
     Consume(tChar);
-    if (_scanner->Peek().GetType() == tLBracket) // Possibility of character array or pointer type.
+    if (_scanner->Peek().GetType() == tLBracket) // Possibility of character (multi-dimensional) array or pointer to character (multi-dimensional) array type.
     {
       Consume(tLBracket);
-      if (_scanner->Peek().GetType() == tRBracket) // Character pointer type.
+      if (_isParam) // Pointer to character (multi-dimensional) array type.
       {
-        return (CType*)GeneratePointerType(_scanner, _tm, (CType*)_tm->GetChar());
+        return (CType*)_tm->GetPointer(GenerateArrayType(_scanner, _tm, (CType*)_tm->GetChar()));
       }
-      else // Character array type.
+      else // Character (multi-dimensional) array type.
       {
         return (CType*)GenerateArrayType(_scanner, _tm, (CType*)_tm->GetChar());
       }
@@ -618,17 +645,17 @@ CType* CParser::type(CTypeManager* _tm, bool _isParam)
       return (CType*)_tm->GetChar();
     }
   }
-  else if (_scanner->Peek().GetType() == tInteger) // Integer basetype, array or pointer type.
+  else if (_scanner->Peek().GetType() == tInteger) // Integer basetype, (multi-dimensional) array or pointer type.
   {
     Consume(tInteger);
-    if (_scanner->Peek().GetType() == tLBracket) // Possibility of integer array or pointer type.
+    if (_scanner->Peek().GetType() == tLBracket) // Possibility of integer (multi-dimensional) array or pointer to integer (multi-dimensional) array type.
     {
       Consume(tLBracket);
-      if (_scanner->Peek().GetType() == tRBracket) // Integer pointer type.
+      if (_isParam) // Pointer to integer (multi-dimensional) array type.
       {
-        return (CType*)GeneratePointerType(_scanner, _tm, (CType*)_tm->GetInt());
+        return (CType*)_tm->GetPointer(GenerateArrayType(_scanner, _tm, (CType*)_tm->GetInt()));
       }
-      else // Integer array type.
+      else // Integer (multi-dimensional) array type.
       {
         return (CType*)GenerateArrayType(_scanner, _tm, (CType*)_tm->GetInt());
       }
@@ -679,7 +706,7 @@ CAstStatement* CParser::statSequence(CAstScope *s)
         Consume(tId, commonFirst); // Consume common FIRST.
         
         // TODO: qualident is not properly handled.
-        if (_scanner->Peek() == tAssign) // Case of assignment.
+        if (_scanner->Peek() == tAssign || _scanner->Peek() == tLBracket) // Case of assignment. When tLBracket is peeked, it is qualident.
         {
           st = assignment(s, commonFirst);
         }
@@ -771,7 +798,6 @@ CAstStatIf* CParser::ifStatement(CAstScope* s)
   //
   // ifStatement         = "if" "(" expression ")" "then" statSequence [ "else" statSequence ] "end".
   //
-  // TODO: Implement ifStatement.
   CToken t;
   
   Consume(tIf, &t);
@@ -803,7 +829,6 @@ CAstStatWhile* CParser::whileStatement(CAstScope* s)
   //
   // whileStatement      = "while" "(" expression ")" "do" statSequence "end".
   //
-  // TODO: Implement whileStatement.
   
   CToken t;
   
@@ -828,7 +853,6 @@ CAstStatReturn* CParser::returnStatement(CAstScope* s)
   //
   // returnStatement     = "return" [ expression ].
   //
-  // TODO: Implement returnStatement.
   
   CToken t;
   
