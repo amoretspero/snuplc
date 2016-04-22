@@ -1,0 +1,137 @@
+parsing 'test02.mod'...
+successfully parsed.
+  AST:
+    CAstScope: 'test02'
+      symbol table:
+        [[
+          [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+          [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+          [ *ReadInt() --> <int>           ]
+          [ *WriteChar(<char>) --> <NULL>           ]
+          [ *WriteInt(<int>) --> <NULL>           ]
+          [ *WriteLn() --> <NULL>           ]
+          [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+          [ @a        <int>           ]
+          [ @arr      <array 3  of <array 3  of <int>>>           ]
+          [ @b        <int>           ]
+          [ *bar(<int>,<bool>,<char>) --> <NULL>           ]
+          [ @c        <int>           ]
+          [ @d        <bool>           ]
+          [ @e        <bool>           ]
+          [ @f        <bool>           ]
+          [ *fn() --> <bool>           ]
+          [ *fnc(<int>,<bool>) --> <int>           ]
+          [ *fncfnc(<int>,<char>) --> <array 5  of <char>>           ]
+          [ *fnfn(<int>,<ptr(4) to <array 5  of <bool>>>) --> <int>           ]
+          [ *fnfnfn(<int>,<ptr(4) to <array  of <array  of <bool>>>>) --> <array 5  of <char>>           ]
+          [ *foo() --> <NULL>           ]
+          [ *foobar(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL>           ]
+          [ *func() --> <array 5  of <int>>           ]
+          [ @g        <char>           ]
+          [ @h        <char>           ]
+          [ @i        <char>           ]
+        ]]
+      statement list:
+        empty.
+      nested scopes:
+        CAstScope: 'foo'
+          symbol table:
+            [[
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'bar'
+          symbol table:
+            [[
+              [ %param    <int>               ]
+              [ %parambool <bool>               ]
+              [ %paramchar <char>               ]
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'foobar'
+          symbol table:
+            [[
+              [ %param    <ptr(4) to <array  of <array  of <int>>>>               ]
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'fn'
+          symbol table:
+            [[
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'func'
+          symbol table:
+            [[
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'fnc'
+          symbol table:
+            [[
+              [ %a        <int>               ]
+              [ %b        <bool>               ]
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'fncfnc'
+          symbol table:
+            [[
+              [ %a        <int>               ]
+              [ %c        <char>               ]
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'fnfn'
+          symbol table:
+            [[
+              [ %a        <int>               ]
+              [ %b        <ptr(4) to <array 5  of <bool>>>               ]
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'fnfnfn'
+          symbol table:
+            [[
+              [ %a        <int>               ]
+              [ %b        <ptr(4) to <array  of <array  of <bool>>>>               ]
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+    
+
+
+run the following command to convert the .dot file into a PDF:
+  dot -Tpdf -otest02.mod.ast.pdf test02.mod.ast.dot
+
+
+Done.

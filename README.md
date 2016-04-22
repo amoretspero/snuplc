@@ -56,10 +56,14 @@ Added predefined functions in <code>InitSymbolTable()</code> function.
 Changed <code>type()</code> function to provide pointer to array when <code>_isParam</code> is <code>true</code>,
 and array when <code>_isParam</code> is <code>false</code>.  
   
-**2016-04-22 19:21 KST**
+**2016-04-22 19:21 KST**  
 Fixed compilation errors.  
 Main errors were <code>const</code> type conversion errors, solved by <code>dynamic_cast</code>.  
   
+**2016-04-23 01:11 KST**  
+Fixed order of <code>procedure</code>/<code>function</code> parameters.  
+Now parameters are added to <code>procedure</code>/<code>function</code>'s symbol and scope.  
+Iteration through <code>vector</code> class is done with <code>iterator</code>/<code>reverse_iterator</code>.  
   
 ### Notice
 Arrays do not have to support array assignments.  

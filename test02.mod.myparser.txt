@@ -1,0 +1,303 @@
+parsing 'test02.mod'...
+===(DEBUG)===Next token is : ;
+===(DEBUG)===Got semicolon of end of var decl.
+===(DEBUG)===Next token is : d
+===(DEBUG)===Next token is : ;
+===(DEBUG)===Got semicolon of end of var decl.
+===(DEBUG)===Next token is : g
+===(DEBUG)===Next token is : ;
+===(DEBUG)===Got semicolon of end of var decl.
+===(DEBUG)===Next token is : arr
+===(DEBUG)===In GenerateArrayType function, got nelem of 3
+===(DEBUG)===In GenerateArrayType function, got nelem of 3
+===(DEBUG)===Next token is : ;
+===(DEBUG)===Got semicolon of end of var decl.
+===(DEBUG)===Next token is : procedure
+===(DEBUG)===Now consumed tProcedure. Next token is : foo
+===(DEBUG)===Now make CToken for procedure name. Next token is : foo
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Now consumed all parameters. Next token is : begin
+===(DEBUG)===Now added all parameters to procedure symbol. Next token is : begin
+===(DEBUG)===Now added all parameters to procedure scope. Next token is : begin
+===(DEBUG)===Now added all local variables for procedure. Next token is : begin
+===(DEBUG)===Now got all statements for procedure. Next token is : end
+===(DEBUG)===Now added statement sequence for procedure. Next token is : foo
+===(DEBUG)===Now checking name. procName: foo, procNameCheck: foo
+===(DEBUG)===Now consumed tProcedure. Next token is : bar
+===(DEBUG)===Now make CToken for procedure name. Next token is : bar
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Got parameter <param>
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Got parameter <parambool>
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Got parameter <paramchar>
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Now consumed all parameters. Next token is : begin
+===(DEBUG)===Now added parameter <param> to procedure symbol.
+===(DEBUG)===Now added parameter <parambool> to procedure symbol.
+===(DEBUG)===Now added parameter <paramchar> to procedure symbol.
+===(DEBUG)===Now added all parameters to procedure symbol. Next token is : begin
+===(DEBUG)===Now added parameter <param> to procedure scope.
+===(DEBUG)===Now added parameter <parambool> to procedure scope.
+===(DEBUG)===Now added parameter <paramchar> to procedure scope.
+===(DEBUG)===Now added all parameters to procedure scope. Next token is : begin
+===(DEBUG)===Now added all local variables for procedure. Next token is : begin
+===(DEBUG)===Now got all statements for procedure. Next token is : end
+===(DEBUG)===Now added statement sequence for procedure. Next token is : bar
+===(DEBUG)===Now checking name. procName: bar, procNameCheck: bar
+===(DEBUG)===Now consumed tProcedure. Next token is : foobar
+===(DEBUG)===Now make CToken for procedure name. Next token is : foobar
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Got parameter <param>
+===(DEBUG)===In GenerateArrayType function, got nelem of -1
+===(DEBUG)===In GenerateArrayType function, got nelem of -1
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Now consumed all parameters. Next token is : begin
+===(DEBUG)===Now added parameter <param> to procedure symbol.
+===(DEBUG)===Now added all parameters to procedure symbol. Next token is : begin
+===(DEBUG)===Now added parameter <param> to procedure scope.
+===(DEBUG)===Now added all parameters to procedure scope. Next token is : begin
+===(DEBUG)===Now added all local variables for procedure. Next token is : begin
+===(DEBUG)===Now got all statements for procedure. Next token is : end
+===(DEBUG)===Now added statement sequence for procedure. Next token is : foobar
+===(DEBUG)===Now checking name. procName: foobar, procNameCheck: foobar
+===(DEBUG)===Now consumed tFunction. Next token is : fn
+===(DEBUG)===Now make CToken for procedure name. Next token is : fn
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Now consumed all parameters. Next token is : boolean
+===(DEBUG)===Now got return type for function. Next token is : begin
+===(DEBUG)===Now added all parameters to function symbol. Next token is : begin
+===(DEBUG)===Now added all parameters to function scope. Next token is : begin
+===(DEBUG)===Now added all local variables for function. Next token is : begin
+===(DEBUG)===Now got all statements for function. Next token is : end
+===(DEBUG)===Now added statement sequence for function. Next token is : fn
+===(DEBUG)===Now checking name. funcName: fn, funcNameCheck: fn
+===(DEBUG)===Now consumed tFunction. Next token is : func
+===(DEBUG)===Now make CToken for procedure name. Next token is : func
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Now consumed all parameters. Next token is : integer
+===(DEBUG)===In GenerateArrayType function, got nelem of 5
+===(DEBUG)===Now got return type for function. Next token is : begin
+===(DEBUG)===Now added all parameters to function symbol. Next token is : begin
+===(DEBUG)===Now added all parameters to function scope. Next token is : begin
+===(DEBUG)===Now added all local variables for function. Next token is : begin
+===(DEBUG)===Now got all statements for function. Next token is : end
+===(DEBUG)===Now added statement sequence for function. Next token is : func
+===(DEBUG)===Now checking name. funcName: func, funcNameCheck: func
+===(DEBUG)===Now consumed tFunction. Next token is : fnc
+===(DEBUG)===Now make CToken for procedure name. Next token is : fnc
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Got parameter <a>
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Got parameter <b>
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Now consumed all parameters. Next token is : integer
+===(DEBUG)===Now got return type for function. Next token is : begin
+===(DEBUG)===Now added parameter <a> to function symbol.
+===(DEBUG)===Now added parameter <b> to function symbol.
+===(DEBUG)===Now added all parameters to function symbol. Next token is : begin
+===(DEBUG)===Now added parameter <a> to function scope.
+===(DEBUG)===Now added parameter <b> to function scope.
+===(DEBUG)===Now added all parameters to function scope. Next token is : begin
+===(DEBUG)===Now added all local variables for function. Next token is : begin
+===(DEBUG)===Now got all statements for function. Next token is : end
+===(DEBUG)===Now added statement sequence for function. Next token is : fnc
+===(DEBUG)===Now checking name. funcName: fnc, funcNameCheck: fnc
+===(DEBUG)===Now consumed tFunction. Next token is : fncfnc
+===(DEBUG)===Now make CToken for procedure name. Next token is : fncfnc
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Got parameter <a>
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Got parameter <c>
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Now consumed all parameters. Next token is : char
+===(DEBUG)===In GenerateArrayType function, got nelem of 5
+===(DEBUG)===Now got return type for function. Next token is : begin
+===(DEBUG)===Now added parameter <a> to function symbol.
+===(DEBUG)===Now added parameter <c> to function symbol.
+===(DEBUG)===Now added all parameters to function symbol. Next token is : begin
+===(DEBUG)===Now added parameter <a> to function scope.
+===(DEBUG)===Now added parameter <c> to function scope.
+===(DEBUG)===Now added all parameters to function scope. Next token is : begin
+===(DEBUG)===Now added all local variables for function. Next token is : begin
+===(DEBUG)===Now got all statements for function. Next token is : end
+===(DEBUG)===Now added statement sequence for function. Next token is : fncfnc
+===(DEBUG)===Now checking name. funcName: fncfnc, funcNameCheck: fncfnc
+===(DEBUG)===Now consumed tFunction. Next token is : fnfn
+===(DEBUG)===Now make CToken for procedure name. Next token is : fnfn
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Got parameter <a>
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Got parameter <b>
+===(DEBUG)===In GenerateArrayType function, got nelem of 5
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Now consumed all parameters. Next token is : integer
+===(DEBUG)===Now got return type for function. Next token is : begin
+===(DEBUG)===Now added parameter <a> to function symbol.
+===(DEBUG)===Now added parameter <b> to function symbol.
+===(DEBUG)===Now added all parameters to function symbol. Next token is : begin
+===(DEBUG)===Now added parameter <a> to function scope.
+===(DEBUG)===Now added parameter <b> to function scope.
+===(DEBUG)===Now added all parameters to function scope. Next token is : begin
+===(DEBUG)===Now added all local variables for function. Next token is : begin
+===(DEBUG)===Now got all statements for function. Next token is : end
+===(DEBUG)===Now added statement sequence for function. Next token is : fnfn
+===(DEBUG)===Now checking name. funcName: fnfn, funcNameCheck: fnfn
+===(DEBUG)===Now consumed tFunction. Next token is : fnfnfn
+===(DEBUG)===Now make CToken for procedure name. Next token is : fnfnfn
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Got parameter <a>
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Got parameter <b>
+===(DEBUG)===In GenerateArrayType function, got nelem of -1
+===(DEBUG)===In GenerateArrayType function, got nelem of -1
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Now consumed all parameters. Next token is : char
+===(DEBUG)===In GenerateArrayType function, got nelem of 5
+===(DEBUG)===Now got return type for function. Next token is : begin
+===(DEBUG)===Now added parameter <a> to function symbol.
+===(DEBUG)===Now added parameter <b> to function symbol.
+===(DEBUG)===Now added all parameters to function symbol. Next token is : begin
+===(DEBUG)===Now added parameter <a> to function scope.
+===(DEBUG)===Now added parameter <b> to function scope.
+===(DEBUG)===Now added all parameters to function scope. Next token is : begin
+===(DEBUG)===Now added all local variables for function. Next token is : begin
+===(DEBUG)===Now got all statements for function. Next token is : end
+===(DEBUG)===Now added statement sequence for function. Next token is : fnfnfn
+===(DEBUG)===Now checking name. funcName: fnfnfn, funcNameCheck: fnfnfn
+successfully parsed.
+  AST:
+    CAstScope: 'test02'
+      symbol table:
+        [[
+          [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+          [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+          [ *ReadInt() --> <int>           ]
+          [ *WriteChar(<char>) --> <NULL>           ]
+          [ *WriteInt(<int>) --> <NULL>           ]
+          [ *WriteLn() --> <NULL>           ]
+          [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+          [ @a        <int>           ]
+          [ @arr      <array 3  of <array 3  of <int>>>           ]
+          [ @b        <int>           ]
+          [ *bar(<int>,<bool>,<char>) --> <NULL>           ]
+          [ @c        <int>           ]
+          [ @d        <bool>           ]
+          [ @e        <bool>           ]
+          [ @f        <bool>           ]
+          [ *fn() --> <bool>           ]
+          [ *fnc(<int>,<bool>) --> <int>           ]
+          [ *fncfnc(<int>,<char>) --> <array 5  of <char>>           ]
+          [ *fnfn(<int>,<ptr(4) to <array 5  of <bool>>>) --> <int>           ]
+          [ *fnfnfn(<int>,<ptr(4) to <array  of <array  of <bool>>>>) --> <array 5  of <char>>           ]
+          [ *foo() --> <NULL>           ]
+          [ *foobar(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL>           ]
+          [ *func() --> <array 5  of <int>>           ]
+          [ @g        <char>           ]
+          [ @h        <char>           ]
+          [ @i        <char>           ]
+        ]]
+      statement list:
+        empty.
+      nested scopes:
+        CAstScope: 'foo'
+          symbol table:
+            [[
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'bar'
+          symbol table:
+            [[
+              [ %param    <int>               ]
+              [ %parambool <bool>               ]
+              [ %paramchar <char>               ]
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'foobar'
+          symbol table:
+            [[
+              [ %param    <ptr(4) to <array  of <array  of <int>>>>               ]
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'fn'
+          symbol table:
+            [[
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'func'
+          symbol table:
+            [[
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'fnc'
+          symbol table:
+            [[
+              [ %a        <int>               ]
+              [ %b        <bool>               ]
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'fncfnc'
+          symbol table:
+            [[
+              [ %a        <int>               ]
+              [ %c        <char>               ]
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'fnfn'
+          symbol table:
+            [[
+              [ %a        <int>               ]
+              [ %b        <ptr(4) to <array 5  of <bool>>>               ]
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+        CAstScope: 'fnfnfn'
+          symbol table:
+            [[
+              [ %a        <int>               ]
+              [ %b        <ptr(4) to <array  of <array  of <bool>>>>               ]
+            ]]
+          statement list:
+            empty.
+          nested scopes:
+            empty.
+        
+    
+
+
+run the following command to convert the .dot file into a PDF:
+  dot -Tpdf -otest02.mod.ast.pdf test02.mod.ast.dot
+
+
+Done.
