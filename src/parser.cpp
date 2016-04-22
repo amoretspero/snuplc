@@ -263,12 +263,12 @@ void CParser::InitSymbolTable(CSymtab *s)
   // For info of predefined functions, please refer to data/PredefinedFunctions.txt file.
   
   f = new CSymProc("DIM", tm->GetInt());
-  f->AddParam(new CSymParam(0, "array", tm->GetPointer(tm->GetArray())));
+  f->AddParam(new CSymParam(0, "array", tm->GetPointer(tm->GetNull())));
   f->AddParam(new CSymParam(1, "dim", tm->GetInt()));
   s->AddSymbol(f);
   
   f = new CSymProc("DOFS", tm->GetInt());
-  f->AddParam(new CSymParam(0, "array", tm->GetPointer(tm->GetArray())));
+  f->AddParam(new CSymParam(0, "array", tm->GetPointer(tm->GetNull())));
   s->AddSymbol(f);
   
   f = new CSymProc("ReadInt", tm->GetInt());
@@ -330,9 +330,9 @@ CAstModule* CParser::module(void)
   }
   // TODO: Support for multiple functions.
   // Part for processing multiple procedure/function. ===START===
-  while (_scanner->Peek() == tProcedure || _scanner->Peek() == tFunction) // Procedure/Function definitions. May be multiple of them.
+  while (_scanner->Peek().GetType() == tProcedure || _scanner->Peek().GetType() == tFunction) // Procedure/Function definitions. May be multiple of them.
   {
-    if (_scanner->Peek() == tProcedure) // Procedure case.
+    if (_scanner->Peek().GetType() == tProcedure) // Procedure case.
     {
       Consume(tProcedure);
       
@@ -341,7 +341,7 @@ CAstModule* CParser::module(void)
       
       vector<vector<CSymParam*> > parameterVector; // Vector for temporarily containing parameters.
       
-      if (_scanner->Peek() == tLBracketRound) // When procedure has parameters.
+      if (_scanner->Peek().GetType() == tLBracketRound) // When procedure has parameters.
       {
         Consume(tLBracketRound);
         
@@ -355,12 +355,14 @@ CAstModule* CParser::module(void)
       
       while(parameterVector.size() > 0) // Add symbols to procedure symbol.
       {
-        vector<CSymParam*> oneTypeParamVec = parameterVector.pop_back();
+        vector<CSymParam*> oneTypeParamVec = parameterVector.back();
         while(oneTypeParamVec.size() > 0)
         {
-          CSymParam* param = oneTypeParamVec.pop_back();
+          CSymParam* param = oneTypeParamVec.back();
           procSymbol->AddParam(param);
+          oneTypeParamVec.pop_back();
         }
+        parameterVector.pop_back();
       }
       
       CAstProcedure* procScope = new CAstProcedure(procName, procName->GetValue(), m, procSymbol); // Scope for procedure.
@@ -368,7 +370,7 @@ CAstModule* CParser::module(void)
       m->GetSymbolTable()->AddSymbol(procSymbol); // Add procedure symbol to module's symbol table.
       
       
-      if (_scanner->Peek() == tVar) // When procedure has its local variables.
+      if (_scanner->Peek().GetType() == tVar) // When procedure has its local variables.
       {
         Consume(tVar);
         while (true) // Iterates until there is no variable to declare.
@@ -407,7 +409,7 @@ CAstModule* CParser::module(void)
       
       vector<vector<CSymParam*> > parameterVector; // Vector for temporarily containing parameters.
       
-      if (_scanner->Peek() == tLBracketRound) // When function has parameters.
+      if (_scanner->Peek().GetType() == tLBracketRound) // When function has parameters.
       {
         Consume(tLBracketRound);
         
@@ -417,7 +419,7 @@ CAstModule* CParser::module(void)
       }
       Consume(tColon);
       
-      CType* funcReturnType = type(typeManager); // Gets return type of function.
+      CType* funcReturnType = type(typeManager, true); // Gets return type of function.
       
       Consume(tSemicolon);
       
@@ -425,19 +427,21 @@ CAstModule* CParser::module(void)
       
       while(parameterVector.size() > 0) // Add parameters to function symbol.
       {
-        vector<CSymParam*> oneTypeParamVec = parameterVector.pop_back();
+        vector<CSymParam*> oneTypeParamVec = parameterVector.back();
         while(oneTypeParamVec.size() > 0)
         {
-          CSymParam* param = oneTypeParamVec.pop_back();
+          CSymParam* param = oneTypeParamVec.back();
           funcSymbol->AddParam(param);
+          oneTypeParamVec.pop_back();
         }
+        parameterVector.pop_back();
       }
       
       CAstProcedure* funcScope = new CAstProcedure(funcName, funcName->GetValue(), m, funcSymbol); // Scope for function.
       
       m->GetSymbolTable()->AddSymbol(funcSymbol); // Add function symbol to module's symbol table.
       
-      if (_scanner->Peek() == tVar) // When function has its local variables.
+      if (_scanner->Peek().GetType() == tVar) // When function has its local variables.
       {
         Consume(tVar);
         while (true) // Iterates until there is no variable to declare.
@@ -552,7 +556,7 @@ CType* CParser::GetVariables (CScanner* _scanner, CAstScope* s, CTypeManager* _t
     Consume(tColon);
     identType = type(_tm, false); // Get type.
     printf("Got type!\n");
-    if (!identType->IsBoolean() && !identType->IsChar() && !identType->IsInt() && !paramType->IsArray() && !paramType->IsPointer()) // Check for type.
+    if (!identType->IsBoolean() && !identType->IsChar() && !identType->IsInt() && !identType->IsArray() && !identType->IsPointer()) // Check for type.
     {
       printf("Type error!\n");
     }
@@ -561,10 +565,10 @@ CType* CParser::GetVariables (CScanner* _scanner, CAstScope* s, CTypeManager* _t
   return identType; // Return the type for recursive call.
 }
 
-CType* CParser::GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType)
+const CType* CParser::GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType)
 {
   CToken* elemCount = NULL;
-  if (_scanner->Peek() != tRBracket)
+  if (_scanner->Peek().GetType() != tRBracket)
   {
     Consume(tNum, elemCount); // Gets number of element in this dimension.
   }
@@ -578,7 +582,7 @@ CType* CParser::GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* 
   if (_scanner->Peek().GetType() == tLBracket) // When more dimensions exist.
   {
     Consume(tLBracket);
-    return _tm->GetArray(nelem, GenerateArrayType(_scanner, _tm)); // Type for this dimension will be array of array by recursive call.
+    return _tm->GetArray(nelem, GenerateArrayType(_scanner, _tm, _baseType)); // Type for this dimension will be array of array by recursive call.
   }
   else // When there are no more dimensions exist. i.e., 1st dimension.
   {
@@ -586,7 +590,7 @@ CType* CParser::GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* 
   }
 }
 
-CType* CParser::GeneratePointerType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType)
+const CType* CParser::GeneratePointerType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType)
 {
   // This function is not used any more.
   if (_scanner->Peek().GetType() == tLBracket) // When more dimensions exist.
@@ -706,11 +710,11 @@ CAstStatement* CParser::statSequence(CAstScope *s)
         Consume(tId, commonFirst); // Consume common FIRST.
         
         // TODO: qualident is not properly handled.
-        if (_scanner->Peek() == tAssign || _scanner->Peek() == tLBracket) // Case of assignment. When tLBracket is peeked, it is qualident.
+        if (_scanner->Peek().GetType() == tAssign || _scanner->Peek().GetType() == tLBracket) // Case of assignment. When tLBracket is peeked, it is qualident.
         {
           st = assignment(s, commonFirst);
         }
-        else if (_scanner->Peek() == tLBracketRound) // Case of subroutineCall.
+        else if (_scanner->Peek().GetType() == tLBracketRound) // Case of subroutineCall.
         {
           st = subroutineCall(s, commonFirst, typeManager);
         }
@@ -763,7 +767,7 @@ CAstStatCall* CParser::subroutineCall(CAstScope* s, CToken* prevToken, CTypeMana
   //
   // subroutineCall      = ident "(" [ expression {"," expression} ] ")".
   //
-  CSymbol* funcSymbol = s->GetSymbolTable()->FindSymbol(prevToken->GetName()); // Find symbol for procedure/function.
+  const CSymProc* funcSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(prevToken->GetName())); // Find symbol for procedure/function.
   //CType* funcDataType = funcSymbol->GetDataType()
   CAstFunctionCall* funcCall = new CAstFunctionCall(prevToken, funcSymbol); // Make functionCall AST node.
   
@@ -774,9 +778,9 @@ CAstStatCall* CParser::subroutineCall(CAstScope* s, CToken* prevToken, CTypeMana
 
 void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, CAstFunctionCall* _fc)
 {
-  Comsume(tLBracketRound);
+  Consume(tLBracketRound);
   
-  if (_scanner->Peek() == tRBracketRound) // No argument to add.
+  if (_scanner->Peek().GetType() == tRBracketRound) // No argument to add.
   {
     return;
   }
@@ -857,7 +861,7 @@ CAstStatReturn* CParser::returnStatement(CAstScope* s)
   CToken t;
   
   Consume(tReturn, &t);
-  EToken checkExp = _scanner->Peek();
+  EToken checkExp = _scanner->Peek().GetType();
   if (checkExp == tEnd || checkExp == tElse || checkExp == tSemicolon)
   {
     return new CAstStatReturn(t, s, NULL);
@@ -880,12 +884,12 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
   // qualident is either an (multi-dimensional)array or basetype identifier.
   //
   CToken t;
-  CSymbol* symbol = s->GetSymbolTable()->FindSymbol(lhs->GetName()); // Find symbol for LHS, which is qualident or ident.
+  const CSymbol* symbol = s->GetSymbolTable()->FindSymbol(lhs->GetName()); // Find symbol for LHS, which is qualident or ident.
 
-  if (_scanner->Peek()->GetType() == tLBracket) // When LHS is qualident.
+  if (_scanner->Peek().GetType() == tLBracket) // When LHS is qualident.
   {
-    CAstArrayDesignator* qualid = CAstArrayDesignator(lhs, symbol); // Make qualident object.
-    while(_scanner->Peek() == tLBracket) // Gets all indices.
+    CAstArrayDesignator* qualid = new CAstArrayDesignator(lhs, symbol); // Make qualident object.
+    while(_scanner->Peek().GetType() == tLBracket) // Gets all indices.
     {
       Consume(tLBracket);
       CAstExpression* idxExp = expression(s); // Get index.
@@ -902,7 +906,7 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
   }
   else // When LHS is ident.
   {
-    CAstDesignator* id = CAstDesignator(lhs, symbol); // Make ident object.
+    CAstDesignator* id = new CAstDesignator(lhs, symbol); // Make ident object.
     
     Consume(tAssign, &t);
     
@@ -1044,7 +1048,7 @@ CAstExpression* CParser::term(CAstScope *s)
     {
       n = new CAstBinaryOp(t, opMul, l, r);
     }
-    else if (t.GetValue() == "/"); // Case of binary division operator.
+    else if (t.GetValue() == "/") // Case of binary division operator.
     {
       n = new CAstBinaryOp(t, opDiv, l, r);
     }
@@ -1089,11 +1093,15 @@ CAstExpression* CParser::factor(CAstScope *s)
     tt = _scanner->Peek().GetType(); // Peek the next.
     if (tt == tLBracketRound) // Case of subroutineCall.
     {
-      n = subroutineCall(s, factorId, typeManager);
+      const CSymProc* funcSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(factorId->GetValue()));
+      CAstFunctionCall* funcCall = new CAstFunctionCall(factorId, funcSymbol);
+      AddArguments(s, _scanner, typeManager, funcCall);
+      //n = subroutineCall(s, factorId, typeManager);
+      n = funcCall;
     }
     else if (tt == tLBracket) // Case of qualident (not ident).
     {
-      CSymbol* qualIdSymbol = s->GetSymbolTable()->FindSymbol(factorId->GetName()); // Find symbol for qualident.
+      const CSymbol* qualIdSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(factorId->GetName())); // Find symbol for qualident.
       CAstArrayDesignator* qualid = new CAstArrayDesignator(factorId, qualIdSymbol); // Construct qualident variable.
       while(tt == tLBracket) // Set indices of qualident variable.
       {
@@ -1107,7 +1115,7 @@ CAstExpression* CParser::factor(CAstScope *s)
     }
     else if (tt == tFact || tt == tRBracket || tt == tRBracketRound || tt == tComma || tt == tEnd || tt == tElse || tt == tSemicolon || tt == tRelOp || tt == tTerm || tt == tAssign) // Case of ident.
     {
-      CSymbol* idSymbol = s->GetSymbolTable()->FindSymbol(factorId->GetName()); // Find symbol for ident.
+      const CSymbol* idSymbol = s->GetSymbolTable()->FindSymbol(factorId->GetName()); // Find symbol for ident.
       n = new CAstDesignator(factorId, idSymbol); // Construct ident variable.
     }
   }
@@ -1149,7 +1157,7 @@ CAstExpression* CParser::factor(CAstScope *s)
   }
   else if (tt = tLBracketRound) // Case of expression.
   {
-    Consume(tLBracketRound)
+    Consume(tLBracketRound);
     n = expression(s); // Get expression.
     Consume(tRBracketRound);
   }

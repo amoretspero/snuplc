@@ -46,15 +46,19 @@ Commented <code>simpleexpr</code>, <code>term</code> and added some TODOs.
 Implemented <code>factor</code> and commented it. May need some more thinking about escape characters.  
 Need code review and (if needed) additional function or bug fixes.  
   
-**2016-04-21 17:37 KST**
+**2016-04-21 17:37 KST**  
 Implemented <code>if</code>, <code>while</code>, <code>return</code> statements.  
 Added support for multiple function declaration in module.  
 Revised functions related to fetching parameters for procedure/function. Now they use <code>vector</code> types.  
   
-**2016-04-21 18:52 KST**
+**2016-04-21 18:52 KST**  
 Added predefined functions in <code>InitSymbolTable()</code> function.
 Changed <code>type()</code> function to provide pointer to array when <code>_isParam</code> is <code>true</code>,
 and array when <code>_isParam</code> is <code>false</code>.  
+  
+**2016-04-22 19:21 KST**
+Fixed compilation errors.  
+Main errors were <code>const</code> type conversion errors, solved by <code>dynamic_cast</code>.  
   
   
 ### Notice

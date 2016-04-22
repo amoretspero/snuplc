@@ -504,7 +504,7 @@ CToken* CScanner::Scan()
       break;
     
     case ']':
-      token = tRBracekt;
+      token = tRBracket;
       break;
 
     default:

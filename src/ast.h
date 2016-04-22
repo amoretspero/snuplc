@@ -465,7 +465,7 @@ class CAstStatAssign : public CAstStatement {
 
     /// @brief return the LHS of the assignment
     /// @retval CAstDesignator* LHS of the assignment
-    CAstConstant* GetLHS(void) const;
+    CAstDesignator* GetLHS(void) const;
 
     /// @brief return the RHS of the assignment
     /// @retval CAstExpression* RHS of the assignment

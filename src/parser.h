@@ -102,7 +102,7 @@ class CParser {
     CAstStatWhile*        whileStatement(CAstScope* s);
     CAstStatReturn*       returnStatement(CAstScope* s);
 
-    CAstStatAssign*       assignment(CAstScope *s);
+    CAstStatAssign*       assignment(CAstScope *s, CToken* commonFirst);
 
     CAstStatCall*         subroutineCall(CAstScope* s, CToken* prevToken, CTypeManager* _tm);
     CAstExpression*       expression(CAstScope *s);
@@ -117,13 +117,13 @@ class CParser {
     //CAstDesignator*       ident(void);
     //CAstArrayDesignator*  qualident(void);
     
-    CType*                type(CTypeManager* _tm);
+    CType*                type(CTypeManager* _tm, bool _isParam);
     
     CType* GetVariables(CScanner* _scanner, CAstScope* s, CTypeManager* _tm);
     CType* GetOneTypeParams(CScanner* _scanner, CTypeManager* _tm, vector<CSymParam*> paramVec, int idx);
     CType* GetParams(CScanner* _scanner, CTypeManager* _tm, vector<vector<CSymParam*> > paramVec1, int lastIdx);
-    CType* GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType);
-    CType* GeneratePointerType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType);
+    const CType* GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType);
+    const CType* GeneratePointerType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType);
     
     void AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, CAstFunctionCall* _fc);
     

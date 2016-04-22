@@ -366,7 +366,7 @@ CAstStatAssign::CAstStatAssign(CToken t,
   assert(rhs != NULL);
 }
 
-CAstConstant* CAstStatAssign::GetLHS(void) const
+CAstDesignator* CAstStatAssign::GetLHS(void) const
 {
   return _lhs;
 }
