@@ -1193,7 +1193,28 @@ bool CAstArrayDesignator::TypeCheck(CToken *t, string *msg) const
 
 const CType* CAstArrayDesignator::GetType(void) const
 {
-  return NULL;
+  const CSymbol* sym = GetSymbol();
+  int idxCnt = GetNIndices();
+  const CArrayType* at = dynamic_cast<const CArrayType*>(GetSymbol()->GetDataType());
+  bool idxEnd = false;
+  
+  if (at == NULL)
+  {
+    return CTypeManager::Get()->GetNull();
+  }
+  
+  for (; idxCnt > 0 && !idxEnd; idxCnt--)
+  {
+    if (at->GetInnerType()->IsArray())
+    {
+      at = dynamic_cast<const CArrayType*>(at->GetInnerType());
+    }
+    else
+    {
+      idxEnd = true;
+    }
+  }
+  return at->GetInnerType();
 }
 
 ostream& CAstArrayDesignator::print(ostream &out, int indent) const
@@ -1359,7 +1380,7 @@ bool CAstStringConstant::TypeCheck(CToken *t, string *msg) const
 
 const CType* CAstStringConstant::GetType(void) const
 {
-  return NULL;
+  return CTypeManager::Get()->GetArray(-1, CTypeManager::Get()->GetChar());
 }
 
 ostream& CAstStringConstant::print(ostream &out, int indent) const
