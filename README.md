@@ -65,6 +65,12 @@ Fixed order of <code>procedure</code>/<code>function</code> parameters.
 Now parameters are added to <code>procedure</code>/<code>function</code>'s symbol and scope.  
 Iteration through <code>vector</code> class is done with <code>iterator</code>/<code>reverse_iterator</code>.  
   
+**2016-04-23 22:53 KST**
+Fixed null <code>token</code> errors.  
+Problems related to <code>CToken</code> <code>GetValue()</code> function is resolved.  
+More code for debugging.  
+Passes <code>char03.mod</code> test.
+  
 ### Notice
 Arrays do not have to support array assignments.  
 (Of course, its syntatically correct, but type checking phase will deal with it.)  

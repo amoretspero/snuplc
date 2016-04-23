@@ -425,6 +425,14 @@ CAstModule* CParser::module(void)
       
       cout << "===(DEBUG)===Now added all local variables for procedure. Next token is : " << _scanner->Peek().GetValue() << endl;
       
+      vector<CSymbol*> procsymbols = procScope->GetSymbolTable()->GetSymbols();
+      vector<CSymbol*>::iterator procSymIter = procsymbols.begin();
+      while(procSymIter != procsymbols.end() && procsymbols.size() > 0)
+      {
+        cout << "===(DEBUG)===Current scope's Variable/Param name : " << (*procSymIter)->GetName() << endl;
+        procSymIter++;
+      }
+      
       Consume(tBegin);
       
       CAstStatement* procStatSeq = NULL;
@@ -642,7 +650,8 @@ CType* CParser::GetVariables (CScanner* _scanner, CAstScope* s, CTypeManager* _t
   {
     Consume(tComma);
     identType = GetVariables(_scanner, s, _tm); // Recursive call.
-    s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType)); // When above recursive call gives type, add variable to scope's symbol table. 
+    s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType)); // When above recursive call gives type, add variable to scope's symbol table.
+    cout << "===(DEBUG)=== Added variable <" << varId->GetValue() << "> to scope." << endl; 
   }
   else // When there are no more variable of same type.
   {
@@ -654,6 +663,7 @@ CType* CParser::GetVariables (CScanner* _scanner, CAstScope* s, CTypeManager* _t
       printf("Type error!\n");
     }
     s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType)); // Add variable to scope's symbol table.
+    cout << "===(DEBUG)=== Added variable <" << varId->GetValue() << "> to scope." << endl; 
   }
   return identType; // Return the type for recursive call.
 }
@@ -799,9 +809,10 @@ CAstStatement* CParser::statSequence(CAstScope *s)
       CAstStatement* st = NULL;
       
       if (statFirstType == tId) // Assignment or subroutineCall.
-      {
-        CToken* commonFirst = NULL;
+      { 
+        CToken* commonFirst = new CToken();
         Consume(tId, commonFirst); // Consume common FIRST.
+        cout << "===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : " << commonFirst->GetValue() << endl;
         
         // TODO: qualident is not properly handled.
         if (_scanner->Peek().GetType() == tAssign || _scanner->Peek().GetType() == tLBracket) // Case of assignment. When tLBracket is peeked, it is qualident.
@@ -861,7 +872,7 @@ CAstStatCall* CParser::subroutineCall(CAstScope* s, CToken* prevToken, CTypeMana
   //
   // subroutineCall      = ident "(" [ expression {"," expression} ] ")".
   //
-  const CSymProc* funcSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(prevToken->GetName())); // Find symbol for procedure/function.
+  const CSymProc* funcSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(prevToken->GetValue())); // Find symbol for procedure/function.
   //CType* funcDataType = funcSymbol->GetDataType()
   CAstFunctionCall* funcCall = new CAstFunctionCall(prevToken, funcSymbol); // Make functionCall AST node.
   
@@ -876,11 +887,13 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
   
   if (_scanner->Peek().GetType() == tRBracketRound) // No argument to add.
   {
+    Consume(tRBracketRound);
     return;
   }
   else // Argument(s) exist(s).
   {
     CAstExpression* exp = expression(s); // Get argument.
+    cout << "===(DEBUG)===Got argument as form of expression. Next token is : " << _scanner->Peek().GetValue() << endl;
     _fc->AddArg(exp); // Add argument to functionCall.
     while(_scanner->Peek().GetType() == tComma) // Until there are no more argument left, iterate.
     {
@@ -889,6 +902,7 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
       _fc->AddArg(exp); // Add argument to functionCall.
     }
   }
+  Consume(tRBracketRound);
 }
 
 CAstStatIf* CParser::ifStatement(CAstScope* s)
@@ -977,8 +991,10 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
   //
   // qualident is either an (multi-dimensional)array or basetype identifier.
   //
+  cout << "===(DEBUG)===Start of assignment" << endl;
   CToken t;
-  const CSymbol* symbol = s->GetSymbolTable()->FindSymbol(lhs->GetName()); // Find symbol for LHS, which is qualident or ident.
+  const CSymbol* symbol = s->GetSymbolTable()->FindSymbol(lhs->GetValue()); // Find symbol for LHS, which is qualident or ident.
+  cout << "===(DEBUG)===Found symbol : " << symbol->GetName() << endl;
 
   if (_scanner->Peek().GetType() == tLBracket) // When LHS is qualident.
   {
@@ -987,6 +1003,7 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
     {
       Consume(tLBracket);
       CAstExpression* idxExp = expression(s); // Get index.
+      cout << "===(DEBUG)===Got exp for index of qualident." << endl;
       qualid->AddIndex(idxExp); // Set index of qualident.
       Consume(tRBracket);
     }
@@ -996,15 +1013,23 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
     
     CAstExpression* rhs = expression(s); // Gets RHS.
     
+    cout << "===(DEBUG)===Got LHS and RHS of assignment." << endl;
+    
     return new CAstStatAssign(t, qualid, rhs);
   }
   else // When LHS is ident.
   {
     CAstDesignator* id = new CAstDesignator(lhs, symbol); // Make ident object.
     
+    cout << "===(DEBUG)===Made new CAstDesignator class for id." << endl;
+    
     Consume(tAssign, &t);
     
+    cout << "===(DEBUG)===Consumed assignment token." << endl;
+    
     CAstExpression *rhs = expression(s); // Gets RHS.
+    
+    cout << "===(DEBUG)===Got LHS and RHS of assignment." << endl;
     
     return new CAstStatAssign(t, id, rhs);
   }
@@ -1020,8 +1045,12 @@ CAstExpression* CParser::expression(CAstScope* s)
   CToken t;
   EOperation relop;
   CAstExpression *left = NULL, *right = NULL;
+  
+  cout << "===(DEBUG)===Now at expression function." << endl;
 
   left = simpleexpr(s);
+  
+  cout << "===(DEBUG)===Got simpleexpr for left side of expression. Next token is : " << _scanner->Peek().GetValue() << endl;
 
   if (_scanner->Peek().GetType() == tRelOp) // When form of simpleexpr relOp simpleexpr.
   {
@@ -1076,13 +1105,13 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
   
   if (_scanner->Peek().GetValue() == "+") // Unary positive operator.
   {
-    CToken* unaryOp = NULL;
+    CToken* unaryOp = new CToken();
     Consume(tTerm, unaryOp); // Get unary operator token.
     n = new CAstUnaryOp(unaryOp, opPos, term(s)); // Construct term with unary operator included.
   }
   else if (_scanner->Peek().GetValue() == "-") // Unary negative operator.
   {
-    CToken* unaryOp = NULL;
+    CToken* unaryOp = new CToken();
     Consume(tTerm, unaryOp); // Get unary operator token.
     n = new CAstUnaryOp(unaryOp, opNeg, term(s)); // Construct term with unary operator included.
   }
@@ -1180,13 +1209,17 @@ CAstExpression* CParser::factor(CAstScope *s)
   EToken tt = _scanner->Peek().GetType(); // Token enumerator for next token. Used for classification.
   CAstExpression *unary = NULL, *n = NULL;
   
+  cout << "===(DEBUG)===Now processing factor." << endl;
+  
   if (tt == tId) // Possibility of qualident or subroutineCall
   {
-    CToken* factorId = NULL;
+    cout << "===(DEBUG)===factor qualident/subroutineCall case." << endl;
+    CToken* factorId = new CToken();
     Consume(tId, factorId); // Get common FIRST.
     tt = _scanner->Peek().GetType(); // Peek the next.
     if (tt == tLBracketRound) // Case of subroutineCall.
     {
+      cout << "===(DEBUG)===factor subroutineCall case." << endl;
       const CSymProc* funcSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(factorId->GetValue()));
       CAstFunctionCall* funcCall = new CAstFunctionCall(factorId, funcSymbol);
       AddArguments(s, _scanner, typeManager, funcCall);
@@ -1195,6 +1228,7 @@ CAstExpression* CParser::factor(CAstScope *s)
     }
     else if (tt == tLBracket) // Case of qualident (not ident).
     {
+      cout << "===(DEBUG)===factor qualident case." << endl;
       const CSymbol* qualIdSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(factorId->GetName())); // Find symbol for qualident.
       CAstArrayDesignator* qualid = new CAstArrayDesignator(factorId, qualIdSymbol); // Construct qualident variable.
       while(tt == tLBracket) // Set indices of qualident variable.
@@ -1209,13 +1243,14 @@ CAstExpression* CParser::factor(CAstScope *s)
     }
     else if (tt == tFact || tt == tRBracket || tt == tRBracketRound || tt == tComma || tt == tEnd || tt == tElse || tt == tSemicolon || tt == tRelOp || tt == tTerm || tt == tAssign) // Case of ident.
     {
-      const CSymbol* idSymbol = s->GetSymbolTable()->FindSymbol(factorId->GetName()); // Find symbol for ident.
+      cout << "===(DEBUG)===factor ident case." << endl;
+      const CSymbol* idSymbol = s->GetSymbolTable()->FindSymbol(factorId->GetValue()); // Find symbol for ident.
       n = new CAstDesignator(factorId, idSymbol); // Construct ident variable.
     }
   }
   else if (tt == tNum) // Case of number.
   {
-    CToken* num = NULL;
+    CToken* num = new CToken();
     Consume(tNum, num); // Get number token.
     char* endPtr = 0;
     long long numValue = strtoll(num->GetValue().c_str(), &endPtr, 10); // Parse number value.
@@ -1223,14 +1258,14 @@ CAstExpression* CParser::factor(CAstScope *s)
   }
   else if (tt == tTrue) // Case of boolean TRUE.
   {
-    CToken* booleanTrue = NULL;
+    CToken* booleanTrue = new CToken();
     Consume(tTrue, booleanTrue); // Get boolean TRUE token.
     long long numValue = 1; // 1 for TRUE, 0 for FALSE.
     n = new CAstConstant(booleanTrue, typeManager->GetBool(), numValue); // Construct boolean constant.
   }
   else if (tt == tFalse) // Case of boolean FALSE.
   {
-    CToken* booleanFalse = NULL;
+    CToken* booleanFalse = new CToken();
     Consume(tFalse, booleanFalse); // Get boolean FALSE token.
     long long numValue = 0; // 1 for TRUE, 0 for FALSE.
     n = new CAstConstant(booleanFalse, typeManager->GetBool(), numValue); // Construct boolean constant.
@@ -1238,14 +1273,14 @@ CAstExpression* CParser::factor(CAstScope *s)
   else if (tt == tCharacter) // Case of character.
   {
     // TODO: Check for escape characters.
-    CToken* ch = NULL;
+    CToken* ch = new CToken();
     Consume(tCharacter, ch); // Get character token.
     long long charValue = ch->GetValue().c_str()[0]; // Parse character value to integer value.
     n = new CAstConstant(ch, typeManager->GetChar(), charValue); // Construct character constant.
   }
   else if (tt = tString) // Case of string.
   {
-    CToken* str = NULL;
+    CToken* str = new CToken();
     Consume(tString, str); // Get string token.
     n = new CAstStringConstant(str, str->GetValue(), s); // Construct string constant.
   }
@@ -1257,7 +1292,7 @@ CAstExpression* CParser::factor(CAstScope *s)
   }
   else if (tt == tExclam) // Case of binary negation.
   {
-    CToken* exclam = NULL;
+    CToken* exclam = new CToken();
     Consume(tExclam, exclam); // Get exclamanation token, which represents binary negation.
     n = new CAstUnaryOp(exclam, opNot, factor(s)); // Construct negation of factor.(recursive call)
   }
