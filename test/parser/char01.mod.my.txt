@@ -1,0 +1,110 @@
+parsing 'test/parser/char01.mod'...
+===(DEBUG)===Current scanner peek : c
+===(DEBUG)=== Added variable <c> to scope.
+===(DEBUG)===Next token is : ;
+===(DEBUG)===Got semicolon of end of var decl.
+===(DEBUG)===Next token is : begin
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : c
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : c
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 1(type : tCharacter)
+===(DEBUG)===factor character case.
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : c
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : c
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : \t(type : tConstChar)
+===(DEBUG)===factor const character case.
+===(DEBUG)===Escaped value is : \\t
+===(DEBUG)===Unescaped value is : 	
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : WriteChar
+===(DEBUG)===Case of subroutineCall in statement.
+===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : c(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : c
+===(DEBUG)===factor ident case. Next token is : )
+===(DEBUG)===Current symbol table size is : 8
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Got expression for function argument.
+===(DEBUG)===Got argument as form of expression. Next token is : )
+===(DEBUG)===Got subroutine call. Next token is : ;
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : WriteChar
+===(DEBUG)===Case of subroutineCall in statement.
+===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : !(type : tCharacter)
+===(DEBUG)===factor character case.
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Got expression for function argument.
+===(DEBUG)===Got argument as form of expression. Next token is : )
+===(DEBUG)===Got subroutine call. Next token is : ;
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : WriteLn
+===(DEBUG)===Case of subroutineCall in statement.
+===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function.
+===(DEBUG)===Got subroutine call. Next token is : end
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : end
+===(DEBUG)===Set tail and head of statement sequence. Next token is : end
+successfully parsed.
+  AST:
+    CAstScope: 'char01'
+      symbol table:
+        [[
+          [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+          [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+          [ *ReadInt() --> <int>           ]
+          [ *WriteChar(<char>) --> <NULL>           ]
+          [ *WriteInt(<int>) --> <NULL>           ]
+          [ *WriteLn() --> <NULL>           ]
+          [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+          [ @c        <char>           ]
+        ]]
+      statement list:
+        := <char>
+          [ @c        <char> ] <char>
+          49 <char>
+        := <char>
+          [ @c        <char> ] <char>
+          9 <char>
+        call [ *WriteChar(<char>) --> <NULL> ] <NULL>
+          [ @c        <char> ] <char>
+        call [ *WriteChar(<char>) --> <NULL> ] <NULL>
+          33 <char>
+        call [ *WriteLn() --> <NULL> ] <NULL>
+      nested scopes:
+        empty.
+    
+
+
+run the following command to convert the .dot file into a PDF:
+  dot -Tpdf -otest/parser/char01.mod.ast.pdf test/parser/char01.mod.ast.dot
+
+
+Done.

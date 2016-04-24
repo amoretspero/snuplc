@@ -81,6 +81,11 @@ Result may not be correct.
 Fixed <code>dynamic_cast</code> type unmatching error.  
 Now <code>term</code> only consists of <code>number</code> is converted to negative number when
 preceding minus sign(<code>-</code>) is present.    
+  
+**2016-04-24 20:11 KST**  
+Passes all default tests without bugs.  
+Added more tests for complex codes and should-throw-error cases.  
+Need to pass <code>strange</code> tests. They are in <code>test/parser/strnage</code> folder.  
     
 ### Notice
 Arrays do not have to support array assignments.  

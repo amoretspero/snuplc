@@ -194,7 +194,7 @@ digraph AST {
   node98 [label="call WriteLn",shape=box];
   node95 -> node98 [style=dotted];
   node100 [label="call Print",shape=box];
-  node102 [label="*()",shape=box];
+  node102 [label="&()",shape=box];
   node101 [label="x",shape=ellipse];
   node102->node101;
   node100->node102;
@@ -206,7 +206,7 @@ digraph AST {
   node107 [label="call WriteLn",shape=box];
   node104 -> node107 [style=dotted];
   node109 [label="call Init",shape=box];
-  node111 [label="*()",shape=box];
+  node111 [label="&()",shape=box];
   node110 [label="x",shape=ellipse];
   node111->node110;
   node109->node111;

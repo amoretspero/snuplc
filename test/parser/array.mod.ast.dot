@@ -5,14 +5,18 @@ digraph AST {
 
   node0 [label="m array",shape=box];
   node53 [label="call add",shape=box];
-  node55 [label="*()",shape=box];
+  node55 [label="&()",shape=box];
   node54 [label="a",shape=ellipse];
   node55->node54;
   node53->node55;
+  node57 [label="&()",shape=box];
   node56 [label="b",shape=ellipse];
-  node53->node56;
-  node57 [label="c",shape=ellipse];
+  node57->node56;
   node53->node57;
+  node59 [label="&()",shape=box];
+  node58 [label="c",shape=ellipse];
+  node59->node58;
+  node53->node59;
   node0 -> node53 [style=dotted];
   node1 [label="p/f add",shape=box];
   node4 [label=":=",shape=box];

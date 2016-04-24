@@ -29,7 +29,7 @@ digraph AST {
   node39->node37;
   node35 -> node39 [style=dotted];
   node40 [label="call Set",shape=box];
-  node42 [label="*()",shape=box];
+  node42 [label="&()",shape=box];
   node41 [label="A",shape=ellipse];
   node42->node41;
   node40->node42;

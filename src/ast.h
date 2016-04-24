@@ -559,6 +559,9 @@ class CAstStatCall : public CAstStatement {
     /// @retval true if no type error has been found
     /// @retval false otherwise
     virtual bool TypeCheck(CToken *t, string *msg) const;
+    
+    /// @brief return (compute) the type of the expression.
+    virtual const CType* GetType(void) const;
 
     /// @}
 

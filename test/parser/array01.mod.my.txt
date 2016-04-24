@@ -1,0 +1,80 @@
+parsing 'test/parser/array01.mod'...
+===(DEBUG)===Current scanner peek : A
+===(DEBUG)===In GenerateArrayType function, got nelem of 5
+===(DEBUG)===In GenerateArrayType function, got nelem of 5
+===(DEBUG)=== Added variable <A> to scope.
+===(DEBUG)===Next token is : ;
+===(DEBUG)===Got semicolon of end of var decl.
+===(DEBUG)===Next token is : begin
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : A
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : A
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 0(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ]
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ]
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ]
+===(DEBUG)===Got exp for index of qualident.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 1(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ]
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ]
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ]
+===(DEBUG)===Got exp for index of qualident.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : A(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : A
+===(DEBUG)===factor qualident case. factorId : A
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 2(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ]
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ]
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ]
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 3(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ]
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ]
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ]
+===(DEBUG)===Constructed factor term. Next token is : end
+===(DEBUG)===Constructed term for simpleexpr. Next token is : end
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : end
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : end
+===(DEBUG)===Set tail and head of statement sequence. Next token is : end
+successfully parsed.
+  AST:
+    CAstScope: 'array01'
+      symbol table:
+        [[
+          [ @A        <array 5  of <array 5  of <int>>>           ]
+          [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+          [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+          [ *ReadInt() --> <int>           ]
+          [ *WriteChar(<char>) --> <NULL>           ]
+          [ *WriteInt(<int>) --> <NULL>           ]
+          [ *WriteLn() --> <NULL>           ]
+          [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+        ]]
+      statement list:
+        := <int>
+          [ @A        <array 5  of <array 5  of <int>>> ] <int>
+            0 <int>
+            1 <int>
+          [ @A        <array 5  of <array 5  of <int>>> ] <int>
+            2 <int>
+            3 <int>
+      nested scopes:
+        empty.
+    
+
+
+run the following command to convert the .dot file into a PDF:
+  dot -Tpdf -otest/parser/array01.mod.ast.pdf test/parser/array01.mod.ast.dot
+
+
+Done.

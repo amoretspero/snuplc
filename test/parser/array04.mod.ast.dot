@@ -33,7 +33,7 @@ digraph AST {
   node55->node52;
   node50 -> node55 [style=dotted];
   node56 [label="call Set",shape=box];
-  node58 [label="*()",shape=box];
+  node58 [label="&()",shape=box];
   node57 [label="A",shape=ellipse];
   node58->node57;
   node56->node58;

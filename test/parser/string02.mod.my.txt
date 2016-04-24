@@ -1,0 +1,194 @@
+parsing 'test/parser/string02.mod'...
+===(DEBUG)===Current scanner peek : age
+===(DEBUG)===Current scanner peek : year
+===(DEBUG)=== Added variable <year> to scope.
+===(DEBUG)=== Added variable <age> to scope.
+===(DEBUG)===Next token is : ;
+===(DEBUG)===Got semicolon of end of var decl.
+===(DEBUG)===Next token is : begin
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : WriteStr
+===(DEBUG)===Case of subroutineCall in statement.
+===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : Enter your age: (type : tString)
+===(DEBUG)===Case of string in factor. Next token is : Enter your age: 
+===(DEBUG)===Got token for string. token value is : Enter your age: , next token is : )
+===(DEBUG)===Length of string is : 17
+===(DEBUG)===Constructed CAstStringConstant for string. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Got expression for function argument.
+===(DEBUG)===Return type of expression is array.
+===(DEBUG)===Got argument as form of expression. Next token is : )
+===(DEBUG)===Got subroutine call. Next token is : ;
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : age
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : age
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : ReadInt(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : ReadInt
+===(DEBUG)===factor subroutineCall case.
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : WriteStr
+===(DEBUG)===Case of subroutineCall in statement.
+===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : Enter the year: (type : tString)
+===(DEBUG)===Case of string in factor. Next token is : Enter the year: 
+===(DEBUG)===Got token for string. token value is : Enter the year: , next token is : )
+===(DEBUG)===Length of string is : 17
+===(DEBUG)===Constructed CAstStringConstant for string. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Got expression for function argument.
+===(DEBUG)===Return type of expression is array.
+===(DEBUG)===Got argument as form of expression. Next token is : )
+===(DEBUG)===Got subroutine call. Next token is : ;
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : year
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : year
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : ReadInt(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : ReadInt
+===(DEBUG)===factor subroutineCall case.
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : WriteStr
+===(DEBUG)===Case of subroutineCall in statement.
+===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : You will be 100 years old in the year (type : tString)
+===(DEBUG)===Case of string in factor. Next token is : You will be 100 years old in the year 
+===(DEBUG)===Got token for string. token value is : You will be 100 years old in the year , next token is : )
+===(DEBUG)===Length of string is : 39
+===(DEBUG)===Constructed CAstStringConstant for string. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Got expression for function argument.
+===(DEBUG)===Return type of expression is array.
+===(DEBUG)===Got argument as form of expression. Next token is : )
+===(DEBUG)===Got subroutine call. Next token is : ;
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : WriteInt
+===(DEBUG)===Case of subroutineCall in statement.
+===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : year(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : year
+===(DEBUG)===factor ident case. Next token is : +
+===(DEBUG)===Current symbol table size is : 12
+===(DEBUG)===Constructed factor term. Next token is : +
+===(DEBUG)===Constructed term for simpleexpr. Next token is : +
+===(DEBUG)===Now processing factor. Next token : 100(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : -
+===(DEBUG)===Now processing factor. Next token : age(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : age
+===(DEBUG)===factor ident case. Next token is : )
+===(DEBUG)===Current symbol table size is : 12
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Got expression for function argument.
+===(DEBUG)===Got argument as form of expression. Next token is : )
+===(DEBUG)===Got subroutine call. Next token is : ;
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : WriteStr
+===(DEBUG)===Case of subroutineCall in statement.
+===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : .\n(type : tString)
+===(DEBUG)===Case of string in factor. Next token is : .\n
+===(DEBUG)===Got token for string. token value is : .\n, next token is : )
+===(DEBUG)===Length of string is : 3
+===(DEBUG)===Constructed CAstStringConstant for string. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Got expression for function argument.
+===(DEBUG)===Return type of expression is array.
+===(DEBUG)===Got argument as form of expression. Next token is : )
+===(DEBUG)===Got subroutine call. Next token is : end
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : end
+===(DEBUG)===Set tail and head of statement sequence. Next token is : end
+successfully parsed.
+  AST:
+    CAstScope: 'string02'
+      symbol table:
+        [[
+          [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+          [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+          [ *ReadInt() --> <int>           ]
+          [ *WriteChar(<char>) --> <NULL>           ]
+          [ *WriteInt(<int>) --> <NULL>           ]
+          [ *WriteLn() --> <NULL>           ]
+          [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+          [ @_str_1   <array 17  of <char>>           ]
+            [ data: 'Enter your age: ' ]
+          [ @_str_2   <array 17  of <char>>           ]
+            [ data: 'Enter the year: ' ]
+          [ @_str_3   <array 39  of <char>>           ]
+            [ data: 'You will be 100 years old in the year ' ]
+          [ @_str_4   <array 3  of <char>>           ]
+            [ data: '.\n' ]
+          [ @age      <int>           ]
+          [ @year     <int>           ]
+        ]]
+      statement list:
+        call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+          &() <ptr(4) to <array 17  of <char>>>
+            "Enter your age: " <array 17  of <char>>
+        := <int>
+          [ @age      <int> ] <int>
+          call [ *ReadInt() --> <int> ] <int>
+        call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+          &() <ptr(4) to <array 17  of <char>>>
+            "Enter the year: " <array 17  of <char>>
+        := <int>
+          [ @year     <int> ] <int>
+          call [ *ReadInt() --> <int> ] <int>
+        call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+          &() <ptr(4) to <array 39  of <char>>>
+            "You will be 100 years old in the year " <array 39  of <char>>
+        call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+          sub <int>
+            add <int>
+              [ @year     <int> ] <int>
+              100 <int>
+            [ @age      <int> ] <int>
+        call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+          &() <ptr(4) to <array 3  of <char>>>
+            ".\n" <array 3  of <char>>
+      nested scopes:
+        empty.
+    
+
+
+run the following command to convert the .dot file into a PDF:
+  dot -Tpdf -otest/parser/string02.mod.ast.pdf test/parser/string02.mod.ast.dot
+
+
+Done.

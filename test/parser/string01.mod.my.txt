@@ -1,0 +1,71 @@
+parsing 'test/parser/string01.mod'...
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : WriteStr
+===(DEBUG)===Case of subroutineCall in statement.
+===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : Hello, world\n(type : tString)
+===(DEBUG)===Case of string in factor. Next token is : Hello, world\n
+===(DEBUG)===Got token for string. token value is : Hello, world\n, next token is : )
+===(DEBUG)===Length of string is : 14
+===(DEBUG)===Constructed CAstStringConstant for string. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Got expression for function argument.
+===(DEBUG)===Return type of expression is array.
+===(DEBUG)===Got argument as form of expression. Next token is : )
+===(DEBUG)===Got subroutine call. Next token is : ;
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : WriteStr
+===(DEBUG)===Case of subroutineCall in statement.
+===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : This is pretty nice!\n\n(type : tString)
+===(DEBUG)===Case of string in factor. Next token is : This is pretty nice!\n\n
+===(DEBUG)===Got token for string. token value is : This is pretty nice!\n\n, next token is : )
+===(DEBUG)===Length of string is : 23
+===(DEBUG)===Constructed CAstStringConstant for string. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Got expression for function argument.
+===(DEBUG)===Return type of expression is array.
+===(DEBUG)===Got argument as form of expression. Next token is : )
+===(DEBUG)===Got subroutine call. Next token is : end
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : end
+===(DEBUG)===Set tail and head of statement sequence. Next token is : end
+successfully parsed.
+  AST:
+    CAstScope: 'string01'
+      symbol table:
+        [[
+          [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+          [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+          [ *ReadInt() --> <int>           ]
+          [ *WriteChar(<char>) --> <NULL>           ]
+          [ *WriteInt(<int>) --> <NULL>           ]
+          [ *WriteLn() --> <NULL>           ]
+          [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+          [ @_str_1   <array 14  of <char>>           ]
+            [ data: 'Hello, world\n' ]
+          [ @_str_2   <array 23  of <char>>           ]
+            [ data: 'This is pretty nice!\n\n' ]
+        ]]
+      statement list:
+        call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+          &() <ptr(4) to <array 14  of <char>>>
+            "Hello, world\n" <array 14  of <char>>
+        call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+          &() <ptr(4) to <array 23  of <char>>>
+            "This is pretty nice!\n\n" <array 23  of <char>>
+      nested scopes:
+        empty.
+    
+
+
+run the following command to convert the .dot file into a PDF:
+  dot -Tpdf -otest/parser/string01.mod.ast.pdf test/parser/string01.mod.ast.dot
+
+
+Done.

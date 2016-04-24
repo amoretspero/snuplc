@@ -1,0 +1,151 @@
+parsing 'test/parser/array02.mod'...
+===(DEBUG)===Current scanner peek : A
+===(DEBUG)===In GenerateArrayType function, got nelem of 5
+===(DEBUG)===In GenerateArrayType function, got nelem of 5
+===(DEBUG)=== Added variable <A> to scope.
+===(DEBUG)===Next token is : ;
+===(DEBUG)===Got semicolon of end of var decl.
+===(DEBUG)===Next token is : begin
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : A
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : A
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 2(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ]
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ]
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ]
+===(DEBUG)===Got exp for index of qualident.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 3(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ]
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ]
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ]
+===(DEBUG)===Got exp for index of qualident.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : ReadInt(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : ReadInt
+===(DEBUG)===factor subroutineCall case.
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : A
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : A
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 0(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ]
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ]
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ]
+===(DEBUG)===Got exp for index of qualident.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 1(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ]
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ]
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ]
+===(DEBUG)===Got exp for index of qualident.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : A(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : A
+===(DEBUG)===factor qualident case. factorId : A
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 2(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ]
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ]
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ]
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 3(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ]
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ]
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ]
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : WriteInt
+===(DEBUG)===Case of subroutineCall in statement.
+===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : A(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : A
+===(DEBUG)===factor qualident case. factorId : A
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 0(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ]
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ]
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ]
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 1(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ]
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ]
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ]
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Got expression for function argument.
+===(DEBUG)===Got argument as form of expression. Next token is : )
+===(DEBUG)===Got subroutine call. Next token is : ;
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : WriteLn
+===(DEBUG)===Case of subroutineCall in statement.
+===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function.
+===(DEBUG)===Got subroutine call. Next token is : end
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : end
+===(DEBUG)===Set tail and head of statement sequence. Next token is : end
+successfully parsed.
+  AST:
+    CAstScope: 'array02'
+      symbol table:
+        [[
+          [ @A        <array 5  of <array 5  of <int>>>           ]
+          [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+          [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+          [ *ReadInt() --> <int>           ]
+          [ *WriteChar(<char>) --> <NULL>           ]
+          [ *WriteInt(<int>) --> <NULL>           ]
+          [ *WriteLn() --> <NULL>           ]
+          [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+        ]]
+      statement list:
+        := <int>
+          [ @A        <array 5  of <array 5  of <int>>> ] <int>
+            2 <int>
+            3 <int>
+          call [ *ReadInt() --> <int> ] <int>
+        := <int>
+          [ @A        <array 5  of <array 5  of <int>>> ] <int>
+            0 <int>
+            1 <int>
+          [ @A        <array 5  of <array 5  of <int>>> ] <int>
+            2 <int>
+            3 <int>
+        call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+          [ @A        <array 5  of <array 5  of <int>>> ] <int>
+            0 <int>
+            1 <int>
+        call [ *WriteLn() --> <NULL> ] <NULL>
+      nested scopes:
+        empty.
+    
+
+
+run the following command to convert the .dot file into a PDF:
+  dot -Tpdf -otest/parser/array02.mod.ast.pdf test/parser/array02.mod.ast.dot
+
+
+Done.
