@@ -1135,8 +1135,18 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
   else if (_scanner->Peek().GetValue() == "-") // Unary negative operator.
   {
     CToken* unaryOp = new CToken();
+    CToken* numtok = new CToken();
     Consume(tTerm, unaryOp); // Get unary operator token.
-    n = new CAstUnaryOp(unaryOp, opNeg, term(s)); // Construct term with unary operator included.
+    if (_scanner->Peek().GetType() == tNum)
+    {
+      char** endPtr = 0;
+      Consume(tNum, numtok);
+      n = new CAstConstant(numtok, CTypeManager::Get()->GetInt(), -(strtoll(numtok->GetValue().c_str(), endPtr, 10)));
+    }
+    else
+    {
+      n = new CAstUnaryOp(unaryOp, opNeg, term(s)); // Construct term with unary operator included.
+    }
   }
   else // When no unary operator prefixed.
   {
@@ -1254,8 +1264,8 @@ CAstExpression* CParser::factor(CAstScope *s)
     }
     else if (tt == tLBracket) // Case of qualident (not ident).
     {
-      cout << "===(DEBUG)===factor qualident case." << endl;
-      const CSymbol* qualIdSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(factorId->GetValue())); // Find symbol for qualident.
+      cout << "===(DEBUG)===factor qualident case. factorId : " << factorId->GetValue() << endl;
+      const CSymbol* qualIdSymbol = dynamic_cast<const CSymbol*>(s->GetSymbolTable()->FindSymbol(factorId->GetValue())); // Find symbol for qualident.
       CAstArrayDesignator* qualid = new CAstArrayDesignator(factorId, qualIdSymbol); // Construct qualident variable.
       while(tt == tLBracket) // Set indices of qualident variable.
       {

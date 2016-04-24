@@ -1,0 +1,496 @@
+parsing 'test/parser/test06.mod'...
+===(DEBUG)===Current scanner peek : a
+===(DEBUG)===Current scanner peek : b
+===(DEBUG)===Current scanner peek : c
+===(DEBUG)=== Added variable <c> to scope.
+===(DEBUG)=== Added variable <b> to scope.
+===(DEBUG)=== Added variable <a> to scope.
+===(DEBUG)===Next token is : ;
+===(DEBUG)===Got semicolon of end of var decl.
+===(DEBUG)===Next token is : b0
+===(DEBUG)===Current scanner peek : b0
+===(DEBUG)===Current scanner peek : b1
+===(DEBUG)=== Added variable <b1> to scope.
+===(DEBUG)=== Added variable <b0> to scope.
+===(DEBUG)===Next token is : ;
+===(DEBUG)===Got semicolon of end of var decl.
+===(DEBUG)===Next token is : procedure
+===(DEBUG)===Now consumed tProcedure. Next token is : foo
+===(DEBUG)===Now make CToken for procedure name. Next token is : foo
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Got parameter <a>
+===(DEBUG)===Number of parameters is : 1
+===(DEBUG)===Now consumed all parameters. Next token is : var
+===(DEBUG)===Now added parameter <a> to procedure symbol.
+===(DEBUG)===Now added all parameters to procedure symbol. Next token is : var
+===(DEBUG)===Now added parameter <a> to procedure scope.
+===(DEBUG)===Now added all parameters to procedure scope. Next token is : var
+===(DEBUG)===Current scanner peek : b
+===(DEBUG)=== Added variable <b> to scope.
+===(DEBUG)===Now added all local variables for procedure. Next token is : begin
+===(DEBUG)===Current scope's Variable/Param name : a
+===(DEBUG)===Current scope's Variable/Param name : b
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : b
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : b
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : c(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : c
+===(DEBUG)===factor ident case. Next token is : ;
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : c
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : c
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : ((type : tRBracketRound)
+===(DEBUG)===factor LBracketRound(expression) case.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : a(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : a
+===(DEBUG)===factor ident case. Next token is : +
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : +
+===(DEBUG)===Constructed term for simpleexpr. Next token is : +
+===(DEBUG)===Now processing factor. Next token : b(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : b
+===(DEBUG)===factor ident case. Next token is : )
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : end
+===(DEBUG)===Constructed term for simpleexpr. Next token is : end
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : end
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : end
+===(DEBUG)===Set tail and head of statement sequence. Next token is : end
+===(DEBUG)===Now got all statements for procedure. Next token is : end
+===(DEBUG)===Now added statement sequence for procedure. Next token is : foo
+===(DEBUG)===Now checking name. procName: foo, procNameCheck: foo
+===(DEBUG)===Now consumed tProcedure. Next token is : unary
+===(DEBUG)===Now make CToken for procedure name. Next token is : unary
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Now consumed all parameters. Next token is : begin
+===(DEBUG)===Now added all parameters to procedure symbol. Next token is : begin
+===(DEBUG)===Now added all parameters to procedure scope. Next token is : begin
+===(DEBUG)===Now added all local variables for procedure. Next token is : begin
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : a
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : a
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : b(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : b
+===(DEBUG)===factor ident case. Next token is : ;
+===(DEBUG)===Current symbol table size is : 0
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : b0
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : b0
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : !(type : tSemicolon)
+===(DEBUG)===factor exclam(binary negation) case.
+===(DEBUG)===Now processing factor. Next token : b1(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : b1
+===(DEBUG)===factor ident case. Next token is : end
+===(DEBUG)===Current symbol table size is : 0
+===(DEBUG)===Constructed factor term. Next token is : end
+===(DEBUG)===Constructed term for simpleexpr. Next token is : end
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : end
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : end
+===(DEBUG)===Set tail and head of statement sequence. Next token is : end
+===(DEBUG)===Now got all statements for procedure. Next token is : end
+===(DEBUG)===Now added statement sequence for procedure. Next token is : unary
+===(DEBUG)===Now checking name. procName: unary, procNameCheck: unary
+===(DEBUG)===Now consumed tFunction. Next token is : binop
+===(DEBUG)===Now make CToken for procedure name. Next token is : binop
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Got parameter <p0>
+===(DEBUG)===Got parameter <p1>
+===(DEBUG)===Number of parameters is : 2
+===(DEBUG)===Now consumed all parameters. Next token is : boolean
+===(DEBUG)===Now got return type for function. Next token is : begin
+===(DEBUG)===Now added parameter <p0> to function symbol.
+===(DEBUG)===Now added parameter <p1> to function symbol.
+===(DEBUG)===Now added all parameters to function symbol. Next token is : begin
+===(DEBUG)===Now added parameter <p0> to function scope.
+===(DEBUG)===Now added parameter <p1> to function scope.
+===(DEBUG)===Now added all parameters to function scope. Next token is : begin
+===(DEBUG)===Now added all local variables for function. Next token is : begin
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : !(type : tSemicolon)
+===(DEBUG)===factor exclam(binary negation) case.
+===(DEBUG)===Now processing factor. Next token : ((type : tRBracketRound)
+===(DEBUG)===factor LBracketRound(expression) case.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : ((type : tRBracketRound)
+===(DEBUG)===factor LBracketRound(expression) case.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : p0(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : p0
+===(DEBUG)===factor ident case. Next token is : +
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : +
+===(DEBUG)===Now processing factor. Next token : p1(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : p1
+===(DEBUG)===factor ident case. Next token is : >
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : >
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : >
+===(DEBUG)===When relOp exists.
+===(DEBUG)===Now processing factor. Next token : 0(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : ||
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ||
+===(DEBUG)===Now processing factor. Next token : ((type : tRBracketRound)
+===(DEBUG)===factor LBracketRound(expression) case.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : p0(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : p0
+===(DEBUG)===factor ident case. Next token is : >
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : >
+===(DEBUG)===Constructed term for simpleexpr. Next token is : >
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : >
+===(DEBUG)===When relOp exists.
+===(DEBUG)===Now processing factor. Next token : 0(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : &&
+===(DEBUG)===Now processing factor. Next token : ((type : tRBracketRound)
+===(DEBUG)===factor LBracketRound(expression) case.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : p1(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : p1
+===(DEBUG)===factor ident case. Next token is : <
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : <
+===(DEBUG)===Constructed term for simpleexpr. Next token is : <
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : <
+===(DEBUG)===When relOp exists.
+===(DEBUG)===Now processing factor. Next token : 0(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : end
+===(DEBUG)===Constructed term for simpleexpr. Next token is : end
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : end
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : end
+===(DEBUG)===Set tail and head of statement sequence. Next token is : end
+===(DEBUG)===Now got all statements for function. Next token is : end
+===(DEBUG)===Now added statement sequence for function. Next token is : binop
+===(DEBUG)===Now checking name. funcName: binop, funcNameCheck: binop
+===(DEBUG)===Now consumed tFunction. Next token is : intop
+===(DEBUG)===Now make CToken for procedure name. Next token is : intop
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Got parameter <p0>
+===(DEBUG)===Got parameter <p1>
+===(DEBUG)===Number of parameters is : 2
+===(DEBUG)===Now consumed all parameters. Next token is : integer
+===(DEBUG)===Now got return type for function. Next token is : begin
+===(DEBUG)===Now added parameter <p0> to function symbol.
+===(DEBUG)===Now added parameter <p1> to function symbol.
+===(DEBUG)===Now added all parameters to function symbol. Next token is : begin
+===(DEBUG)===Now added parameter <p0> to function scope.
+===(DEBUG)===Now added parameter <p1> to function scope.
+===(DEBUG)===Now added all parameters to function scope. Next token is : begin
+===(DEBUG)===Now added all local variables for function. Next token is : begin
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : p0(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : p0
+===(DEBUG)===factor ident case. Next token is : +
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : +
+===(DEBUG)===Now processing factor. Next token : ((type : tRBracketRound)
+===(DEBUG)===factor LBracketRound(expression) case.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : p1(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : p1
+===(DEBUG)===factor ident case. Next token is : )
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : end
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : end
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : end
+===(DEBUG)===Set tail and head of statement sequence. Next token is : end
+===(DEBUG)===Now got all statements for function. Next token is : end
+===(DEBUG)===Now added statement sequence for function. Next token is : intop
+===(DEBUG)===Now checking name. funcName: intop, funcNameCheck: intop
+===(DEBUG)===Now consumed tFunction. Next token is : compare
+===(DEBUG)===Now make CToken for procedure name. Next token is : compare
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Got parameter <a>
+===(DEBUG)===Got parameter <b>
+===(DEBUG)===Number of parameters is : 2
+===(DEBUG)===Now consumed all parameters. Next token is : boolean
+===(DEBUG)===Now got return type for function. Next token is : begin
+===(DEBUG)===Now added parameter <a> to function symbol.
+===(DEBUG)===Now added parameter <b> to function symbol.
+===(DEBUG)===Now added all parameters to function symbol. Next token is : begin
+===(DEBUG)===Now added parameter <a> to function scope.
+===(DEBUG)===Now added parameter <b> to function scope.
+===(DEBUG)===Now added all parameters to function scope. Next token is : begin
+===(DEBUG)===Now added all local variables for function. Next token is : begin
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : binop(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : binop
+===(DEBUG)===factor subroutineCall case.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : a(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : a
+===(DEBUG)===factor ident case. Next token is : ,
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : ,
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ,
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ,
+===(DEBUG)===Got expression for function argument.
+===(DEBUG)===Got argument as form of expression. Next token is : ,
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : b(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : b
+===(DEBUG)===factor ident case. Next token is : )
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : &&
+===(DEBUG)===Now processing factor. Next token : ((type : tRBracketRound)
+===(DEBUG)===factor LBracketRound(expression) case.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : intop(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : intop
+===(DEBUG)===factor subroutineCall case.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : b(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : b
+===(DEBUG)===factor ident case. Next token is : ,
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : ,
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ,
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ,
+===(DEBUG)===Got expression for function argument.
+===(DEBUG)===Got argument as form of expression. Next token is : ,
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : a(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : a
+===(DEBUG)===factor ident case. Next token is : )
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : <
+===(DEBUG)===Constructed term for simpleexpr. Next token is : <
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : <
+===(DEBUG)===When relOp exists.
+===(DEBUG)===Now processing factor. Next token : a(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : a
+===(DEBUG)===factor ident case. Next token is : )
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Now processing factor. Next token : ((type : tRBracketRound)
+===(DEBUG)===factor LBracketRound(expression) case.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : a(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : a
+===(DEBUG)===factor ident case. Next token is : #
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : #
+===(DEBUG)===Constructed term for simpleexpr. Next token is : #
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : #
+===(DEBUG)===When relOp exists.
+===(DEBUG)===Now processing factor. Next token : b(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : b
+===(DEBUG)===factor ident case. Next token is : )
+===(DEBUG)===Current symbol table size is : 2
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Constructed term for simpleexpr. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : true(type : tFalse)
+===(DEBUG)===factor TRUE case.
+===(DEBUG)===Constructed factor term. Next token is : else
+===(DEBUG)===Constructed term for simpleexpr. Next token is : else
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : else
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : else
+===(DEBUG)===Set tail and head of statement sequence. Next token is : else
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : false(type : tBoolean)
+===(DEBUG)===factor FALSE case.
+===(DEBUG)===Constructed factor term. Next token is : end
+===(DEBUG)===Constructed term for simpleexpr. Next token is : end
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : end
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : end
+===(DEBUG)===Set tail and head of statement sequence. Next token is : end
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : end
+===(DEBUG)===Set tail and head of statement sequence. Next token is : end
+===(DEBUG)===Now got all statements for function. Next token is : end
+===(DEBUG)===Now added statement sequence for function. Next token is : compare
+===(DEBUG)===Now checking name. funcName: compare, funcNameCheck: compare
+successfully parsed.
+  AST:
+    CAstScope: 'test06'
+      symbol table:
+        [[
+          [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+          [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+          [ *ReadInt() --> <int>           ]
+          [ *WriteChar(<char>) --> <NULL>           ]
+          [ *WriteInt(<int>) --> <NULL>           ]
+          [ *WriteLn() --> <NULL>           ]
+          [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+          [ @a        <int>           ]
+          [ @b        <int>           ]
+          [ @b0       <bool>           ]
+          [ @b1       <bool>           ]
+          [ *binop(<int>,<int>) --> <bool>           ]
+          [ @c        <int>           ]
+          [ *compare(<int>,<int>) --> <bool>           ]
+          [ *foo(<int>) --> <NULL>           ]
+          [ *intop(<int>,<int>) --> <int>           ]
+          [ *unary() --> <NULL>           ]
+        ]]
+      statement list:
+        empty.
+      nested scopes:
+        CAstScope: 'foo'
+          symbol table:
+            [[
+              [ %a        <int>               ]
+              [ $b        <int>               ]
+            ]]
+          statement list:
+            := <int>
+              [ $b        <int> ] <int>
+              [ @c        <int> ] <int>
+            := <int>
+              [ @c        <int> ] <int>
+              add <int>
+                [ %a        <int> ] <int>
+                [ $b        <int> ] <int>
+          nested scopes:
+            empty.
+        
+        CAstScope: 'unary'
+          symbol table:
+            [[
+            ]]
+          statement list:
+            := <int>
+              [ @a        <int> ] <int>
+              neg <int>
+                [ @b        <int> ] <int>
+            := <bool>
+              [ @b0       <bool> ] <bool>
+              not <int>
+                [ @b1       <bool> ] <bool>
+          nested scopes:
+            empty.
+        
+        CAstScope: 'binop'
+          symbol table:
+            [[
+              [ %p0       <int>               ]
+              [ %p1       <int>               ]
+            ]]
+          statement list:
+            return <int>
+              not <int>
+                or <int>
+                  > <int>
+                    add <int>
+                      neg <int>
+                        [ %p0       <int> ] <int>
+                      [ %p1       <int> ] <int>
+                    0 <int>
+                  and <int>
+                    > <int>
+                      [ %p0       <int> ] <int>
+                      0 <int>
+                    < <int>
+                      [ %p1       <int> ] <int>
+                      0 <int>
+          nested scopes:
+            empty.
+        
+        CAstScope: 'intop'
+          symbol table:
+            [[
+              [ %p0       <int>               ]
+              [ %p1       <int>               ]
+            ]]
+          statement list:
+            return <int>
+              add <int>
+                neg <int>
+                  [ %p0       <int> ] <int>
+                pos <int>
+                  [ %p1       <int> ] <int>
+          nested scopes:
+            empty.
+        
+        CAstScope: 'compare'
+          symbol table:
+            [[
+              [ %a        <int>               ]
+              [ %b        <int>               ]
+            ]]
+          statement list:
+            if cond
+              and <int>
+                and <int>
+                  call [ *binop(<int>,<int>) --> <bool> ] <bool>
+                    [ %a        <int> ] <int>
+                    [ %b        <int> ] <int>
+                  < <int>
+                    call [ *intop(<int>,<int>) --> <int> ] <int>
+                      [ %b        <int> ] <int>
+                      [ %a        <int> ] <int>
+                    [ %a        <int> ] <int>
+                # <int>
+                  [ %a        <int> ] <int>
+                  [ %b        <int> ] <int>
+            if-body
+              return <bool>
+                true <bool>
+            else-body
+              return <bool>
+                false <bool>
+          nested scopes:
+            empty.
+        
+    
+
+
+run the following command to convert the .dot file into a PDF:
+  dot -Tpdf -otest/parser/test06.mod.ast.pdf test/parser/test06.mod.ast.dot
+
+
+Done.

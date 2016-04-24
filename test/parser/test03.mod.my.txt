@@ -1,0 +1,16 @@
+parsing 'test/parser/test03.mod'...
+===(DEBUG)===Now consumed tFunction. Next token is : foo
+===(DEBUG)===Now make CToken for procedure name. Next token is : foo
+===(DEBUG)===Now consumed tId. Next token is : (
+===(DEBUG)===Now consumed all parameters. Next token is : integer
+===(DEBUG)===Now got return type for function. Next token is : begin
+===(DEBUG)===Now added all parameters to function symbol. Next token is : begin
+===(DEBUG)===Now added all parameters to function scope. Next token is : begin
+===(DEBUG)===Now added all local variables for function. Next token is : begin
+===(DEBUG)===Now got all statements for function. Next token is : end
+===(DEBUG)===Now added statement sequence for function. Next token is : foox
+===(DEBUG)===Now checking name. funcName: foo, funcNameCheck: foox
+parse error : at 22:5 : Function name mismatch.
+
+
+Done.

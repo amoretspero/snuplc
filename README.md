@@ -71,11 +71,16 @@ Problems related to <code>CToken</code> <code>GetValue()</code> function is reso
 More code for debugging.  
 Passes <code>char03.mod</code> test.  
   
-**2016-04-24 03:23 KST**
+**2016-04-24 03:23 KST**  
 Fixed type related errors.  
 Implemented some <code>CAstNode</code>'s <code>GetType()</code> functions.  
 Parsing is done to <code>char0?.mod</code> files and <code>test0?.mod</code> files.  
 Result may not be correct.   
+  
+**2016-04-24 12:20 KST**  
+Fixed <code>dynamic_cast</code> type unmatching error.  
+Now <code>term</code> only consists of <code>number</code> is converted to negative number when
+preceding minus sign(<code>-</code>) is present.    
     
 ### Notice
 Arrays do not have to support array assignments.  

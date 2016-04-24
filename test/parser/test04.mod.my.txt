@@ -1,0 +1,278 @@
+parsing 'test/parser/test04.mod'...
+===(DEBUG)===Current scanner peek : a
+===(DEBUG)===Current scanner peek : b
+===(DEBUG)===Current scanner peek : c
+===(DEBUG)=== Added variable <c> to scope.
+===(DEBUG)=== Added variable <b> to scope.
+===(DEBUG)=== Added variable <a> to scope.
+===(DEBUG)===Next token is : ;
+===(DEBUG)===Got semicolon of end of var decl.
+===(DEBUG)===Next token is : begin
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : a
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : a
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 1(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : b
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : b
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 2(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : c
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : c
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : 3(type : tNum)
+===(DEBUG)===factor number case.
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : a
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : a
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : a(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : a
+===(DEBUG)===factor ident case. Next token is : +
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed factor term. Next token is : +
+===(DEBUG)===Constructed term for simpleexpr. Next token is : +
+===(DEBUG)===Now processing factor. Next token : b(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : b
+===(DEBUG)===factor ident case. Next token is : +
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed factor term. Next token is : +
+===(DEBUG)===Now processing factor. Next token : c(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : c
+===(DEBUG)===factor ident case. Next token is : ;
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : b
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : b
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : a(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : a
+===(DEBUG)===factor ident case. Next token is : -
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed factor term. Next token is : -
+===(DEBUG)===Constructed term for simpleexpr. Next token is : -
+===(DEBUG)===Now processing factor. Next token : b(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : b
+===(DEBUG)===factor ident case. Next token is : -
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed factor term. Next token is : -
+===(DEBUG)===Now processing factor. Next token : c(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : c
+===(DEBUG)===factor ident case. Next token is : ;
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : c
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : c
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : a(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : a
+===(DEBUG)===factor ident case. Next token is : +
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed factor term. Next token is : +
+===(DEBUG)===Constructed term for simpleexpr. Next token is : +
+===(DEBUG)===Now processing factor. Next token : b(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : b
+===(DEBUG)===factor ident case. Next token is : *
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed factor term. Next token is : *
+===(DEBUG)===Now processing factor. Next token : c(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : c
+===(DEBUG)===factor ident case. Next token is : ;
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : a
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : a
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : a(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : a
+===(DEBUG)===factor ident case. Next token is : ;
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed factor term. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : b
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : b
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : ((type : tRBracketRound)
+===(DEBUG)===factor LBracketRound(expression) case.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : a(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : a
+===(DEBUG)===factor ident case. Next token is : +
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed factor term. Next token is : +
+===(DEBUG)===Constructed term for simpleexpr. Next token is : +
+===(DEBUG)===Now processing factor. Next token : b(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : b
+===(DEBUG)===factor ident case. Next token is : )
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : /
+===(DEBUG)===Now processing factor. Next token : c(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : c
+===(DEBUG)===factor ident case. Next token is : ;
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed term for simpleexpr. Next token is : ;
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : ;
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Set tail and head of statement sequence. Next token is : ;
+===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : c
+===(DEBUG)===Case of assignment in statement.
+===(DEBUG)===Start of assignment
+===(DEBUG)===Found symbol : c
+===(DEBUG)===Made new CAstDesignator class for id.
+===(DEBUG)===Consumed assignment token.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : ((type : tRBracketRound)
+===(DEBUG)===factor LBracketRound(expression) case.
+===(DEBUG)===Now at expression function.
+===(DEBUG)===Now processing factor. Next token : a(type : tId)
+===(DEBUG)===factor qualident/subroutineCall case. Next token : a
+===(DEBUG)===factor ident case. Next token is : )
+===(DEBUG)===Current symbol table size is : 10
+===(DEBUG)===Constructed factor term. Next token is : )
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : )
+===(DEBUG)===Constructed factor term. Next token is : end
+===(DEBUG)===Got simpleexpr for left side of expression. Next token is : end
+===(DEBUG)===Got LHS and RHS of assignment.
+===(DEBUG)===Now setting tail and head of statement sequence. Next token is : end
+===(DEBUG)===Set tail and head of statement sequence. Next token is : end
+successfully parsed.
+  AST:
+    CAstScope: 'test04'
+      symbol table:
+        [[
+          [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+          [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+          [ *ReadInt() --> <int>           ]
+          [ *WriteChar(<char>) --> <NULL>           ]
+          [ *WriteInt(<int>) --> <NULL>           ]
+          [ *WriteLn() --> <NULL>           ]
+          [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+          [ @a        <int>           ]
+          [ @b        <int>           ]
+          [ @c        <int>           ]
+        ]]
+      statement list:
+        := <int>
+          [ @a        <int> ] <int>
+          1 <int>
+        := <int>
+          [ @b        <int> ] <int>
+          2 <int>
+        := <int>
+          [ @c        <int> ] <int>
+          3 <int>
+        := <int>
+          [ @a        <int> ] <int>
+          add <int>
+            add <int>
+              [ @a        <int> ] <int>
+              [ @b        <int> ] <int>
+            [ @c        <int> ] <int>
+        := <int>
+          [ @b        <int> ] <int>
+          sub <int>
+            sub <int>
+              [ @a        <int> ] <int>
+              [ @b        <int> ] <int>
+            [ @c        <int> ] <int>
+        := <int>
+          [ @c        <int> ] <int>
+          add <int>
+            [ @a        <int> ] <int>
+            mul <int>
+              [ @b        <int> ] <int>
+              [ @c        <int> ] <int>
+        := <int>
+          [ @a        <int> ] <int>
+          neg <int>
+            [ @a        <int> ] <int>
+        := <int>
+          [ @b        <int> ] <int>
+          div <int>
+            add <int>
+              [ @a        <int> ] <int>
+              [ @b        <int> ] <int>
+            [ @c        <int> ] <int>
+        := <int>
+          [ @c        <int> ] <int>
+          neg <int>
+            add <int>
+              -1 <int>
+              [ @a        <int> ] <int>
+      nested scopes:
+        empty.
+    
+
+
+run the following command to convert the .dot file into a PDF:
+  dot -Tpdf -otest/parser/test04.mod.ast.pdf test/parser/test04.mod.ast.dot
+
+
+Done.
