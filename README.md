@@ -86,6 +86,12 @@ preceding minus sign(<code>-</code>) is present.
 Passes all default tests without bugs.  
 Added more tests for complex codes and should-throw-error cases.  
 Need to pass <code>strange</code> tests. They are in <code>test/parser/strnage</code> folder.  
+  
+**2016-04-25 16:31 KST**  
+Working on strange tests.  
+Fixed parameter, variable duplication errors.  
+Changed name unmatch error messages as same as reference parser.  
+  
     
 ### Notice
 Arrays do not have to support array assignments.  

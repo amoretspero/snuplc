@@ -321,7 +321,29 @@ CAstModule* CParser::module(void)
    
     while (true)
     {
-      GetVariables(_scanner, m, typeManager); // Get one type of variables at a time.
+      vector<CToken*> varVec;
+      CType* varType = GetVariables(_scanner, &varVec);
+      
+      //cout << "===(DEBUG)===Got global variables, count : " << varVec.size() << endl;
+      
+      vector<CToken*>::iterator oneTypeIter = varVec.begin();
+      //cout << "===(DEBUG)===Got begin of varVec, at module." << endl;
+      while(oneTypeIter != varVec.end() && varVec.size() > 0)
+      {
+        if (m->GetSymbolTable() == NULL)
+        {
+          //cout << "===(DEBUG)===Module symboltable is NULL." << endl;
+        }
+        //cout << "===(DEBUG)===In variable adding loop. token value is : " << (*oneTypeIter)->GetValue() << endl;
+        bool addVarRes = m->GetSymbolTable()->AddSymbol(m->CreateVar((*oneTypeIter)->GetValue(), varType));
+        
+        if (!addVarRes)
+        {
+          SetError((*oneTypeIter), "duplicate variable declaration '" + (*oneTypeIter)->GetValue() + "'.");
+        }
+        oneTypeIter++;
+      }
+      //GetVariables(_scanner, m, typeManager); // Get one type of variables at a time.
       //printf("End get variables.\n");
       //cout << "===(DEBUG)===Next token is : " << _scanner->Peek().GetValue() << endl;
       Consume(tSemicolon); // Semicolon separates one type of variables from other ones.
@@ -345,6 +367,18 @@ CAstModule* CParser::module(void)
       //cout << "===(DEBUG)===Now make CToken for procedure name. Next token is : " << _scanner->Peek().GetValue() << endl;
       Consume(tId, procName);
       //cout << "===(DEBUG)===Now consumed tId. Next token is : " << _scanner->Peek().GetValue() << endl;
+      
+      /*
+      const CSymProc* procNameDupCheck = dynamic_cast<const CSymProc*>(m->GetSymbolTable()->FindSymbol(procName->GetValue())); // Find whether procedure name is duplicated.
+      if (procNameDupCheck != NULL)
+      {
+        SetError(procName, "duplicate procedure/function declaration '" + procName->GetValue() + "'.");
+      }*/
+      const CSymbol* procNameDupCheck = m->GetSymbolTable()->FindSymbol(procName->GetValue());
+      if (procNameDupCheck != NULL)
+      {
+        SetError(procName, "duplicate procedure/function declaration '" + procName->GetValue() + "'.");
+      }
       
       vector<vector<CSymParam*> > parameterVector; // Vector for temporarily containing parameters.
       
@@ -375,6 +409,7 @@ CAstModule* CParser::module(void)
         while(oneTypeIter != oneTypeParamVec.rend() && oneTypeParamVec.size() > 0)
         {
           CSymParam* param = *oneTypeIter;
+          
           procSymbol->AddParam(param);
           //cout << "===(DEBUG)===Now added parameter <" << param->GetName() << "> to procedure symbol." << endl;
           //oneTypeParamVec.pop_back();
@@ -416,7 +451,21 @@ CAstModule* CParser::module(void)
         Consume(tVar);
         while (true) // Iterates until there is no variable to declare.
         {
-          GetVariables(_scanner, procScope, typeManager); // Get one type of variables.
+          vector<CToken*> varVec;
+          //GetVariables(_scanner, procScope, typeManager); // Get one type of variables.
+          CType* varType = GetVariables(_scanner, &varVec);
+          
+          vector<CToken*>::iterator oneTypeIter = varVec.begin();
+          while(oneTypeIter != varVec.end() && varVec.size() > 0)
+          {
+            bool addVarRes = procScope->GetSymbolTable()->AddSymbol(procScope->CreateVar((*oneTypeIter)->GetValue(), varType));
+            if (!addVarRes)
+            {
+              SetError(*oneTypeIter, "duplicate variable declaration '" + (*oneTypeIter)->GetValue() + "'.");
+            }
+            oneTypeIter++;
+          }
+          
           Consume(tSemicolon);
           if (_scanner->Peek().GetType() != tId) // If there is no more, stop.
           {
@@ -452,7 +501,7 @@ CAstModule* CParser::module(void)
       //cout << "===(DEBUG)===Now checking name. procName: " << procName->GetValue() << ", procNameCheck: " << procNameCheck->GetValue() << endl;
       if (procNameCheck->GetValue() != procName->GetValue()) // Check if name matches.
       {
-        SetError(procNameCheck, "Procedure name mismatch.");
+        SetError(procNameCheck, "procedure/function identifier mismatch ('"+procName->GetValue()+"' != '"+procNameCheck->GetValue()+"').");
       }
       Consume(tSemicolon);
     }
@@ -464,6 +513,19 @@ CAstModule* CParser::module(void)
       //cout << "===(DEBUG)===Now make CToken for procedure name. Next token is : " << _scanner->Peek().GetValue() << endl;
       Consume(tId, funcName);
       //cout << "===(DEBUG)===Now consumed tId. Next token is : " << _scanner->Peek().GetValue() << endl;
+      
+      /*
+      const CSymProc* funcNameDupCheck = dynamic_cast<const CSymProc*>(m->GetSymbolTable()->FindSymbol(funcName->GetValue())); // Find whether function is duplicated.
+      if (funcNameDupCheck != NULL)
+      {
+        SetError(funcName, "duplicate procedure/function declaration '" + funcName->GetValue() + "'.");
+      }
+      */
+      const CSymbol* funcNameDupCheck = m->GetSymbolTable()->FindSymbol(funcName->GetValue());
+      if (funcNameDupCheck != NULL)
+      {
+        SetError(funcName, "duplicate procedure/function declaration '" + funcName->GetValue() + "'.");
+      }
       
       vector<vector<CSymParam*> > parameterVector; // Vector for temporarily containing parameters.
       
@@ -538,7 +600,21 @@ CAstModule* CParser::module(void)
         Consume(tVar);
         while (true) // Iterates until there is no variable to declare.
         {
-          GetVariables(_scanner, funcScope, typeManager); // Get one type of variables.
+          //GetVariables(_scanner, funcScope, typeManager); // Get one type of variables.
+          vector<CToken*> varVec; // Vector for getting one type of variables.
+          CType* varType = GetVariables(_scanner, &varVec); // Get one type of variables.
+          
+          vector<CToken*>::iterator oneTypeIter = varVec.begin();
+          while(oneTypeIter != varVec.end() && varVec.size() > 0)
+          {
+            bool addVarRes = funcScope->GetSymbolTable()->AddSymbol(funcScope->CreateVar((*oneTypeIter)->GetValue(), varType));
+            if (!addVarRes)
+            {
+              SetError(*oneTypeIter, "duplicate variable declaration '" + (*oneTypeIter)->GetValue() + "'.");
+            }
+            oneTypeIter++;
+          }
+          
           Consume(tSemicolon);
           if (_scanner->Peek().GetType() != tId) // If there is no more, stop.
           {
@@ -586,17 +662,45 @@ CAstModule* CParser::module(void)
 
   if (module_id->GetValue() != module_id_check->GetValue()) // Check if name matches.
   {
-    SetError(t, "module name mismatch.");
+    SetError(module_id_check, "module identifier mismatch ('" + module_id->GetValue() + "' != '" + module_id_check->GetValue() + "').");
   }
   Consume(tDot);
   
   return m;
 }
 
-CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<CSymParam*>* paramVec, int idx)
+bool CParser::CheckParamDups (vector<vector<CSymParam*> >* paramVec, const string elemToFind)
+{
+  bool res = false;
+  vector<vector<CSymParam*> >::iterator iter = paramVec->begin();
+  while (paramVec->size() > 0 && iter != paramVec->end())
+  {
+    vector<CSymParam*> oneTypeVec = *iter;
+    vector<CSymParam*>::iterator oneTypeIter = oneTypeVec.begin();
+    while (oneTypeVec.size() > 0 && oneTypeIter != oneTypeVec.end())
+    {
+      if ((*oneTypeIter)->GetName() == elemToFind)
+      {
+        res = true;
+        return res;
+      }
+      oneTypeIter++;
+    }
+    iter++;
+  }
+  return res;
+}
+
+CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<CSymParam*>* paramVec, vector<vector<CSymParam*> >* originVec, int idx)
 {
   CToken* paramId = new CToken();
   Consume(tId, paramId); // Get identifier for parameter.
+  
+  bool checkDupRes = CheckParamDups(originVec, paramId->GetValue());
+  if (checkDupRes)
+  {
+    SetError(paramId, "duplicate variable declaration '" + paramId->GetValue() + "'.");
+  }
   
   //cout << "===(DEBUG)===Got parameter <" << paramId->GetValue() << ">" << endl;
   
@@ -605,7 +709,7 @@ CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<
   if (_scanner->Peek().GetType() == tComma) // When there are more identifier(s) of same type.
   {
     Consume(tComma);
-    paramType = GetOneTypeParams(_scanner, _tm, paramVec, idx+1); // Recursive call.
+    paramType = GetOneTypeParams(_scanner, _tm, paramVec, originVec, idx+1); // Recursive call.
     paramVec->push_back(new CSymParam(idx, paramId->GetValue(), paramType)); // When above recursive call returns type, add parameter to procedure symbol.
     //_ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType)); // When above recursive call returns type, add parameter to procedure symbol. 
   }
@@ -626,7 +730,7 @@ CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<
 CType* CParser::GetParams (CScanner* _scanner, CTypeManager* _tm, vector<vector<CSymParam*> >* paramVec, int lastIdx)
 {
   paramVec->resize(paramVec->size() + 1);
-  CType* oneTypeResult = GetOneTypeParams(_scanner, _tm, &(paramVec->at(paramVec->size() - 1)), lastIdx+1); // Adds one type of parameters.
+  CType* oneTypeResult = GetOneTypeParams(_scanner, _tm, &(paramVec->at(paramVec->size() - 1)), paramVec, lastIdx+1); // Adds one type of parameters.
   //cout << "===(DEBUG)===Number of parameters is : " << paramVec->at(paramVec->size() - 1).size() << endl;
   if (_scanner->Peek().GetType() == tSemicolon) // When there are more variables.
   {
@@ -639,6 +743,32 @@ CType* CParser::GetParams (CScanner* _scanner, CTypeManager* _tm, vector<vector<
   }
 }
 
+CType* CParser::GetVariables (CScanner* _scanner, vector<CToken*>* varVec)
+{
+  CToken* varId = new CToken();
+  Consume(tId, varId); // Gets identifier for variable.
+  
+  //varVec->resize(varVec->size() + 1);
+  varVec->push_back(varId);
+  //cout << "===(DEBUG)===Added variable : " << varId->GetValue() << ", size of varVec is : " << varVec->size() << endl;
+  
+  while (_scanner->Peek().GetType() == tComma) // When there are more variable of same type.
+  {
+    Consume(tComma);
+    varId = new CToken();
+    Consume(tId, varId); // Gets identifier for variable.
+    
+    //varVec->resize(varVec->size() + 1);
+    varVec->push_back(varId); // Push got identifier into variable vector.
+    //cout << "===(DEBUG)===Added variable : " << varId->GetValue() << ", size of varVec is : " << varVec->size() << endl;
+  }
+  Consume(tColon);
+  CType* identType = NULL;
+  identType = type(CTypeManager::Get(), false); // Gets variables' type.
+  return identType; // Return the type to use for adding variable to procedure/function symbol table.
+}
+
+/*
 CType* CParser::GetVariables (CScanner* _scanner, CAstScope* s, CTypeManager* _tm)
 {
   //printf("In GetVariables function!\n");
@@ -654,11 +784,15 @@ CType* CParser::GetVariables (CScanner* _scanner, CAstScope* s, CTypeManager* _t
     identType = GetVariables(_scanner, s, _tm); // Recursive call.
     if (s->GetSymbolTable()->FindSymbol(varId->GetValue(), sLocal) != NULL)
     {
-      SetError(varId, "Duplicate variable declaration.");
+      SetError(varId, "duplicate variable declaration '" + varId->GetValue() + "'.");
     }
     else
     {
-      s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType)); // When above recursive call gives type, add variable to scope's symbol table.
+      bool addVarRes = s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType)); // When above recursive call gives type, add variable to scope's symbol table.
+      if (!addVarRes)
+      {
+        SetError(varId, "duplicate variable declaration '" + varId->GetValue() + "'.");
+      }
       //cout << "===(DEBUG)=== Added variable <" << varId->GetValue() << "> to scope." << endl;
     } 
   }
@@ -671,11 +805,13 @@ CType* CParser::GetVariables (CScanner* _scanner, CAstScope* s, CTypeManager* _t
     {
       printf("Type error!\n");
     }
-    s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType)); // Add variable to scope's symbol table.
+    bool addVarRes = s->GetSymbolTable()->AddSymbol(s->CreateVar(varId->GetValue(), identType)); // Add variable to scope's symbol table.
+    if (!addVarRes)
     //cout << "===(DEBUG)=== Added variable <" << varId->GetValue() << "> to scope." << endl; 
   }
   return identType; // Return the type for recursive call.
 }
+*/
 
 const CType* CParser::GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType)
 {
@@ -887,6 +1023,10 @@ CAstStatCall* CParser::subroutineCall(CAstScope* s, CToken* prevToken, CTypeMana
   //
   const CSymProc* funcSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(prevToken->GetValue())); // Find symbol for procedure/function.
   //CType* funcDataType = funcSymbol->GetDataType()
+  if (funcSymbol == NULL)
+  {
+    SetError(prevToken, "undefined identifier.");
+  }
   CAstFunctionCall* funcCall = new CAstFunctionCall(prevToken, funcSymbol); // Make functionCall AST node.
   //cout << "===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function." << endl;
   AddArguments(s, _scanner, _tm, funcCall); // Add arguments to procedure/function.

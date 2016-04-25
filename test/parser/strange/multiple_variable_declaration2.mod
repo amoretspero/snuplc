@@ -5,7 +5,7 @@ var X : integer;
 procedure print;
 var X : integer;
 begin
-	WriteInt(X)
+    WriteInt(X)
 end print;
 
 begin

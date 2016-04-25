@@ -1267,12 +1267,24 @@ const CType* CAstArrayDesignator::GetType(void) const
     {
       at = dynamic_cast<const CArrayType*>(at->GetInnerType());
     }
+    else if (at->GetInnerType()->IsBoolean() && idxCnt == 1)
+    {
+      return dynamic_cast<const CBoolType*>(at->GetInnerType());
+    }
+    else if (at->GetInnerType()->IsChar() && idxCnt == 1)
+    {
+      return dynamic_cast<const CCharType*>(at->GetInnerType());
+    }
+    else if (at->GetInnerType()->IsInt() && idxCnt == 1)
+    {
+      return dynamic_cast<const CIntType*>(at->GetInnerType());
+    }
     else
     {
       idxEnd = true;
     }
   }
-  return at->GetInnerType();
+  return at;
 }
 
 ostream& CAstArrayDesignator::print(ostream &out, int indent) const

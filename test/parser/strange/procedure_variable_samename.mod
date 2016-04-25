@@ -4,9 +4,9 @@ var f : integer;
 
 procedure f(X : integer);
 begin
-	WriteInt(X)
+    WriteInt(X)
 end f;
 
 begin
-	f(f)
+    f(f)
 end procedure_variable_samename.
