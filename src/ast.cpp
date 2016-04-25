@@ -811,10 +811,18 @@ const CType* CAstBinaryOp::GetType(void) const
   EOperation _operator = GetOperation();
   if (_operator == opAdd || _operator == opSub || _operator == opMul || _operator == opDiv)
   {
-    return CTypeManager::Get()->GetInt();
+    if (GetLeft()->GetType() != GetRight()->GetType() || GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL)
+    {
+      return NULL;
+    }
+    return GetLeft()->GetType();
   }
   else
   {
+    if (GetLeft()->GetType() != GetRight()->GetType() || GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL)
+    {
+      return NULL;
+    }
     return CTypeManager::Get()->GetBool();
   }
 }
@@ -1258,7 +1266,8 @@ const CType* CAstArrayDesignator::GetType(void) const
   
   if (at == NULL)
   {
-    return CTypeManager::Get()->GetNull();
+    //return CTypeManager::Get()->GetNull();
+    return NULL;
   }
   
   for (; idxCnt > 0 && !idxEnd; idxCnt--)

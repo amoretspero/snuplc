@@ -1021,11 +1021,15 @@ CAstStatCall* CParser::subroutineCall(CAstScope* s, CToken* prevToken, CTypeMana
   //
   // subroutineCall      = ident "(" [ expression {"," expression} ] ")".
   //
+  if (s->GetSymbolTable()->FindSymbol(prevToken->GetValue()) == NULL)
+  {
+    SetError(prevToken, "undefined identifier.");
+  }
   const CSymProc* funcSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(prevToken->GetValue())); // Find symbol for procedure/function.
   //CType* funcDataType = funcSymbol->GetDataType()
   if (funcSymbol == NULL)
   {
-    SetError(prevToken, "undefined identifier.");
+    SetError(prevToken, "invalid procedure/function identifier.");
   }
   CAstFunctionCall* funcCall = new CAstFunctionCall(prevToken, funcSymbol); // Make functionCall AST node.
   //cout << "===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function." << endl;
@@ -1171,6 +1175,11 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
   CToken t;
   const CSymbol* symbol = s->GetSymbolTable()->FindSymbol(lhs->GetValue()); // Find symbol for LHS, which is qualident or ident.
   //cout << "===(DEBUG)===Found symbol : " << symbol->GetName() << endl;
+  
+  if (symbol == NULL)
+  {
+    SetError(lhs, "undefined identifier.");
+  }
 
   if (_scanner->Peek().GetType() == tLBracket) // When LHS is qualident.
   {

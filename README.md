@@ -92,6 +92,11 @@ Working on strange tests.
 Fixed parameter, variable duplication errors.  
 Changed name unmatch error messages as same as reference parser.  
   
+**2016-04-25 18:16 KST**
+Fixed <code>GetType()</code> function for <code>CAstBinaryOp</code>.  
+<code>CAstBinaryOp</code> function now returns <code>NULL</code> when type of lhs and rhs are different,
+or when at least one of them are <code>NULL</code>.
+  
     
 ### Notice
 Arrays do not have to support array assignments.  
