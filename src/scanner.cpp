@@ -47,7 +47,7 @@ using namespace std;
 //------------------------------------------------------------------------------
 // token names
 //
-#define TOKEN_STRLEN 38
+#define TOKEN_STRLEN 39
 
 char ETokenName[][TOKEN_STRLEN] = {
   "tString",                        ///< a string
@@ -57,6 +57,8 @@ char ETokenName[][TOKEN_STRLEN] = {
   
   "tCharacter",                     ///< a character, for example, 'a', 'b', and more.
   "tConstChar",                     ///< a constant character, i.e. '\t', '\n' and more.
+  
+  "tType",                          ///< a type.
   
   "tTerm",                          ///< '+' or '-' or '||'
   "tFact",                          ///< '*' or '/' or '&&'

@@ -92,10 +92,19 @@ Working on strange tests.
 Fixed parameter, variable duplication errors.  
 Changed name unmatch error messages as same as reference parser.  
   
-**2016-04-25 18:16 KST**
+**2016-04-25 18:16 KST**  
 Fixed <code>GetType()</code> function for <code>CAstBinaryOp</code>.  
 <code>CAstBinaryOp</code> function now returns <code>NULL</code> when type of lhs and rhs are different,
-or when at least one of them are <code>NULL</code>.
+or when at least one of them are <code>NULL</code>.  
+  
+**2016-04-26 20:18 KST**  
+Added more complicated tests. They are in folder <code>test/parser/hell</code>.  
+Fixed token mismatch bug in <code>scanner.cpp</code>. <code>tType</code> was not included in <code>ETokenName</code>.  
+Added symbol type check in <code>factor(CAstScope* s)</code> function.  
+When subroutineCall is expected, it will throw error if <code>stProcedure</code> is not given.  
+When non-subroutineCall is expected, it will throw error if <code>stProcedure</code> is given.  
+Test for subroutineCall is done with <code>dynamic_cast</code> to <code>const CSymProc*</code>,
+and test for non-subroutineCall is done with <code>GetSymbolType()</code> function.  
   
     
 ### Notice

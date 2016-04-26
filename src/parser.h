@@ -126,7 +126,7 @@ class CParser {
     const CType* GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType);
     const CType* GeneratePointerType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType);
     
-    void AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, CAstFunctionCall* _fc);
+    void AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, CAstFunctionCall* _fc, int nParams);
     bool CheckParamDups (vector<vector<CSymParam*> >* paramVec, const string elemToFind);
     
     

@@ -1031,20 +1031,28 @@ CAstStatCall* CParser::subroutineCall(CAstScope* s, CToken* prevToken, CTypeMana
   {
     SetError(prevToken, "invalid procedure/function identifier.");
   }
+  int nParams = funcSymbol->GetNParams();
   CAstFunctionCall* funcCall = new CAstFunctionCall(prevToken, funcSymbol); // Make functionCall AST node.
   //cout << "===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function." << endl;
-  AddArguments(s, _scanner, _tm, funcCall); // Add arguments to procedure/function.
+  AddArguments(s, _scanner, _tm, funcCall, nParams); // Add arguments to procedure/function.
   
   return new CAstStatCall(prevToken, funcCall);
 }
 
-void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, CAstFunctionCall* _fc)
+void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, CAstFunctionCall* _fc, int nParams)
 {
   Consume(tLBracketRound);
   
+  int gotArgs = 0;
+    
   if (_scanner->Peek().GetType() == tRBracketRound) // No argument to add.
   {
-    Consume(tRBracketRound);
+    CToken* t = new CToken();
+    Consume(tRBracketRound, t);
+    if (nParams > gotArgs)
+    {
+      SetError(t, "number of arguments expected : " + to_string(nParams) + ", got : " + to_string(gotArgs) + ".");
+    }
     return;
   }
   else // Argument(s) exist(s).
@@ -1063,6 +1071,7 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
     }
     //cout << "===(DEBUG)===Got argument as form of expression. Next token is : " << _scanner->Peek().GetValue() << endl;
     _fc->AddArg(exp); // Add argument to functionCall.
+    gotArgs++;
     while(_scanner->Peek().GetType() == tComma) // Until there are no more argument left, iterate.
     {
       Consume(tComma);
@@ -1080,9 +1089,15 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
       }
       //cout << "===(DEBUG)===Got argument as form of expression. Next token is : " << _scanner->Peek().GetValue() << endl;
       _fc->AddArg(exp); // Add argument to functionCall.
+      gotArgs++;
     }
   }
-  Consume(tRBracketRound);
+  CToken* chk = new CToken();
+  Consume(tRBracketRound, chk);
+  if (nParams != gotArgs)
+  {
+    SetError(chk, "number of arguments expected : " + to_string(nParams) + ", got : " + to_string(gotArgs) + ".");
+  }
 }
 
 CAstStatIf* CParser::ifStatement(CAstScope* s)
@@ -1420,8 +1435,16 @@ CAstExpression* CParser::factor(CAstScope *s)
     {
       //cout << "===(DEBUG)===factor subroutineCall case." << endl;
       const CSymProc* funcSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(factorId->GetValue()));
+      if (s->GetSymbolTable()->FindSymbol(factorId->GetValue()) == NULL)
+      {
+        SetError(factorId, "undefined identifier.");
+      }
+      if (funcSymbol == NULL)
+      {
+        SetError(factorId, "invalid procedure/function identifier.");
+      }
       CAstFunctionCall* funcCall = new CAstFunctionCall(factorId, funcSymbol);
-      AddArguments(s, _scanner, typeManager, funcCall);
+      AddArguments(s, _scanner, typeManager, funcCall, funcSymbol->GetNParams());
       //n = subroutineCall(s, factorId, typeManager);
       n = funcCall;
     }
@@ -1429,6 +1452,10 @@ CAstExpression* CParser::factor(CAstScope *s)
     {
       //cout << "===(DEBUG)===factor qualident case. factorId : " << factorId->GetValue() << endl;
       const CSymbol* qualIdSymbol = dynamic_cast<const CSymbol*>(s->GetSymbolTable()->FindSymbol(factorId->GetValue())); // Find symbol for qualident.
+      if (qualIdSymbol->GetSymbolType() == stProcedure)
+      {
+        SetError(factorId, "designator expected.");
+      }
       CAstArrayDesignator* qualid = new CAstArrayDesignator(factorId, qualIdSymbol); // Construct qualident variable.
       while(tt == tLBracket) // Set indices of qualident variable.
       {
@@ -1445,6 +1472,10 @@ CAstExpression* CParser::factor(CAstScope *s)
       //cout << "===(DEBUG)===factor ident case. Next token is : " << _scanner->Peek().GetValue() << endl;
       const CSymbol* idSymbol = s->GetSymbolTable()->FindSymbol(factorId->GetValue()); // Find symbol for ident.
       //cout << "===(DEBUG)===Current symbol table size is : " << s->GetSymbolTable()->GetSymbols().size() << endl;
+      if (idSymbol->GetSymbolType() == stProcedure)
+      {
+        SetError(factorId, "designator expected.");
+      }
       n = new CAstDesignator(factorId, idSymbol); // Construct ident variable.
     }
   }
