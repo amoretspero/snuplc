@@ -299,7 +299,7 @@ CAstModule* CParser::module(void)
   //                       statSequence "end" ident ".".
   //
   
-  CSymtab moduleSymTab = new CSymtab();
+  CSymtab moduleSymTab = new CSymtab(); // New symbol table for initialization of module's symbol table.
   
   CToken t; // For error indication.
   Consume(tModule); 
@@ -312,7 +312,7 @@ CAstModule* CParser::module(void)
   
   CTypeManager* typeManager = CTypeManager::Get(); // Typemanager to deal with types.
   
-  InitSymbolTable(m->GetSymbolTable()); 
+  InitSymbolTable(m->GetSymbolTable()); // Initialize module's symbol table.
   
   CToken checkIfVar = _scanner->Peek(); // Check if there are global variables.
   if (checkIfVar.GetType() == tVar) // Global variable exists.
@@ -321,23 +321,23 @@ CAstModule* CParser::module(void)
    
     while (true)
     {
-      vector<CToken*> varVec;
-      CType* varType = GetVariables(_scanner, &varVec);
+      vector<CToken*> varVec; // Vector for one type of global variables.
+      CType* varType = GetVariables(_scanner, &varVec); // Get one type of global variables and their type.
       
       //cout << "===(DEBUG)===Got global variables, count : " << varVec.size() << endl;
       
       vector<CToken*>::iterator oneTypeIter = varVec.begin();
       //cout << "===(DEBUG)===Got begin of varVec, at module." << endl;
-      while(oneTypeIter != varVec.end() && varVec.size() > 0)
+      while(oneTypeIter != varVec.end() && varVec.size() > 0) // Iterate through vector and add variables.
       {
         if (m->GetSymbolTable() == NULL)
         {
           //cout << "===(DEBUG)===Module symboltable is NULL." << endl;
         }
         //cout << "===(DEBUG)===In variable adding loop. token value is : " << (*oneTypeIter)->GetValue() << endl;
-        bool addVarRes = m->GetSymbolTable()->AddSymbol(m->CreateVar((*oneTypeIter)->GetValue(), varType));
+        bool addVarRes = m->GetSymbolTable()->AddSymbol(m->CreateVar((*oneTypeIter)->GetValue(), varType)); // Add variable to symbol table.
         
-        if (!addVarRes)
+        if (!addVarRes) // If adding fails, i.e. there are already variable with same name, throw error.
         {
           SetError((*oneTypeIter), "duplicate variable declaration '" + (*oneTypeIter)->GetValue() + "'.");
         }
@@ -349,13 +349,13 @@ CAstModule* CParser::module(void)
       Consume(tSemicolon); // Semicolon separates one type of variables from other ones.
       //cout << "===(DEBUG)===Got semicolon of end of var decl." << endl;
       //cout << "===(DEBUG)===Next token is : " << _scanner->Peek().GetValue() << endl;
-      if (_scanner->Peek().GetType() != tId)
+      if (_scanner->Peek().GetType() != tId) // If there are no more variables to add, end loop.
       {
         break;
       }
     }
   }
-  // TODO: Support for multiple functions.
+
   // Part for processing multiple procedure/function. ===START===
   while (_scanner->Peek().GetType() == tProcedure || _scanner->Peek().GetType() == tFunction) // Procedure/Function definitions. May be multiple of them.
   {
@@ -374,8 +374,8 @@ CAstModule* CParser::module(void)
       {
         SetError(procName, "duplicate procedure/function declaration '" + procName->GetValue() + "'.");
       }*/
-      const CSymbol* procNameDupCheck = m->GetSymbolTable()->FindSymbol(procName->GetValue());
-      if (procNameDupCheck != NULL)
+      const CSymbol* procNameDupCheck = m->GetSymbolTable()->FindSymbol(procName->GetValue()); // Check if there is already procedure/function/variable with same name.
+      if (procNameDupCheck != NULL) // If there is, throw error.
       {
         SetError(procName, "duplicate procedure/function declaration '" + procName->GetValue() + "'.");
       }
@@ -386,7 +386,7 @@ CAstModule* CParser::module(void)
       {
         Consume(tLBracketRound);
         
-        if (_scanner->Peek().GetType() != tRBracketRound) // When procedure has parameters, get them.
+        if (_scanner->Peek().GetType() != tRBracketRound) // When procedure has parameters, get them. Duplication check is done in GetParams function.
         {
           GetParams(_scanner, typeManager, &parameterVector, 0); // Get parameters for procedure.
         }
@@ -425,7 +425,7 @@ CAstModule* CParser::module(void)
       
       iter = parameterVector.begin();
       
-      while(iter != parameterVector.end() && parameterVector.size() > 0)
+      while(iter != parameterVector.end() && parameterVector.size() > 0) // Add symbols to symbol table of procedure.
       {
         vector<CSymParam*> oneTypeParamVec = *iter;
         vector<CSymParam*>::reverse_iterator oneTypeIter = oneTypeParamVec.rbegin();
@@ -453,13 +453,13 @@ CAstModule* CParser::module(void)
         {
           vector<CToken*> varVec;
           //GetVariables(_scanner, procScope, typeManager); // Get one type of variables.
-          CType* varType = GetVariables(_scanner, &varVec);
+          CType* varType = GetVariables(_scanner, &varVec); // Get one type of variables.
           
           vector<CToken*>::iterator oneTypeIter = varVec.begin();
           while(oneTypeIter != varVec.end() && varVec.size() > 0)
           {
-            bool addVarRes = procScope->GetSymbolTable()->AddSymbol(procScope->CreateVar((*oneTypeIter)->GetValue(), varType));
-            if (!addVarRes)
+            bool addVarRes = procScope->GetSymbolTable()->AddSymbol(procScope->CreateVar((*oneTypeIter)->GetValue(), varType)); // Add variable to procedure scope.
+            if (!addVarRes) // Check for variable duplication.
             {
               SetError(*oneTypeIter, "duplicate variable declaration '" + (*oneTypeIter)->GetValue() + "'.");
             }
@@ -476,13 +476,13 @@ CAstModule* CParser::module(void)
       
       //cout << "===(DEBUG)===Now added all local variables for procedure. Next token is : " << _scanner->Peek().GetValue() << endl;
       
-      vector<CSymbol*> procsymbols = procScope->GetSymbolTable()->GetSymbols();
-      vector<CSymbol*>::iterator procSymIter = procsymbols.begin();
-      while(procSymIter != procsymbols.end() && procsymbols.size() > 0)
-      {
+      //vector<CSymbol*> procsymbols = procScope->GetSymbolTable()->GetSymbols();
+      //vector<CSymbol*>::iterator procSymIter = procsymbols.begin();
+      //while(procSymIter != procsymbols.end() && procsymbols.size() > 0)
+      //{
         //cout << "===(DEBUG)===Current scope's Variable/Param name : " << (*procSymIter)->GetName() << endl;
-        procSymIter++;
-      }
+        //procSymIter++;
+      //}
       
       Consume(tBegin);
       
@@ -521,8 +521,8 @@ CAstModule* CParser::module(void)
         SetError(funcName, "duplicate procedure/function declaration '" + funcName->GetValue() + "'.");
       }
       */
-      const CSymbol* funcNameDupCheck = m->GetSymbolTable()->FindSymbol(funcName->GetValue());
-      if (funcNameDupCheck != NULL)
+      const CSymbol* funcNameDupCheck = m->GetSymbolTable()->FindSymbol(funcName->GetValue()); // Check if there is already procedure/function/variable with same name.
+      if (funcNameDupCheck != NULL) // If there is, throw error.
       {
         SetError(funcName, "duplicate procedure/function declaration '" + funcName->GetValue() + "'.");
       }
@@ -535,7 +535,7 @@ CAstModule* CParser::module(void)
         
         if (_scanner->Peek().GetType() != tRBracketRound) // When function has parameters, get them.
         {
-          GetParams(_scanner, typeManager, &parameterVector, 0); // Get parameters for function.
+          GetParams(_scanner, typeManager, &parameterVector, 0); // Get parameters for function. Duplication check is done in GetParams() function.
         }
         
         Consume(tRBracketRound);
@@ -605,10 +605,10 @@ CAstModule* CParser::module(void)
           CType* varType = GetVariables(_scanner, &varVec); // Get one type of variables.
           
           vector<CToken*>::iterator oneTypeIter = varVec.begin();
-          while(oneTypeIter != varVec.end() && varVec.size() > 0)
+          while(oneTypeIter != varVec.end() && varVec.size() > 0) // Add variables to function scope.
           {
             bool addVarRes = funcScope->GetSymbolTable()->AddSymbol(funcScope->CreateVar((*oneTypeIter)->GetValue(), varType));
-            if (!addVarRes)
+            if (!addVarRes) // Check for variable duplication.
             {
               SetError(*oneTypeIter, "duplicate variable declaration '" + (*oneTypeIter)->GetValue() + "'.");
             }
@@ -652,10 +652,10 @@ CAstModule* CParser::module(void)
   Consume(tBegin);
   //printf("Got begin keyword!\n");
   
-  CAstStatement* statseq = statSequence(m);
+  CAstStatement* statseq = statSequence(m); // Get statement sequence of module.
   
   Consume(tEnd);
-  m->SetStatementSequence(statseq);
+  m->SetStatementSequence(statseq); // Set statement sequence of module.
   
   CToken* module_id_check = new CToken();
   Consume(tId, module_id_check); // Ending name of module. Must match starting name.
@@ -671,15 +671,19 @@ CAstModule* CParser::module(void)
 
 bool CParser::CheckParamDups (vector<vector<CSymParam*> >* paramVec, const string elemToFind)
 {
-  bool res = false;
+  // Parameters are the first local symbols that will be added to procedure/function scope.
+  // So, we only check for duplication in parameters.
+  // Local variables will be added after all the parameters are added,
+  // therefore parameter-(local)variable duplication will be check when local variables are added.
+  bool res = false; // Initialize result at false.
   vector<vector<CSymParam*> >::iterator iter = paramVec->begin();
-  while (paramVec->size() > 0 && iter != paramVec->end())
+  while (paramVec->size() > 0 && iter != paramVec->end()) // Iterates through parameters and check for duplication.
   {
     vector<CSymParam*> oneTypeVec = *iter;
     vector<CSymParam*>::iterator oneTypeIter = oneTypeVec.begin();
     while (oneTypeVec.size() > 0 && oneTypeIter != oneTypeVec.end())
     {
-      if ((*oneTypeIter)->GetName() == elemToFind)
+      if ((*oneTypeIter)->GetName() == elemToFind) // If duplication occurs, set res to true and return.
       {
         res = true;
         return res;
@@ -696,8 +700,8 @@ CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<
   CToken* paramId = new CToken();
   Consume(tId, paramId); // Get identifier for parameter.
   
-  bool checkDupRes = CheckParamDups(originVec, paramId->GetValue());
-  if (checkDupRes)
+  bool checkDupRes = CheckParamDups(originVec, paramId->GetValue()); // Check for parameter duplication.
+  if (checkDupRes) // If duplication occurs, throw error.
   {
     SetError(paramId, "duplicate variable declaration '" + paramId->GetValue() + "'.");
   }
@@ -711,7 +715,6 @@ CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<
     Consume(tComma);
     paramType = GetOneTypeParams(_scanner, _tm, paramVec, originVec, idx+1); // Recursive call.
     paramVec->push_back(new CSymParam(idx, paramId->GetValue(), paramType)); // When above recursive call returns type, add parameter to procedure symbol.
-    //_ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType)); // When above recursive call returns type, add parameter to procedure symbol. 
   }
   else // When there are no more identifier(s) of same type.
   {
@@ -719,17 +722,16 @@ CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<
     paramType = type(_tm, true); // Set Parameter type.
     if (!paramType->IsBoolean() && !paramType->IsChar() && !paramType->IsInt() && !paramType->IsArray() && !paramType->IsPointer()) // Check for type.
     {
-      printf("Type error!\n");
+      cout << "Type error!" << endl;
     }
     paramVec->push_back(new CSymParam(idx, paramId->GetValue(), paramType)); // Add parameter to CSymParam* vector.
-    //_ps->AddParam(new CSymParam(i, paramId->GetValue(), paramType)); // Add parameter to procedure symbol.
   }
   return paramType; // Return the type for recursive call.
 }
 
 CType* CParser::GetParams (CScanner* _scanner, CTypeManager* _tm, vector<vector<CSymParam*> >* paramVec, int lastIdx)
 {
-  paramVec->resize(paramVec->size() + 1);
+  paramVec->resize(paramVec->size() + 1); // Add space for one type of parameters.
   CType* oneTypeResult = GetOneTypeParams(_scanner, _tm, &(paramVec->at(paramVec->size() - 1)), paramVec, lastIdx+1); // Adds one type of parameters.
   //cout << "===(DEBUG)===Number of parameters is : " << paramVec->at(paramVec->size() - 1).size() << endl;
   if (_scanner->Peek().GetType() == tSemicolon) // When there are more variables.
@@ -823,7 +825,7 @@ const CType* CParser::GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, C
   Consume(tRBracket);
   char* endPtr = 0; // For string to integer conversion.
   int nelem = -1; // Number of elements in this dimension.
-  if (elemCount->GetType() != tUndefined)
+  if (elemCount->GetType() != tUndefined) // When number of elements are specified, get it.
   {
     nelem = strtol(elemCount->GetValue().c_str(), &endPtr, 10);
   }
@@ -959,7 +961,6 @@ CAstStatement* CParser::statSequence(CAstScope *s)
         Consume(tId, commonFirst); // Consume common FIRST.
         //cout << "===(DEBUG)===Case of assignment or subroutineCall in statement. commentFirst : " << commonFirst->GetValue() << endl;
         
-        // TODO: qualident is not properly handled.
         if (_scanner->Peek().GetType() == tAssign || _scanner->Peek().GetType() == tLBracket) // Case of assignment. When tLBracket is peeked, it is qualident.
         {
           //cout << "===(DEBUG)===Case of assignment in statement." << endl;
@@ -1021,17 +1022,17 @@ CAstStatCall* CParser::subroutineCall(CAstScope* s, CToken* prevToken, CTypeMana
   //
   // subroutineCall      = ident "(" [ expression {"," expression} ] ")".
   //
-  if (s->GetSymbolTable()->FindSymbol(prevToken->GetValue()) == NULL)
+  if (s->GetSymbolTable()->FindSymbol(prevToken->GetValue()) == NULL) // When there are no symbol with given name, throw error.
   {
     SetError(prevToken, "undefined identifier.");
   }
   const CSymProc* funcSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(prevToken->GetValue())); // Find symbol for procedure/function.
   //CType* funcDataType = funcSymbol->GetDataType()
-  if (funcSymbol == NULL)
+  if (funcSymbol == NULL) // When there is symbol with given name but it is not procedure/function, throw error.
   {
     SetError(prevToken, "invalid procedure/function identifier.");
   }
-  int nParams = funcSymbol->GetNParams();
+  int nParams = funcSymbol->GetNParams(); // Get number of parameters for checking argument number.
   CAstFunctionCall* funcCall = new CAstFunctionCall(prevToken, funcSymbol); // Make functionCall AST node.
   //cout << "===(DEBUG)===Constructed CAstFunctionCall in subroutineCall function." << endl;
   AddArguments(s, _scanner, _tm, funcCall, nParams); // Add arguments to procedure/function.
@@ -1043,13 +1044,13 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
 {
   Consume(tLBracketRound);
   
-  int gotArgs = 0;
+  int gotArgs = 0; // Number of arguments got.
     
   if (_scanner->Peek().GetType() == tRBracketRound) // No argument to add.
   {
     CToken* t = new CToken();
     Consume(tRBracketRound, t);
-    if (nParams > gotArgs)
+    if (nParams > gotArgs) // When there are no arguments, but argument(s) are needed, throw error.
     {
       SetError(t, "number of arguments expected : " + to_string(nParams) + ", got : " + to_string(gotArgs) + ".");
     }
@@ -1067,11 +1068,11 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
     if (exp->GetType()->IsArray()) // When expression has return type of array.
     {
       //cout << "===(DEBUG)===Return type of expression is array." << endl;
-      exp = new CAstSpecialOp(t, opAddress, exp);
+      exp = new CAstSpecialOp(t, opAddress, exp); // Reference the array.
     }
     //cout << "===(DEBUG)===Got argument as form of expression. Next token is : " << _scanner->Peek().GetValue() << endl;
     _fc->AddArg(exp); // Add argument to functionCall.
-    gotArgs++;
+    gotArgs++; // Count how many arguments are consumed.
     while(_scanner->Peek().GetType() == tComma) // Until there are no more argument left, iterate.
     {
       Consume(tComma);
@@ -1082,19 +1083,19 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
         //cout << "===(DEBUG)===Expression for function argument is NULL." << endl;
       }
       t = _scanner->Peek();
-      if (exp->GetType()->IsArray())
+      if (exp->GetType()->IsArray()) // When expression has return type of array.
       {
         //cout << "===(DEBUG)===Return type of expression is array." << endl;
-        exp = new CAstSpecialOp(t, opAddress, exp);
+        exp = new CAstSpecialOp(t, opAddress, exp); // Reference the array.
       }
       //cout << "===(DEBUG)===Got argument as form of expression. Next token is : " << _scanner->Peek().GetValue() << endl;
       _fc->AddArg(exp); // Add argument to functionCall.
-      gotArgs++;
+      gotArgs++; // Count how many arguments are consumed.
     }
   }
   CToken* chk = new CToken();
   Consume(tRBracketRound, chk);
-  if (nParams != gotArgs)
+  if (nParams != gotArgs) // when number of parameters does not match the number of arguments the parser got, throw error.
   {
     SetError(chk, "number of arguments expected : " + to_string(nParams) + ", got : " + to_string(gotArgs) + ".");
   }
@@ -1110,24 +1111,24 @@ CAstStatIf* CParser::ifStatement(CAstScope* s)
   Consume(tIf, &t);
   Consume(tLBracketRound);
   
-  CAstExpression* exp = expression(s);
+  CAstExpression* exp = expression(s); // Get expression for if condition.
   
   Consume(tRBracketRound);
   Consume(tThen);
   
-  CAstStatement* statSeq = statSequence(s);
+  CAstStatement* statSeq = statSequence(s); // Get statement sequence for if body.
   
-  if (_scanner->Peek().GetType() == tEnd)
+  if (_scanner->Peek().GetType() == tEnd) // When there are no else body.
   {
     Consume(tEnd);
-    return new CAstStatIf(t, exp, statSeq, NULL);
+    return new CAstStatIf(t, exp, statSeq, NULL); // Return new CAstStatIf.
   }
-  else
+  else // When there is else body.
   {
     Consume(tElse);
-    CAstStatement* elseStatSeq = statSequence(s);
+    CAstStatement* elseStatSeq = statSequence(s); // Get statement sequence for else body.
     Consume(tEnd);
-    return new CAstStatIf(t, exp, statSeq, elseStatSeq);
+    return new CAstStatIf(t, exp, statSeq, elseStatSeq); // Return new CAstStatIf.
   }
 }
 
@@ -1142,17 +1143,15 @@ CAstStatWhile* CParser::whileStatement(CAstScope* s)
   Consume(tWhile, &t);
   Consume(tLBracketRound);
   
-  CAstExpression* exp = expression(s);
+  CAstExpression* exp = expression(s); // Get expression for while condition.
   
   Consume(tRBracketRound);
   Consume(tDo);
   
-  CAstStatement* statSeq = statSequence(s);
+  CAstStatement* statSeq = statSequence(s); // Get statement sequence for while body.
   Consume(tEnd);
   
-  return new CAstStatWhile(t, exp, statSeq);
-  
-  return NULL;
+  return new CAstStatWhile(t, exp, statSeq); // Return new CAstStatWhile.
 }
 
 CAstStatReturn* CParser::returnStatement(CAstScope* s)
@@ -1164,17 +1163,16 @@ CAstStatReturn* CParser::returnStatement(CAstScope* s)
   CToken t;
   
   Consume(tReturn, &t);
-  EToken checkExp = _scanner->Peek().GetType();
-  if (checkExp == tEnd || checkExp == tElse || checkExp == tSemicolon)
+  EToken checkExp = _scanner->Peek().GetType(); // Token type for checking return has its expression or not.
+  if (checkExp == tEnd || checkExp == tElse || checkExp == tSemicolon) // When return has no expression.
   {
-    return new CAstStatReturn(t, s, NULL);
+    return new CAstStatReturn(t, s, NULL); // Return new CAstStatReturn.
   }
-  else
+  else // When return has its expression.
   {
-    CAstExpression* exp = expression(s);
-    return new CAstStatReturn(t, s, exp);
+    CAstExpression* exp = expression(s); // Get expression for return.
+    return new CAstStatReturn(t, s, exp); // Return new CAstStatReturn.
   }
-  return NULL;
 }
 
 CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
@@ -1191,7 +1189,7 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
   const CSymbol* symbol = s->GetSymbolTable()->FindSymbol(lhs->GetValue()); // Find symbol for LHS, which is qualident or ident.
   //cout << "===(DEBUG)===Found symbol : " << symbol->GetName() << endl;
   
-  if (symbol == NULL)
+  if (symbol == NULL) // If there are no symbol for LHS, throw error.
   {
     SetError(lhs, "undefined identifier.");
   }
@@ -1248,7 +1246,7 @@ CAstExpression* CParser::expression(CAstScope* s)
   
   //cout << "===(DEBUG)===Now at expression function." << endl;
 
-  left = simpleexpr(s);
+  left = simpleexpr(s); // Gets first simpleexpr.
   
   //cout << "===(DEBUG)===Got simpleexpr for left side of expression. Next token is : " << _scanner->Peek().GetValue() << endl;
 
@@ -1315,11 +1313,11 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
     CToken* unaryOp = new CToken();
     CToken* numtok = new CToken();
     Consume(tTerm, unaryOp); // Get unary operator token.
-    if (_scanner->Peek().GetType() == tNum)
+    if (_scanner->Peek().GetType() == tNum) // When number comes right aftre unary negative operator, negate number.
     {
       char** endPtr = 0;
       Consume(tNum, numtok);
-      n = new CAstConstant(numtok, CTypeManager::Get()->GetInt(), -(strtoll(numtok->GetValue().c_str(), endPtr, 10)));
+      n = new CAstConstant(numtok, CTypeManager::Get()->GetInt(), -(strtoll(numtok->GetValue().c_str(), endPtr, 10))); // Negated number.
     }
     else
     {
@@ -1332,7 +1330,7 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
     //cout << "===(DEBUG)===Constructed term for simpleexpr. Next token is : " << _scanner->Peek().GetValue() << endl;
   }
 
-  while (_scanner->Peek().GetType() == tTerm) // Until there are no term left, iterate and construct simpleexpr.
+  while (_scanner->Peek().GetType() == tTerm) // Until there are no term left, iterate and construct simpleexpr. Previous term will be left side of Binary operator, new term will be right side.
   {
     CToken t;
     CAstExpression *l = n, *r;
@@ -1434,25 +1432,29 @@ CAstExpression* CParser::factor(CAstScope *s)
     if (tt == tLBracketRound) // Case of subroutineCall.
     {
       //cout << "===(DEBUG)===factor subroutineCall case." << endl;
-      const CSymProc* funcSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(factorId->GetValue()));
-      if (s->GetSymbolTable()->FindSymbol(factorId->GetValue()) == NULL)
+      const CSymProc* funcSymbol = dynamic_cast<const CSymProc*>(s->GetSymbolTable()->FindSymbol(factorId->GetValue())); // Gets procedure/function symbol.
+      if (s->GetSymbolTable()->FindSymbol(factorId->GetValue()) == NULL) // When there are no such symbol in symbol table, throw error.
       {
         SetError(factorId, "undefined identifier.");
       }
-      if (funcSymbol == NULL)
+      if (funcSymbol == NULL) // When there is symbol but not type of procedure/function symbol, throw error.
       {
         SetError(factorId, "invalid procedure/function identifier.");
       }
-      CAstFunctionCall* funcCall = new CAstFunctionCall(factorId, funcSymbol);
-      AddArguments(s, _scanner, typeManager, funcCall, funcSymbol->GetNParams());
+      CAstFunctionCall* funcCall = new CAstFunctionCall(factorId, funcSymbol); // Construct function call.
+      AddArguments(s, _scanner, typeManager, funcCall, funcSymbol->GetNParams()); // Add arguments to procedure/function call.
       //n = subroutineCall(s, factorId, typeManager);
       n = funcCall;
     }
     else if (tt == tLBracket) // Case of qualident (not ident).
     {
       //cout << "===(DEBUG)===factor qualident case. factorId : " << factorId->GetValue() << endl;
+      if (s->GetSymbolTable()->FindSymbol(factorId->GetValue()) == NULL) // When there is no such symbol.
+      {
+        SetError(factorId, "undefined identifier.");
+      }
       const CSymbol* qualIdSymbol = dynamic_cast<const CSymbol*>(s->GetSymbolTable()->FindSymbol(factorId->GetValue())); // Find symbol for qualident.
-      if (qualIdSymbol->GetSymbolType() == stProcedure)
+      if (qualIdSymbol->GetSymbolType() == stProcedure) // When there is symbol but is type of procedure/function, throw error.
       {
         SetError(factorId, "designator expected.");
       }
@@ -1460,19 +1462,24 @@ CAstExpression* CParser::factor(CAstScope *s)
       while(tt == tLBracket) // Set indices of qualident variable.
       {
         Consume(tLBracket);
-        CAstExpression* idxExp = expression(s);
-        qualid->AddIndex(idxExp);
+        CAstExpression* idxExp = expression(s); // Get expression for index.
+        qualid->AddIndex(idxExp); // Set index.
         Consume(tRBracket);
-        tt = _scanner->Peek().GetType();
+        tt = _scanner->Peek().GetType(); // To check iteration should continu or not.
       }
+      qualid->IndicesComplete(); // Indicate that index addition is finished.
       n = qualid;
     }
     else if (tt == tFact || tt == tRBracket || tt == tRBracketRound || tt == tComma || tt == tEnd || tt == tElse || tt == tSemicolon || tt == tRelOp || tt == tTerm || tt == tAssign) // Case of ident.
     {
       //cout << "===(DEBUG)===factor ident case. Next token is : " << _scanner->Peek().GetValue() << endl;
+      if (s->GetSymbolTable()->FindSymbol(factorId->GetValue()) == NULL) // When there is no such symbol.
+      {
+        SetError(factorId, "undefined identifier");
+      }
       const CSymbol* idSymbol = s->GetSymbolTable()->FindSymbol(factorId->GetValue()); // Find symbol for ident.
       //cout << "===(DEBUG)===Current symbol table size is : " << s->GetSymbolTable()->GetSymbols().size() << endl;
-      if (idSymbol->GetSymbolType() == stProcedure)
+      if (idSymbol->GetSymbolType() == stProcedure) // When there is symbol but is type of procedure/function, throw error.
       {
         SetError(factorId, "designator expected.");
       }
@@ -1584,6 +1591,8 @@ CAstConstant* CParser::number(void)
   // number ::= digit { digit }.
   //
   // "digit { digit }" is scanned as one token (tNum)
+  //
+  // This function is not used anymore.
   //
 
   CToken t;

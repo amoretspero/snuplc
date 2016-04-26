@@ -87,15 +87,18 @@ Passes all default tests without bugs.
 Added more tests for complex codes and should-throw-error cases.  
 Need to pass <code>strange</code> tests. They are in <code>test/parser/strnage</code> folder.  
   
-**2016-04-25 16:31 KST**  
+**2016-04-26 16:31 KST**  
 Working on strange tests.  
 Fixed parameter, variable duplication errors.  
 Changed name unmatch error messages as same as reference parser.  
   
-**2016-04-25 18:16 KST**  
+**2016-04-26 18:16 KST**  
 Fixed <code>GetType()</code> function for <code>CAstBinaryOp</code>.  
 <code>CAstBinaryOp</code> function now returns <code>NULL</code> when type of lhs and rhs are different,
 or when at least one of them are <code>NULL</code>.  
+  
+**2016-04-27 01:11 KST**
+Commented <code>parser.cpp</code>. 
   
 **2016-04-26 20:18 KST**  
 Added more complicated tests. They are in folder <code>test/parser/hell</code>.  

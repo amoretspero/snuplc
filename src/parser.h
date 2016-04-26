@@ -119,7 +119,6 @@ class CParser {
     
     CType*                type(CTypeManager* _tm, bool _isParam);
     
-    //CType* GetVariables(CScanner* _scanner, CAstScope* s, CTypeManager* _tm);
     CType* GetVariables(CScanner* _scanner, vector<CToken*>* varVec);
     CType* GetOneTypeParams(CScanner* _scanner, CTypeManager* _tm, vector<CSymParam*>* paramVec, vector<vector<CSymParam*> >* originVec, int idx);
     CType* GetParams(CScanner* _scanner, CTypeManager* _tm, vector<vector<CSymParam*> >* paramVec1, int lastIdx);
