@@ -94,38 +94,117 @@ class CParser {
 
     /// @name methods for recursive-descent parsing
     /// @{
-
+      
+    /// @brief Scope for module. Takes no parameter.
+    /// @retval CAstModule* for module.
     CAstModule*           module(void);
 
+    /// @brief AST node for sequence of statements.
+    /// @param s Scope for this sequence of statements.
+    /// @retval CAstStatement* Processed statements. May be multiple of them.
     CAstStatement*        statSequence(CAstScope *s);
+    
+    /// @brief AST node for if statement.
+    /// @param s Scope for this if statement.
+    /// @retval CAstStatIf* Processed if statement. 
     CAstStatIf*           ifStatement(CAstScope* s);
+    
+    /// @brief AST node for while statement.
+    /// @param s Scope for this while statement.
+    /// @retval CAstStatWhile* Processed while statement.
     CAstStatWhile*        whileStatement(CAstScope* s);
+    
+    /// @brief AST node for return statement.
+    /// @param s Scope for this while statement.
+    /// @retval CAstStatReturn* Processed return statement.
     CAstStatReturn*       returnStatement(CAstScope* s);
 
+    /// @brief AST node for assignment statement.
+    /// @param s Scope for this assignment statement.
+    /// @param commonFirst First token for LHS of this assignment. Used to find appropriate symbol.
+    /// @retval CAstStatAssign* Processed assignment statement.
     CAstStatAssign*       assignment(CAstScope *s, CToken* commonFirst);
 
+    /// @brief AST node for subroutine call.
+    /// @param s Scope for this subroutine call.
+    /// @param prevToken Token that will be the name of subroutine(procedure/function).
+    /// @param _tm Type manager.
+    /// @retval CAstStatCall* Processed statement call.
     CAstStatCall*         subroutineCall(CAstScope* s, CToken* prevToken, CTypeManager* _tm);
+    
+    /// @brief AST node for expression.
+    /// @param s Scope for this expression.
+    /// @retval CAstExpression* Processed expression.
     CAstExpression*       expression(CAstScope *s);
+    
+    /// @brief AST node for simple expression.
+    /// @param s Scope for this simple expression.
+    /// @retval CAstExpression* Processed simple expression.
     CAstExpression*       simpleexpr(CAstScope *s);
+    
+    /// @brief AST node for term.
+    /// @param s Scope for this term.
+    /// @retval CAstExpression* Processed term.
     CAstExpression*       term(CAstScope *s);
+    
+    /// @brief AST node for this factor.
+    /// @param s Scope for this factor.
+    /// @retval CAstExpression* Processed factor.
     CAstExpression*       factor(CAstScope *s);
 
     CAstConstant*         number(void);
-    //CAstConstant*         boolean(void);
-    //CAstConstant*         character(void);
-    //CAstStringConstant*   stringconstant(CAstScope* s);
-    //CAstDesignator*       ident(void);
-    //CAstArrayDesignator*  qualident(void);
     
+    /// @brief Function for getting type of variable, parameter or function.
+    /// @param _tm Type manager.
+    /// @param _isParam Indicator that type is for parameter or not. When _isParam is true and type is array, it will be referenced.
+    /// @retval CType* that this function got.
     CType*                type(CTypeManager* _tm, bool _isParam);
     
+    /// @brief Gets one type of variables for procedure/function or global module and store them to vector.
+    /// @param _scanner Scanner
+    /// @param varVec Vector for storing tokens.
+    /// @retVal Returns the type of read variables.
     CType* GetVariables(CScanner* _scanner, vector<CToken*>* varVec);
+    
+    /// @brief Gets one type of parameters for procedure/function.
+    /// @param _scanner Scanner
+    /// @param _tm Type manager.
+    /// @param paramVec parameter vector for one type.
+    /// @param originVec Vector for whole parameter, more than one type. Used to check duplication.
+    /// @param idx Index of parameter.
+    /// @retVal Type of read parameter.
     CType* GetOneTypeParams(CScanner* _scanner, CTypeManager* _tm, vector<CSymParam*>* paramVec, vector<vector<CSymParam*> >* originVec, int idx);
+    
+    /// @brief Gets parameters for procedure/function.
+    /// @param _scanner Scanner.
+    /// @param _tm Type manager.
+    /// @param paramVec1 Vector for containing parameters read, may contain multiple types.
+    /// @param lastIdx Indicates how many parameters are read before this function is called.
+    /// @retVal Type of last read parameter. This is not used.
     CType* GetParams(CScanner* _scanner, CTypeManager* _tm, vector<vector<CSymParam*> >* paramVec1, int lastIdx);
+    
+    /// @brief Gets Array type for given base type. May use recursive call to this function for getting multiple dimension array.
+    /// @param _scanner Scanner.
+    /// @param _tm Type manager.
+    /// @param _baseType Base type that this array will contain.
+    /// @retVal Array type of given base type.
     const CType* GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType);
+    
     const CType* GeneratePointerType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType);
     
+    /// @brief Add argument to given function call.
+    /// @param s Scope for function call to add parameter.
+    /// @param _scanner Scanner.
+    /// @param _tm Type manager.
+    /// @param _fc Function call to add arguments.
+    /// @param nParams Number of parameters that this function call needs.
     void AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, CAstFunctionCall* _fc, int nParams);
+    
+    /// @brief Check parameter duplication for given name string.
+    /// @param paramVec Parameter vector that contains parameters read.
+    /// @param elemToFind Name of element to check for duplication.
+    /// @retVal true when there is duplication.
+    /// @retVal false when there is no duplication.
     bool CheckParamDups (vector<vector<CSymParam*> >* paramVec, const string elemToFind);
     
     

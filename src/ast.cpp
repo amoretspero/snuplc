@@ -808,22 +808,22 @@ bool CAstBinaryOp::TypeCheck(CToken *t, string *msg) const
 
 const CType* CAstBinaryOp::GetType(void) const
 {
-  EOperation _operator = GetOperation();
-  if (_operator == opAdd || _operator == opSub || _operator == opMul || _operator == opDiv)
+  EOperation _operator = GetOperation(); // Performed operation.
+  if (_operator == opAdd || _operator == opSub || _operator == opMul || _operator == opDiv) // When integer/char operator.
   {
-    if (GetLeft()->GetType() != GetRight()->GetType() || GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL)
+    if (GetLeft()->GetType() != GetRight()->GetType() || GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL) // If LHS or RHS is NULL.
     {
       return NULL;
     }
-    return GetLeft()->GetType();
+    return GetLeft()->GetType(); // When LHS and RHS are both non-NULL.
   }
-  else
+  else // When boolean operator.
   {
-    if (GetLeft()->GetType() != GetRight()->GetType() || GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL)
+    if (GetLeft()->GetType() != GetRight()->GetType() || GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL) // If LHS or RHS is NULL.
     {
       return NULL;
     }
-    return CTypeManager::Get()->GetBool();
+    return CTypeManager::Get()->GetBool(); // When LHS and RHS are both non-NULL.
   }
 }
 
@@ -897,11 +897,11 @@ bool CAstUnaryOp::TypeCheck(CToken *t, string *msg) const
 
 const CType* CAstUnaryOp::GetType(void) const
 {
-  if (GetOperation() == opNeg || GetOperation() == opPos)
+  if (GetOperation() == opNeg || GetOperation() == opPos) // When integer/char operator.
   {
     return CTypeManager::Get()->GetInt();
   }
-  else
+  else // When boolean operator.
   {
     return CTypeManager::Get()->GetBool();
   }
@@ -976,7 +976,7 @@ bool CAstSpecialOp::TypeCheck(CToken *t, string *msg) const
 
 const CType* CAstSpecialOp::GetType(void) const
 {
-  if (GetOperand()->GetType()->IsPointer())
+  if (GetOperand()->GetType()->IsPointer()) // When type is pointer. This should NOT OCCUR.
   {
     const CArrayType* at = dynamic_cast<const CArrayType*>(GetOperand()->GetType());
     if (at != NULL)
@@ -1002,12 +1002,12 @@ const CType* CAstSpecialOp::GetType(void) const
       return NULL;
     }
   }
-  else if (GetOperand()->GetType()->IsArray())
+  else if (GetOperand()->GetType()->IsArray()) // When type is array.
   {
     CAstExpression* _op = GetOperand();
-    return CTypeManager::Get()->GetPointer(GetOperand()->GetType());
+    return CTypeManager::Get()->GetPointer(GetOperand()->GetType()); // Return pointer to array.
   }
-  else
+  else // Invalid input. Return NULL.
   {
     return NULL;
   }
@@ -1255,36 +1255,36 @@ bool CAstArrayDesignator::TypeCheck(CToken *t, string *msg) const
 
 const CType* CAstArrayDesignator::GetType(void) const
 {
-  const CSymbol* sym = GetSymbol();
-  int idxCnt = GetNIndices();
-  const CArrayType* at = dynamic_cast<const CArrayType*>(GetSymbol()->GetDataType());
-  if (at == NULL && GetSymbol()->GetDataType()->IsPointer())
+  const CSymbol* sym = GetSymbol(); // Symbol for array.
+  int idxCnt = GetNIndices(); // Get number of indices.
+  const CArrayType* at = dynamic_cast<const CArrayType*>(GetSymbol()->GetDataType()); // Check for given symbol is array.
+  if (at == NULL && GetSymbol()->GetDataType()->IsPointer()) // If given symbol is not array, but is pointer to array.
   {
-    at = dynamic_cast<const CArrayType*>(dynamic_cast<const CPointerType*>(GetSymbol()->GetDataType())->GetBaseType());
+    at = dynamic_cast<const CArrayType*>(dynamic_cast<const CPointerType*>(GetSymbol()->GetDataType())->GetBaseType()); // Dereference it.
   }
   bool idxEnd = false;
   
-  if (at == NULL)
+  if (at == NULL) // Nor array or pointer to array.
   {
     //return CTypeManager::Get()->GetNull();
     return NULL;
   }
   
-  for (; idxCnt > 0 && !idxEnd; idxCnt--)
+  for (; idxCnt > 0 && !idxEnd; idxCnt--) // Iterates through indices and get while indices lasts.
   {
-    if (at->GetInnerType()->IsArray())
+    if (at->GetInnerType()->IsArray()) // At least two dimension array. Go to inner array.
     {
       at = dynamic_cast<const CArrayType*>(at->GetInnerType());
     }
-    else if (at->GetInnerType()->IsBoolean() && idxCnt == 1)
+    else if (at->GetInnerType()->IsBoolean() && idxCnt == 1) // Got to the base type and base type is boolean.
     {
       return dynamic_cast<const CBoolType*>(at->GetInnerType());
     }
-    else if (at->GetInnerType()->IsChar() && idxCnt == 1)
+    else if (at->GetInnerType()->IsChar() && idxCnt == 1) // Got to the base type and base type is char.
     {
       return dynamic_cast<const CCharType*>(at->GetInnerType());
     }
-    else if (at->GetInnerType()->IsInt() && idxCnt == 1)
+    else if (at->GetInnerType()->IsInt() && idxCnt == 1) // Got to the base type and base type is integer.
     {
       return dynamic_cast<const CIntType*>(at->GetInnerType());
     }
@@ -1459,7 +1459,7 @@ bool CAstStringConstant::TypeCheck(CToken *t, string *msg) const
 
 const CType* CAstStringConstant::GetType(void) const
 {
-  return CTypeManager::Get()->GetArray(CToken::unescape(GetValue()).size()+1, CTypeManager::Get()->GetChar());
+  return CTypeManager::Get()->GetArray(CToken::unescape(GetValue()).size()+1, CTypeManager::Get()->GetChar()); // String is array of characters. Not open.
 }
 
 ostream& CAstStringConstant::print(ostream &out, int indent) const

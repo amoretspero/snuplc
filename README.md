@@ -98,7 +98,12 @@ Fixed <code>GetType()</code> function for <code>CAstBinaryOp</code>.
 or when at least one of them are <code>NULL</code>.  
   
 **2016-04-27 01:11 KST**
-Commented <code>parser.cpp</code>. 
+Commented <code>parser.cpp</code>.  
+  
+**2016-04-27 13:17 KST**  
+Commented <code>parser.h</code>, <code>ast.cpp</code>.  
+Need to get rid of unused functions.  
+  
   
 **2016-04-26 20:18 KST**  
 Added more complicated tests. They are in folder <code>test/parser/hell</code>.  
