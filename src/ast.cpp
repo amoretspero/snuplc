@@ -976,9 +976,9 @@ bool CAstSpecialOp::TypeCheck(CToken *t, string *msg) const
 
 const CType* CAstSpecialOp::GetType(void) const
 {
-  if (GetOperand()->GetType()->IsPointer()) // When type is pointer. This should NOT OCCUR.
+  if (GetOperand()->GetType()->IsPointer()) // When type is pointer. This should NOT OCCUR in parser phase.
   {
-    const CArrayType* at = dynamic_cast<const CArrayType*>(GetOperand()->GetType());
+    const CArrayType* at = dynamic_cast<const CArrayType*>(dynamic_cast<const CPointerType*>(GetOperand()->GetType())->GetBaseType());
     if (at != NULL)
     {
       
@@ -1002,7 +1002,7 @@ const CType* CAstSpecialOp::GetType(void) const
       return NULL;
     }
   }
-  else if (GetOperand()->GetType()->IsArray()) // When type is array.
+  else if (GetOperand()->GetType()->IsArray() && GetOperation() == opAddress) // When type is array.
   {
     CAstExpression* _op = GetOperand();
     return CTypeManager::Get()->GetPointer(GetOperand()->GetType()); // Return pointer to array.

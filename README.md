@@ -104,6 +104,10 @@ Commented <code>parser.cpp</code>.
 Commented <code>parser.h</code>, <code>ast.cpp</code>.  
 Need to get rid of unused functions.  
   
+**2016-04-27 19:25 KST**
+Removed debugging code.  
+Code with debugging code is in seperate folder.  
+  
   
 **2016-04-26 20:18 KST**  
 Added more complicated tests. They are in folder <code>test/parser/hell</code>.  

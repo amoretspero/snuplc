@@ -1,9 +1,11 @@
 module null_string;
 
 var a,b,c,d: integer[5][5];
+ch: char;
 
 procedure write;
 begin
+  ch := '\0';
   WriteStr("\0");
   WriteStr("\t");
   WriteStr("\n");
