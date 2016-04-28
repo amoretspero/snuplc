@@ -108,6 +108,11 @@ Need to get rid of unused functions.
 Removed debugging code.  
 Code with debugging code is in seperate folder.  
   
+**2016-04-28 23:36 KST**
+Generated doxygen documents, added more tests for invalid usage of semicolons.
+Parser phase is submitted.  
+LAST COMMIT of PARSER phase.  
+  
   
 **2016-04-26 20:18 KST**  
 Added more complicated tests. They are in folder <code>test/parser/hell</code>.  

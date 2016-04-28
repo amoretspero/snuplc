@@ -73,7 +73,7 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a8d3b3514bb26761dd840a43899a60c98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a8d3b3514bb26761dd840a43899a60c98">SetError</a> (<a class="el" href="classCToken.html">CToken</a> t, const string message)</td></tr>
 <tr class="memdesc:a8d3b3514bb26761dd840a43899a60c98"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the token causing a parse error along with a message  <a href="#a8d3b3514bb26761dd840a43899a60c98">More...</a><br/></td></tr>
 <tr class="separator:a8d3b3514bb26761dd840a43899a60c98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af036593159f9387e1f9604e2790a8d86"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#af036593159f9387e1f9604e2790a8d86">Consume</a> (<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08">EToken</a> type, <a class="el" href="classCToken.html">CToken</a> *token=NULL)</td></tr>
+<tr class="memitem:af036593159f9387e1f9604e2790a8d86"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#af036593159f9387e1f9604e2790a8d86">Consume</a> (<a class="el" href="scanner_8h.html#a9093554967c90043b2a4a74c028f3f08">EToken</a> <a class="el" href="classCParser.html#a5892cb57efc78876ebbabb1a1f87d2ac">type</a>, <a class="el" href="classCToken.html">CToken</a> *token=NULL)</td></tr>
 <tr class="memdesc:af036593159f9387e1f9604e2790a8d86"><td class="mdescLeft">&#160;</td><td class="mdescRight">consume a token given type and optionally store the token  <a href="#af036593159f9387e1f9604e2790a8d86">More...</a><br/></td></tr>
 <tr class="separator:af036593159f9387e1f9604e2790a8d86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79fb208a17e733f5ce3ca866bce7387f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a79fb208a17e733f5ce3ca866bce7387f">InitSymbolTable</a> (<a class="el" href="classCSymtab.html">CSymtab</a> *s)</td></tr>
@@ -81,23 +81,63 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a79fb208a17e733f5ce3ca866bce7387f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">methods for recursive-descent parsing</div></td></tr>
 <tr class="memitem:a608abf6627862b02dff4e2146416d81e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstModule.html">CAstModule</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a608abf6627862b02dff4e2146416d81e">module</a> (void)</td></tr>
+<tr class="memdesc:a608abf6627862b02dff4e2146416d81e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scope for module. Takes no parameter.  <a href="#a608abf6627862b02dff4e2146416d81e">More...</a><br/></td></tr>
 <tr class="separator:a608abf6627862b02dff4e2146416d81e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab80b3a1e6c92caee041d937a5c98b492"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstStatement.html">CAstStatement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#ab80b3a1e6c92caee041d937a5c98b492">statSequence</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s)</td></tr>
+<tr class="memdesc:ab80b3a1e6c92caee041d937a5c98b492"><td class="mdescLeft">&#160;</td><td class="mdescRight">AST node for sequence of statements.  <a href="#ab80b3a1e6c92caee041d937a5c98b492">More...</a><br/></td></tr>
 <tr class="separator:ab80b3a1e6c92caee041d937a5c98b492"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2adfe259b73c4e3695eb3269ca6b83d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstStatAssign.html">CAstStatAssign</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a2adfe259b73c4e3695eb3269ca6b83d8">assignment</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s)</td></tr>
-<tr class="separator:a2adfe259b73c4e3695eb3269ca6b83d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11b8e7d702308e517cfb0547a27d9dce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstStatIf.html">CAstStatIf</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a11b8e7d702308e517cfb0547a27d9dce">ifStatement</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s)</td></tr>
+<tr class="memdesc:a11b8e7d702308e517cfb0547a27d9dce"><td class="mdescLeft">&#160;</td><td class="mdescRight">AST node for if statement.  <a href="#a11b8e7d702308e517cfb0547a27d9dce">More...</a><br/></td></tr>
+<tr class="separator:a11b8e7d702308e517cfb0547a27d9dce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8007208e69c368e50bf08a5b9c0bf847"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstStatWhile.html">CAstStatWhile</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a8007208e69c368e50bf08a5b9c0bf847">whileStatement</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s)</td></tr>
+<tr class="memdesc:a8007208e69c368e50bf08a5b9c0bf847"><td class="mdescLeft">&#160;</td><td class="mdescRight">AST node for while statement.  <a href="#a8007208e69c368e50bf08a5b9c0bf847">More...</a><br/></td></tr>
+<tr class="separator:a8007208e69c368e50bf08a5b9c0bf847"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42d2e25ae8f0739f2c2c736a4d866914"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstStatReturn.html">CAstStatReturn</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a42d2e25ae8f0739f2c2c736a4d866914">returnStatement</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s)</td></tr>
+<tr class="memdesc:a42d2e25ae8f0739f2c2c736a4d866914"><td class="mdescLeft">&#160;</td><td class="mdescRight">AST node for return statement.  <a href="#a42d2e25ae8f0739f2c2c736a4d866914">More...</a><br/></td></tr>
+<tr class="separator:a42d2e25ae8f0739f2c2c736a4d866914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbb25a8f4c093c2afa9b1fd582558b25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstStatAssign.html">CAstStatAssign</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#acbb25a8f4c093c2afa9b1fd582558b25">assignment</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s, <a class="el" href="classCToken.html">CToken</a> *commonFirst)</td></tr>
+<tr class="memdesc:acbb25a8f4c093c2afa9b1fd582558b25"><td class="mdescLeft">&#160;</td><td class="mdescRight">AST node for assignment statement.  <a href="#acbb25a8f4c093c2afa9b1fd582558b25">More...</a><br/></td></tr>
+<tr class="separator:acbb25a8f4c093c2afa9b1fd582558b25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a403701cd62ce8b14fd240457999612af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstStatCall.html">CAstStatCall</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a403701cd62ce8b14fd240457999612af">subroutineCall</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s, <a class="el" href="classCToken.html">CToken</a> *prevToken, <a class="el" href="classCTypeManager.html">CTypeManager</a> *_tm)</td></tr>
+<tr class="memdesc:a403701cd62ce8b14fd240457999612af"><td class="mdescLeft">&#160;</td><td class="mdescRight">AST node for subroutine call.  <a href="#a403701cd62ce8b14fd240457999612af">More...</a><br/></td></tr>
+<tr class="separator:a403701cd62ce8b14fd240457999612af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7852ab9a6c8bb432f771a578e26d36f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstExpression.html">CAstExpression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#ab7852ab9a6c8bb432f771a578e26d36f">expression</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s)</td></tr>
+<tr class="memdesc:ab7852ab9a6c8bb432f771a578e26d36f"><td class="mdescLeft">&#160;</td><td class="mdescRight">AST node for expression.  <a href="#ab7852ab9a6c8bb432f771a578e26d36f">More...</a><br/></td></tr>
 <tr class="separator:ab7852ab9a6c8bb432f771a578e26d36f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af96bce53cd6e0a0093d6ceed571e6d72"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstExpression.html">CAstExpression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#af96bce53cd6e0a0093d6ceed571e6d72">simpleexpr</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s)</td></tr>
+<tr class="memdesc:af96bce53cd6e0a0093d6ceed571e6d72"><td class="mdescLeft">&#160;</td><td class="mdescRight">AST node for simple expression.  <a href="#af96bce53cd6e0a0093d6ceed571e6d72">More...</a><br/></td></tr>
 <tr class="separator:af96bce53cd6e0a0093d6ceed571e6d72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad91bb89e981a45a0d9332ed0c1ce9537"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstExpression.html">CAstExpression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#ad91bb89e981a45a0d9332ed0c1ce9537">term</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s)</td></tr>
+<tr class="memdesc:ad91bb89e981a45a0d9332ed0c1ce9537"><td class="mdescLeft">&#160;</td><td class="mdescRight">AST node for term.  <a href="#ad91bb89e981a45a0d9332ed0c1ce9537">More...</a><br/></td></tr>
 <tr class="separator:ad91bb89e981a45a0d9332ed0c1ce9537"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fb9499395df05708e93ac0e5c553411"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstExpression.html">CAstExpression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a3fb9499395df05708e93ac0e5c553411">factor</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s)</td></tr>
+<tr class="memdesc:a3fb9499395df05708e93ac0e5c553411"><td class="mdescLeft">&#160;</td><td class="mdescRight">AST node for this factor.  <a href="#a3fb9499395df05708e93ac0e5c553411">More...</a><br/></td></tr>
 <tr class="separator:a3fb9499395df05708e93ac0e5c553411"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01c77fec4ed324078d63dda279597289"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstConstant.html">CAstConstant</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a01c77fec4ed324078d63dda279597289">number</a> (void)</td></tr>
-<tr class="separator:a01c77fec4ed324078d63dda279597289"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66ed70d1f4dcd0d99442cb3324374cb5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstStringConstant.html">CAstStringConstant</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a66ed70d1f4dcd0d99442cb3324374cb5">id</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s)</td></tr>
-<tr class="separator:a66ed70d1f4dcd0d99442cb3324374cb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77ea1e5f554acf67db9a07e9eff1f6fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstConstant.html">CAstConstant</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a77ea1e5f554acf67db9a07e9eff1f6fd">number</a> (void)</td></tr>
+<tr class="separator:a77ea1e5f554acf67db9a07e9eff1f6fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5892cb57efc78876ebbabb1a1f87d2ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCType.html">CType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a5892cb57efc78876ebbabb1a1f87d2ac">type</a> (<a class="el" href="classCTypeManager.html">CTypeManager</a> *_tm, bool _isParam)</td></tr>
+<tr class="memdesc:a5892cb57efc78876ebbabb1a1f87d2ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for getting type of variable, parameter or function.  <a href="#a5892cb57efc78876ebbabb1a1f87d2ac">More...</a><br/></td></tr>
+<tr class="separator:a5892cb57efc78876ebbabb1a1f87d2ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa151095c29b50a41877e16b88ee73bb0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCType.html">CType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#aa151095c29b50a41877e16b88ee73bb0">GetVariables</a> (<a class="el" href="classCScanner.html">CScanner</a> *<a class="el" href="classCParser.html#a90bb0e8599f6a4513e9c31d34384c7bd">_scanner</a>, vector&lt; <a class="el" href="classCToken.html">CToken</a> * &gt; *varVec)</td></tr>
+<tr class="memdesc:aa151095c29b50a41877e16b88ee73bb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets one type of variables for procedure/function or global module and store them to vector.  <a href="#aa151095c29b50a41877e16b88ee73bb0">More...</a><br/></td></tr>
+<tr class="separator:aa151095c29b50a41877e16b88ee73bb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a450b633391f1133e2f6f273a73beda15"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCType.html">CType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a450b633391f1133e2f6f273a73beda15">GetOneTypeParams</a> (<a class="el" href="classCScanner.html">CScanner</a> *<a class="el" href="classCParser.html#a90bb0e8599f6a4513e9c31d34384c7bd">_scanner</a>, <a class="el" href="classCTypeManager.html">CTypeManager</a> *_tm, vector&lt; <a class="el" href="classCSymParam.html">CSymParam</a> * &gt; *paramVec, vector&lt; vector&lt; <a class="el" href="classCSymParam.html">CSymParam</a> * &gt; &gt; *originVec, int idx)</td></tr>
+<tr class="memdesc:a450b633391f1133e2f6f273a73beda15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets one type of parameters for procedure/function.  <a href="#a450b633391f1133e2f6f273a73beda15">More...</a><br/></td></tr>
+<tr class="separator:a450b633391f1133e2f6f273a73beda15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27ce2e9d1613583a698d190a57a10247"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCType.html">CType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a27ce2e9d1613583a698d190a57a10247">GetParams</a> (<a class="el" href="classCScanner.html">CScanner</a> *<a class="el" href="classCParser.html#a90bb0e8599f6a4513e9c31d34384c7bd">_scanner</a>, <a class="el" href="classCTypeManager.html">CTypeManager</a> *_tm, vector&lt; vector&lt; <a class="el" href="classCSymParam.html">CSymParam</a> * &gt; &gt; *paramVec1, int lastIdx)</td></tr>
+<tr class="memdesc:a27ce2e9d1613583a698d190a57a10247"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets parameters for procedure/function.  <a href="#a27ce2e9d1613583a698d190a57a10247">More...</a><br/></td></tr>
+<tr class="separator:a27ce2e9d1613583a698d190a57a10247"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61ad142e9fdd526823c9c1269cffae13"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classCType.html">CType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a61ad142e9fdd526823c9c1269cffae13">GenerateArrayType</a> (<a class="el" href="classCScanner.html">CScanner</a> *<a class="el" href="classCParser.html#a90bb0e8599f6a4513e9c31d34384c7bd">_scanner</a>, <a class="el" href="classCTypeManager.html">CTypeManager</a> *_tm, <a class="el" href="classCType.html">CType</a> *_baseType)</td></tr>
+<tr class="memdesc:a61ad142e9fdd526823c9c1269cffae13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets Array type for given base type. May use recursive call to this function for getting multiple dimension array.  <a href="#a61ad142e9fdd526823c9c1269cffae13">More...</a><br/></td></tr>
+<tr class="separator:a61ad142e9fdd526823c9c1269cffae13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1efca0ae8ffe0a78cea3ca6908e4779d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classCType.html">CType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a1efca0ae8ffe0a78cea3ca6908e4779d">GeneratePointerType</a> (<a class="el" href="classCScanner.html">CScanner</a> *<a class="el" href="classCParser.html#a90bb0e8599f6a4513e9c31d34384c7bd">_scanner</a>, <a class="el" href="classCTypeManager.html">CTypeManager</a> *_tm, <a class="el" href="classCType.html">CType</a> *_baseType)</td></tr>
+<tr class="separator:a1efca0ae8ffe0a78cea3ca6908e4779d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51c0eb96d443f7155ac1f2270af4e712"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a51c0eb96d443f7155ac1f2270af4e712">AddArguments</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s, <a class="el" href="classCScanner.html">CScanner</a> *<a class="el" href="classCParser.html#a90bb0e8599f6a4513e9c31d34384c7bd">_scanner</a>, <a class="el" href="classCTypeManager.html">CTypeManager</a> *_tm, <a class="el" href="classCAstFunctionCall.html">CAstFunctionCall</a> *_fc, int nParams)</td></tr>
+<tr class="memdesc:a51c0eb96d443f7155ac1f2270af4e712"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add argument to given function call.  <a href="#a51c0eb96d443f7155ac1f2270af4e712">More...</a><br/></td></tr>
+<tr class="separator:a51c0eb96d443f7155ac1f2270af4e712"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7416b72e9279db1d3b569465cdb22d6e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a7416b72e9279db1d3b569465cdb22d6e">CheckParamDups</a> (vector&lt; vector&lt; <a class="el" href="classCSymParam.html">CSymParam</a> * &gt; &gt; *paramVec, const string elemToFind)</td></tr>
+<tr class="memdesc:a7416b72e9279db1d3b569465cdb22d6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check parameter duplication for given name string.  <a href="#a7416b72e9279db1d3b569465cdb22d6e">More...</a><br/></td></tr>
+<tr class="separator:a7416b72e9279db1d3b569465cdb22d6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -173,12 +213,78 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00174">174</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00197">197</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a2adfe259b73c4e3695eb3269ca6b83d8"></a>
+<a class="anchor" id="a51c0eb96d443f7155ac1f2270af4e712"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CParser::AddArguments </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCAstScope.html">CAstScope</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCScanner.html">CScanner</a> *&#160;</td>
+          <td class="paramname"><em>_scanner</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCTypeManager.html">CTypeManager</a> *&#160;</td>
+          <td class="paramname"><em>_tm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCAstFunctionCall.html">CAstFunctionCall</a> *&#160;</td>
+          <td class="paramname"><em>_fc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nParams</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add argument to given function call. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Scope for function call to add parameter. </td></tr>
+    <tr><td class="paramname">_scanner</td><td>Scanner. </td></tr>
+    <tr><td class="paramname">_tm</td><td>Type manager. </td></tr>
+    <tr><td class="paramname">_fc</td><td>Function call to add arguments. </td></tr>
+    <tr><td class="paramname">nParams</td><td>Number of parameters that this function call needs. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00886">886</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acbb25a8f4c093c2afa9b1fd582558b25"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -189,8 +295,18 @@ License</h1>
           <td class="memname"><a class="el" href="classCAstStatAssign.html">CAstStatAssign</a> * CParser::assignment </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classCAstScope.html">CAstScope</a> *&#160;</td>
-          <td class="paramname"><em>s</em></td><td>)</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classCToken.html">CToken</a> *&#160;</td>
+          <td class="paramname"><em>commonFirst</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -200,7 +316,67 @@ License</h1>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00306">306</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>AST node for assignment statement. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Scope for this assignment statement. </td></tr>
+    <tr><td class="paramname">commonFirst</td><td>First token for LHS of this assignment. Used to find appropriate symbol. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CAstStatAssign*</td><td>Processed assignment statement. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01011">1011</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7416b72e9279db1d3b569465cdb22d6e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CParser::CheckParamDups </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; vector&lt; <a class="el" href="classCSymParam.html">CSymParam</a> * &gt; &gt; *&#160;</td>
+          <td class="paramname"><em>paramVec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string&#160;</td>
+          <td class="paramname"><em>elemToFind</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check parameter duplication for given name string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">paramVec</td><td>Parameter vector that contains parameters read. </td></tr>
+    <tr><td class="paramname">elemToFind</td><td>Name of element to check for duplication.  true when there is duplication.  false when there is no duplication. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00590">590</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -252,7 +428,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00221">221</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00244">244</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -278,7 +454,21 @@ License</h1>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00321">321</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>AST node for expression. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Scope for this expression. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CAstExpression*</td><td>Processed expression. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01059">1059</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -304,7 +494,113 @@ License</h1>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00397">397</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>AST node for this factor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Scope for this factor. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CAstExpression*</td><td>Processed factor. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01216">1216</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a61ad142e9fdd526823c9c1269cffae13"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classCType.html">CType</a> * CParser::GenerateArrayType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCScanner.html">CScanner</a> *&#160;</td>
+          <td class="paramname"><em>_scanner</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCTypeManager.html">CTypeManager</a> *&#160;</td>
+          <td class="paramname"><em>_tm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCType.html">CType</a> *&#160;</td>
+          <td class="paramname"><em>_baseType</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets Array type for given base type. May use recursive call to this function for getting multiple dimension array. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_scanner</td><td>Scanner. </td></tr>
+    <tr><td class="paramname">_tm</td><td>Type manager. </td></tr>
+    <tr><td class="paramname">_baseType</td><td>Base type that this array will contain.  Array type of given base type. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00684">684</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1efca0ae8ffe0a78cea3ca6908e4779d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classCType.html">CType</a>* CParser::GeneratePointerType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCScanner.html">CScanner</a> *&#160;</td>
+          <td class="paramname"><em>_scanner</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCTypeManager.html">CTypeManager</a> *&#160;</td>
+          <td class="paramname"><em>_tm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCType.html">CType</a> *&#160;</td>
+          <td class="paramname"><em>_baseType</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -330,7 +626,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00207">207</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00230">230</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -356,7 +652,177 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00201">201</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00224">224</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a450b633391f1133e2f6f273a73beda15"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCType.html">CType</a> * CParser::GetOneTypeParams </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCScanner.html">CScanner</a> *&#160;</td>
+          <td class="paramname"><em>_scanner</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCTypeManager.html">CTypeManager</a> *&#160;</td>
+          <td class="paramname"><em>_tm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; <a class="el" href="classCSymParam.html">CSymParam</a> * &gt; *&#160;</td>
+          <td class="paramname"><em>paramVec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; vector&lt; <a class="el" href="classCSymParam.html">CSymParam</a> * &gt; &gt; *&#160;</td>
+          <td class="paramname"><em>originVec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>idx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets one type of parameters for procedure/function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_scanner</td><td>Scanner </td></tr>
+    <tr><td class="paramname">_tm</td><td>Type manager. </td></tr>
+    <tr><td class="paramname">paramVec</td><td>parameter vector for one type. </td></tr>
+    <tr><td class="paramname">originVec</td><td>Vector for whole parameter, more than one type. Used to check duplication. </td></tr>
+    <tr><td class="paramname">idx</td><td>Index of parameter.  Type of read parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00616">616</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a27ce2e9d1613583a698d190a57a10247"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCType.html">CType</a> * CParser::GetParams </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCScanner.html">CScanner</a> *&#160;</td>
+          <td class="paramname"><em>_scanner</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCTypeManager.html">CTypeManager</a> *&#160;</td>
+          <td class="paramname"><em>_tm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; vector&lt; <a class="el" href="classCSymParam.html">CSymParam</a> * &gt; &gt; *&#160;</td>
+          <td class="paramname"><em>paramVec1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>lastIdx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets parameters for procedure/function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_scanner</td><td>Scanner. </td></tr>
+    <tr><td class="paramname">_tm</td><td>Type manager. </td></tr>
+    <tr><td class="paramname">paramVec1</td><td>Vector for containing parameters read, may contain multiple types. </td></tr>
+    <tr><td class="paramname">lastIdx</td><td>Indicates how many parameters are read before this function is called.  Type of last read parameter. This is not used. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00648">648</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa151095c29b50a41877e16b88ee73bb0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCType.html">CType</a> * CParser::GetVariables </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCScanner.html">CScanner</a> *&#160;</td>
+          <td class="paramname"><em>_scanner</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; <a class="el" href="classCToken.html">CToken</a> * &gt; *&#160;</td>
+          <td class="paramname"><em>varVec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets one type of variables for procedure/function or global module and store them to vector. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_scanner</td><td>Scanner </td></tr>
+    <tr><td class="paramname">varVec</td><td>Vector for storing tokens.  Returns the type of read variables. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00663">663</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -395,7 +861,7 @@ License</h1>
 
 </div>
 </div>
-<a class="anchor" id="a66ed70d1f4dcd0d99442cb3324374cb5"></a>
+<a class="anchor" id="a11b8e7d702308e517cfb0547a27d9dce"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -403,7 +869,7 @@ License</h1>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classCAstStringConstant.html">CAstStringConstant</a> * CParser::id </td>
+          <td class="memname"><a class="el" href="classCAstStatIf.html">CAstStatIf</a> * CParser::ifStatement </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classCAstScope.html">CAstScope</a> *&#160;</td>
           <td class="paramname"><em>s</em></td><td>)</td>
@@ -417,7 +883,21 @@ License</h1>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00450">450</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>AST node for if statement. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Scope for this if statement. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CAstStatIf*</td><td>Processed if statement. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00937">937</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -445,7 +925,7 @@ License</h1>
 
 <p>initialize symbol table <em>s</em> with predefined procedures and global variables </p>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00237">237</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00260">260</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -471,11 +951,19 @@ License</h1>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00244">244</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Scope for module. Takes no parameter. </p>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CAstModule*</td><td>for module. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00295">295</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a01c77fec4ed324078d63dda279597289"></a>
+<a class="anchor" id="a77ea1e5f554acf67db9a07e9eff1f6fd"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -483,7 +971,7 @@ License</h1>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classCAstConstant.html">CAstConstant</a> * CParser::number </td>
+          <td class="memname"><a class="el" href="classCAstConstant.html">CAstConstant</a>* CParser::number </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -496,8 +984,6 @@ License</h1>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00431">431</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -523,7 +1009,47 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00180">180</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00203">203</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a42d2e25ae8f0739f2c2c736a4d866914"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCAstStatReturn.html">CAstStatReturn</a> * CParser::returnStatement </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCAstScope.html">CAstScope</a> *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>AST node for return statement. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Scope for this while statement. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CAstStatReturn*</td><td>Processed return statement. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00990">990</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -568,7 +1094,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00213">213</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00236">236</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -594,7 +1120,21 @@ License</h1>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00346">346</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>AST node for simple expression. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Scope for this simple expression. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CAstExpression*</td><td>Processed simple expression. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01114">1114</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -620,7 +1160,79 @@ License</h1>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00261">261</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>AST node for sequence of statements. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Scope for this sequence of statements. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CAstStatement*</td><td>Processed statements. May be multiple of them. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00780">780</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a403701cd62ce8b14fd240457999612af"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCAstStatCall.html">CAstStatCall</a> * CParser::subroutineCall </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCAstScope.html">CAstScope</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCToken.html">CToken</a> *&#160;</td>
+          <td class="paramname"><em>prevToken</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCTypeManager.html">CTypeManager</a> *&#160;</td>
+          <td class="paramname"><em>_tm</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>AST node for subroutine call. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Scope for this subroutine call. </td></tr>
+    <tr><td class="paramname">prevToken</td><td>Token that will be the name of subroutine(procedure/function). </td></tr>
+    <tr><td class="paramname">_tm</td><td>Type manager. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CAstStatCall*</td><td>Processed statement call. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00865">865</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -646,7 +1258,112 @@ License</h1>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00370">370</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>AST node for term. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Scope for this term. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CAstExpression*</td><td>Processed term. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01175">1175</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5892cb57efc78876ebbabb1a1f87d2ac"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCType.html">CType</a> * CParser::type </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCTypeManager.html">CTypeManager</a> *&#160;</td>
+          <td class="paramname"><em>_tm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_isParam</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Function for getting type of variable, parameter or function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_tm</td><td>Type manager. </td></tr>
+    <tr><td class="paramname">_isParam</td><td>Indicator that type is for parameter or not. When _isParam is true and type is array, it will be referenced. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CType*</td><td>that this function got. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00709">709</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8007208e69c368e50bf08a5b9c0bf847"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCAstStatWhile.html">CAstStatWhile</a> * CParser::whileStatement </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCAstScope.html">CAstScope</a> *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>AST node for while statement. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Scope for this while statement. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CAstStatWhile*</td><td>Processed while statement. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00968">968</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -671,7 +1388,7 @@ License</h1>
 
 <p>error flag </p>
 
-<p>Definition at line <a class="el" href="parser_8h_source.html#l00122">122</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p>Definition at line <a class="el" href="parser_8h_source.html#l00223">223</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -695,7 +1412,7 @@ License</h1>
 
 <p>error token </p>
 
-<p>Definition at line <a class="el" href="parser_8h_source.html#l00120">120</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p>Definition at line <a class="el" href="parser_8h_source.html#l00221">221</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -719,7 +1436,7 @@ License</h1>
 
 <p>error message </p>
 
-<p>Definition at line <a class="el" href="parser_8h_source.html#l00121">121</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p>Definition at line <a class="el" href="parser_8h_source.html#l00222">222</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -743,7 +1460,7 @@ License</h1>
 
 <p>root node of the program </p>
 
-<p>Definition at line <a class="el" href="parser_8h_source.html#l00116">116</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p>Definition at line <a class="el" href="parser_8h_source.html#l00217">217</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -767,7 +1484,7 @@ License</h1>
 
 <p><a class="el" href="classCScanner.html" title="scanner ">CScanner</a> instance. </p>
 
-<p>Definition at line <a class="el" href="parser_8h_source.html#l00115">115</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p>Definition at line <a class="el" href="parser_8h_source.html#l00216">216</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -791,7 +1508,7 @@ License</h1>
 
 <p>current token </p>
 
-<p>Definition at line <a class="el" href="parser_8h_source.html#l00117">117</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p>Definition at line <a class="el" href="parser_8h_source.html#l00218">218</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -802,7 +1519,7 @@ License</h1>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Apr 17 2016 00:15:27 for SnuPL Compiler by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 27 2016 10:28:02 for SnuPL Compiler by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
