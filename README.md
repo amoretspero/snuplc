@@ -24,4 +24,8 @@ Start Phase 3.
 Implemented <code>TypeCheck()</code> methods for various <code>CAstNode</code>.  
 Error reporting token locations should be fixed.  
 Non-open array check for variable declaration should be supported.  
-Error messages should be updated.
+Error messages should be updated.  
+  
+**2016-05-11 02:56 KST**  
+Non-open array check for variable declaration is now supported.  
+There may be corner cases, verification is needed.

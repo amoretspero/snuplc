@@ -188,7 +188,7 @@ class CParser {
     /// @param _tm Type manager.
     /// @param _baseType Base type that this array will contain.
     /// @retVal Array type of given base type.
-    const CType* GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType);
+    const CType* GenerateArrayType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType, bool _isParam);
     
     const CType* GeneratePointerType(CScanner* _scanner, CTypeManager* _tm, CType* _baseType);
     
