@@ -18,4 +18,10 @@ Sementic Analysis Phase.
 ### Detailed status
 **2016-05-10 14:28 KST**  
 Added sementic analysis phase.  
-Start Phase 3.
+Start Phase 3.  
+  
+**2016-05-11 02:30 KST**  
+Implemented <code>TypeCheck()</code> methods for various <code>CAstNode</code>.  
+Error reporting token locations should be fixed.  
+Non-open array check for variable declaration should be supported.  
+Error messages should be updated.

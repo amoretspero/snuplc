@@ -1,0 +1,1531 @@
+running ./test/parser/array.mod
+diff reference and yours
++ parse error : at 0:0 : 
+- successfully parsed.
+-   AST:
+-     CAstScope: 'array'
+-       symbol table:
+-         [[
+-           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+-           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+-           [ *ReadInt() --> <int>           ]
+-           [ *WriteChar(<char>) --> <NULL>           ]
+-           [ *WriteInt(<int>) --> <NULL>           ]
+-           [ *WriteLn() --> <NULL>           ]
+-           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+-           [ @a        <array 5  of <array 5  of <int>>>           ]
+-           [ *add(<ptr(4) to <array 5  of <array 5  of <int>>>>,<ptr(4) to <array 5  of <array 5  of <int>>>>,<ptr(4) to <array 5  of <array 5  of <int>>>>) --> <NULL>           ]
+-           [ *addB(<ptr(4) to <array 5  of <array 5  of <int>>>>,<ptr(4) to <array 5  of <array 5  of <int>>>>,<ptr(4) to <array 5  of <array 5  of <int>>>>) --> <NULL>           ]
+-           [ @b        <array 5  of <array 5  of <int>>>           ]
+-           [ @c        <array 5  of <array 5  of <int>>>           ]
+-         ]]
+-       statement list:
+-         call [ *add(<ptr(4) to <array 5  of <array 5  of <int>>>>,<ptr(4) to <array 5  of <array 5  of <int>>>>,<ptr(4) to <array 5  of <array 5  of <int>>>>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array 5  of <array 5  of <int>>>>
+-             [ @a        <array 5  of <array 5  of <int>>> ] <array 5  of <array 5  of <int>>>
+-           &() <ptr(4) to <array 5  of <array 5  of <int>>>>
+-             [ @b        <array 5  of <array 5  of <int>>> ] <array 5  of <array 5  of <int>>>
+-           &() <ptr(4) to <array 5  of <array 5  of <int>>>>
+-             [ @c        <array 5  of <array 5  of <int>>> ] <array 5  of <array 5  of <int>>>
+-       nested scopes:
+-         CAstScope: 'add'
+-           symbol table:
+-             [[
+-               [ %A        <ptr(4) to <array 5  of <array 5  of <int>>>>               ]
+-               [ %B        <ptr(4) to <array 5  of <array 5  of <int>>>>               ]
+-               [ %C        <ptr(4) to <array 5  of <array 5  of <int>>>>               ]
+-               [ $i        <int>               ]
+-               [ $j        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ $i        <int> ] <int>
+-               0 <int>
+-             while cond
+-               < <bool>
+-                 [ $i        <int> ] <int>
+-                 5 <int>
+-             while-body
+-               := <int>
+-                 [ $j        <int> ] <int>
+-                 0 <int>
+-               while cond
+-                 < <bool>
+-                   [ $j        <int> ] <int>
+-                   5 <int>
+-               while-body
+-                 := <int>
+-                   [ %C        <ptr(4) to <array 5  of <array 5  of <int>>>> ] <int>
+-                     [ $i        <int> ] <int>
+-                     [ $j        <int> ] <int>
+-                   add <int>
+-                     [ %A        <ptr(4) to <array 5  of <array 5  of <int>>>> ] <int>
+-                       [ $i        <int> ] <int>
+-                       [ $j        <int> ] <int>
+-                     [ %B        <ptr(4) to <array 5  of <array 5  of <int>>>> ] <int>
+-                       [ $i        <int> ] <int>
+-                       [ $j        <int> ] <int>
+-           nested scopes:
+-             empty.
+-         
+-         CAstScope: 'addB'
+-           symbol table:
+-             [[
+-               [ %A        <ptr(4) to <array 5  of <array 5  of <int>>>>               ]
+-               [ %B        <ptr(4) to <array 5  of <array 5  of <int>>>>               ]
+-               [ %C        <ptr(4) to <array 5  of <array 5  of <int>>>>               ]
+-               [ $i        <int>               ]
+-               [ $j        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ $i        <int> ] <int>
+-               0 <int>
+-             while cond
+-               < <bool>
+-                 [ $i        <int> ] <int>
+-                 5 <int>
+-             while-body
+-               := <int>
+-                 [ $j        <int> ] <int>
+-                 0 <int>
+-               while cond
+-                 < <bool>
+-                   [ $j        <int> ] <int>
+-                   5 <int>
+-               while-body
+-                 := <int>
+-                   [ %C        <ptr(4) to <array 5  of <array 5  of <int>>>> ] <int>
+-                     [ $i        <int> ] <int>
+-                     [ $j        <int> ] <int>
+-                   add <int>
+-                     [ %A        <ptr(4) to <array 5  of <array 5  of <int>>>> ] <int>
+-                       [ $i        <int> ] <int>
+-                       [ $j        <int> ] <int>
+-                     [ %B        <ptr(4) to <array 5  of <array 5  of <int>>>> ] <int>
+-                       [ $i        <int> ] <int>
+-                       [ $j        <int> ] <int>
+-           nested scopes:
+-             empty.
+-         
+-     
+- 
+- 
+- run the following command to convert the .dot file into a PDF:
+-   dot -Tpdf -o./test/parser/array.mod.ast.pdf ./test/parser/array.mod.ast.dot
+running ./test/parser/array01.mod
+diff reference and yours
+all same
+running ./test/parser/array02.mod
+diff reference and yours
+all same
+running ./test/parser/array03.mod
+diff reference and yours
++ parse error : at 0:0 : 
+- successfully parsed.
+-   AST:
+-     CAstScope: 'array03'
+-       symbol table:
+-         [[
+-           [ @A        <array 5  of <int>>           ]
+-           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+-           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+-           [ *ReadInt() --> <int>           ]
+-           [ *Set(<ptr(4) to <array  of <int>>>,<int>) --> <NULL>           ]
+-           [ *WriteChar(<char>) --> <NULL>           ]
+-           [ *WriteInt(<int>) --> <NULL>           ]
+-           [ *WriteLn() --> <NULL>           ]
+-           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+-           [ @i        <int>           ]
+-           [ *print() --> <NULL>           ]
+-         ]]
+-       statement list:
+-         call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-           11111111 <int>
+-         call [ *WriteLn() --> <NULL> ] <NULL>
+-         call [ *print() --> <NULL> ] <NULL>
+-         := <int>
+-           [ @A        <array 5  of <int>> ] <int>
+-             2 <int>
+-           3 <int>
+-         := <int>
+-           [ @i        <int> ] <int>
+-           [ @A        <array 5  of <int>> ] <int>
+-             2 <int>
+-         call [ *Set(<ptr(4) to <array  of <int>>>,<int>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array  of <int>>>
+-             [ @A        <array 5  of <int>> ] <array 5  of <int>>
+-           [ @i        <int> ] <int>
+-         call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-           22222222 <int>
+-         call [ *WriteLn() --> <NULL> ] <NULL>
+-         call [ *print() --> <NULL> ] <NULL>
+-       nested scopes:
+-         CAstScope: 'Set'
+-           symbol table:
+-             [[
+-               [ %P        <ptr(4) to <array  of <int>>>               ]
+-               [ %v        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ %P        <ptr(4) to <array  of <int>>> ] <int>
+-                 [ %v        <int> ] <int>
+-               1 <int>
+-           nested scopes:
+-             empty.
+-         
+-         CAstScope: 'print'
+-           symbol table:
+-             [[
+-               [ $i        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ $i        <int> ] <int>
+-               0 <int>
+-             while cond
+-               < <bool>
+-                 [ $i        <int> ] <int>
+-                 5 <int>
+-             while-body
+-               call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-                 [ @A        <array 5  of <int>> ] <int>
+-                   [ $i        <int> ] <int>
+-               call [ *WriteLn() --> <NULL> ] <NULL>
+-               := <int>
+-                 [ $i        <int> ] <int>
+-                 add <int>
+-                   [ $i        <int> ] <int>
+-                   1 <int>
+-           nested scopes:
+-             empty.
+-         
+-     
+- 
+- 
+- run the following command to convert the .dot file into a PDF:
+-   dot -Tpdf -o./test/parser/array03.mod.ast.pdf ./test/parser/array03.mod.ast.dot
+running ./test/parser/array04.mod
+diff reference and yours
++ parse error : at 0:0 : 
+- successfully parsed.
+-   AST:
+-     CAstScope: 'array04'
+-       symbol table:
+-         [[
+-           [ @A        <array 3  of <array 3  of <int>>>           ]
+-           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+-           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+-           [ *ReadInt() --> <int>           ]
+-           [ *Set(<ptr(4) to <array  of <array  of <int>>>>,<int>) --> <NULL>           ]
+-           [ *WriteChar(<char>) --> <NULL>           ]
+-           [ *WriteInt(<int>) --> <NULL>           ]
+-           [ *WriteLn() --> <NULL>           ]
+-           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+-           [ @i        <int>           ]
+-           [ *print() --> <NULL>           ]
+-         ]]
+-       statement list:
+-         call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-           11111111 <int>
+-         call [ *WriteLn() --> <NULL> ] <NULL>
+-         call [ *print() --> <NULL> ] <NULL>
+-         := <int>
+-           [ @A        <array 3  of <array 3  of <int>>> ] <int>
+-             0 <int>
+-             0 <int>
+-           2 <int>
+-         := <int>
+-           [ @i        <int> ] <int>
+-           [ @A        <array 3  of <array 3  of <int>>> ] <int>
+-             0 <int>
+-             0 <int>
+-         call [ *Set(<ptr(4) to <array  of <array  of <int>>>>,<int>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array  of <array  of <int>>>>
+-             [ @A        <array 3  of <array 3  of <int>>> ] <array 3  of <array 3  of <int>>>
+-           [ @i        <int> ] <int>
+-         call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-           22222222 <int>
+-         call [ *WriteLn() --> <NULL> ] <NULL>
+-         call [ *print() --> <NULL> ] <NULL>
+-       nested scopes:
+-         CAstScope: 'Set'
+-           symbol table:
+-             [[
+-               [ %P        <ptr(4) to <array  of <array  of <int>>>>               ]
+-               [ %v        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ %P        <ptr(4) to <array  of <array  of <int>>>> ] <int>
+-                 [ %v        <int> ] <int>
+-                 [ %v        <int> ] <int>
+-               1 <int>
+-           nested scopes:
+-             empty.
+-         
+-         CAstScope: 'print'
+-           symbol table:
+-             [[
+-               [ $i        <int>               ]
+-               [ $j        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ $i        <int> ] <int>
+-               0 <int>
+-             while cond
+-               < <bool>
+-                 [ $i        <int> ] <int>
+-                 3 <int>
+-             while-body
+-               := <int>
+-                 [ $j        <int> ] <int>
+-                 0 <int>
+-               while cond
+-                 < <bool>
+-                   [ $j        <int> ] <int>
+-                   3 <int>
+-               while-body
+-                 call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-                   [ @A        <array 3  of <array 3  of <int>>> ] <int>
+-                     [ $i        <int> ] <int>
+-                     [ $j        <int> ] <int>
+-                 := <int>
+-                   [ $j        <int> ] <int>
+-                   add <int>
+-                     [ $j        <int> ] <int>
+-                     1 <int>
+-               := <int>
+-                 [ $i        <int> ] <int>
+-                 add <int>
+-                   [ $i        <int> ] <int>
+-                   1 <int>
+-             call [ *WriteLn() --> <NULL> ] <NULL>
+-           nested scopes:
+-             empty.
+-         
+-     
+- 
+- 
+- run the following command to convert the .dot file into a PDF:
+-   dot -Tpdf -o./test/parser/array04.mod.ast.pdf ./test/parser/array04.mod.ast.dot
+running ./test/parser/array05.mod
+diff reference and yours
++ parse error : at 0:0 : 
+- successfully parsed.
+-   AST:
+-     CAstScope: 'array05'
+-       symbol table:
+-         [[
+-           [ @A        <array 3  of <array 3  of <int>>>           ]
+-           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+-           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+-           [ *Init(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL>           ]
+-           [ *Print(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL>           ]
+-           [ *ReadInt() --> <int>           ]
+-           [ *Set(<ptr(4) to <array  of <array  of <int>>>>,<int>) --> <NULL>           ]
+-           [ *WriteChar(<char>) --> <NULL>           ]
+-           [ *WriteInt(<int>) --> <NULL>           ]
+-           [ *WriteLn() --> <NULL>           ]
+-           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+-           [ @i        <int>           ]
+-         ]]
+-       statement list:
+-         call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-           11111111 <int>
+-         call [ *WriteLn() --> <NULL> ] <NULL>
+-         call [ *Print(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array  of <array  of <int>>>>
+-             [ @A        <array 3  of <array 3  of <int>>> ] <array 3  of <array 3  of <int>>>
+-         call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-           22222222 <int>
+-         call [ *WriteLn() --> <NULL> ] <NULL>
+-         call [ *Init(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array  of <array  of <int>>>>
+-             [ @A        <array 3  of <array 3  of <int>>> ] <array 3  of <array 3  of <int>>>
+-       nested scopes:
+-         CAstScope: 'Set'
+-           symbol table:
+-             [[
+-               [ %P        <ptr(4) to <array  of <array  of <int>>>>               ]
+-               [ %v        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ %P        <ptr(4) to <array  of <array  of <int>>>> ] <int>
+-                 [ %v        <int> ] <int>
+-                 [ %v        <int> ] <int>
+-               1 <int>
+-           nested scopes:
+-             empty.
+-         
+-         CAstScope: 'Print'
+-           symbol table:
+-             [[
+-               [ %A        <ptr(4) to <array  of <array  of <int>>>>               ]
+-               [ $M        <int>               ]
+-               [ $N        <int>               ]
+-               [ $i        <int>               ]
+-               [ $j        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ $N        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %A        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 1 <int>
+-             := <int>
+-               [ $M        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %A        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 2 <int>
+-             := <int>
+-               [ $i        <int> ] <int>
+-               0 <int>
+-             while cond
+-               < <bool>
+-                 [ $i        <int> ] <int>
+-                 [ $N        <int> ] <int>
+-             while-body
+-               := <int>
+-                 [ $j        <int> ] <int>
+-                 0 <int>
+-               while cond
+-                 < <bool>
+-                   [ $j        <int> ] <int>
+-                   [ $M        <int> ] <int>
+-               while-body
+-                 call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-                   [ %A        <ptr(4) to <array  of <array  of <int>>>> ] <int>
+-                     [ $i        <int> ] <int>
+-                     [ $j        <int> ] <int>
+-                 call [ *WriteLn() --> <NULL> ] <NULL>
+-                 := <int>
+-                   [ $j        <int> ] <int>
+-                   add <int>
+-                     [ $j        <int> ] <int>
+-                     1 <int>
+-               := <int>
+-                 [ $i        <int> ] <int>
+-                 add <int>
+-                   [ $i        <int> ] <int>
+-                   1 <int>
+-           nested scopes:
+-             empty.
+-         
+-         CAstScope: 'Init'
+-           symbol table:
+-             [[
+-               [ $M        <int>               ]
+-               [ $N        <int>               ]
+-               [ %a        <ptr(4) to <array  of <array  of <int>>>>               ]
+-               [ $c        <int>               ]
+-               [ $i        <int>               ]
+-               [ $j        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ $N        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 1 <int>
+-             := <int>
+-               [ $M        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 2 <int>
+-             := <int>
+-               [ $c        <int> ] <int>
+-               0 <int>
+-             := <int>
+-               [ $i        <int> ] <int>
+-               0 <int>
+-             while cond
+-               < <bool>
+-                 [ $i        <int> ] <int>
+-                 [ $N        <int> ] <int>
+-             while-body
+-               := <int>
+-                 [ $j        <int> ] <int>
+-                 0 <int>
+-               while cond
+-                 < <bool>
+-                   [ $j        <int> ] <int>
+-                   [ $M        <int> ] <int>
+-               while-body
+-                 := <int>
+-                   [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <int>
+-                     [ $i        <int> ] <int>
+-                     [ $j        <int> ] <int>
+-                   [ $c        <int> ] <int>
+-                 := <int>
+-                   [ $c        <int> ] <int>
+-                   add <int>
+-                     [ $c        <int> ] <int>
+-                     1 <int>
+-                 := <int>
+-                   [ $j        <int> ] <int>
+-                   add <int>
+-                     [ $j        <int> ] <int>
+-                     1 <int>
+-               := <int>
+-                 [ $i        <int> ] <int>
+-                 add <int>
+-                   [ $i        <int> ] <int>
+-                   1 <int>
+-             call [ *Print(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL> ] <NULL>
+-               [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-           nested scopes:
+-             empty.
+-         
+-     
+- 
+- 
+- run the following command to convert the .dot file into a PDF:
+-   dot -Tpdf -o./test/parser/array05.mod.ast.pdf ./test/parser/array05.mod.ast.dot
+running ./test/parser/array06.mod
+diff reference and yours
++ parse error : at 0:0 : 
+- successfully parsed.
+-   AST:
+-     CAstScope: 'array06'
+-       symbol table:
+-         [[
+-           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+-           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+-           [ *Init(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL>           ]
+-           [ *Print(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL>           ]
+-           [ *ReadInt() --> <int>           ]
+-           [ *Test() --> <NULL>           ]
+-           [ *WriteChar(<char>) --> <NULL>           ]
+-           [ *WriteInt(<int>) --> <NULL>           ]
+-           [ *WriteLn() --> <NULL>           ]
+-           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+-         ]]
+-       statement list:
+-         call [ *Test() --> <NULL> ] <NULL>
+-       nested scopes:
+-         CAstScope: 'Print'
+-           symbol table:
+-             [[
+-               [ %A        <ptr(4) to <array  of <array  of <int>>>>               ]
+-               [ $M        <int>               ]
+-               [ $N        <int>               ]
+-               [ $i        <int>               ]
+-               [ $j        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ $N        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %A        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 1 <int>
+-             := <int>
+-               [ $M        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %A        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 2 <int>
+-             := <int>
+-               [ $i        <int> ] <int>
+-               0 <int>
+-             while cond
+-               < <bool>
+-                 [ $i        <int> ] <int>
+-                 [ $N        <int> ] <int>
+-             while-body
+-               := <int>
+-                 [ $j        <int> ] <int>
+-                 0 <int>
+-               while cond
+-                 < <bool>
+-                   [ $j        <int> ] <int>
+-                   [ $M        <int> ] <int>
+-               while-body
+-                 call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-                   [ %A        <ptr(4) to <array  of <array  of <int>>>> ] <int>
+-                     [ $i        <int> ] <int>
+-                     [ $j        <int> ] <int>
+-                 call [ *WriteLn() --> <NULL> ] <NULL>
+-                 := <int>
+-                   [ $j        <int> ] <int>
+-                   add <int>
+-                     [ $j        <int> ] <int>
+-                     1 <int>
+-               := <int>
+-                 [ $i        <int> ] <int>
+-                 add <int>
+-                   [ $i        <int> ] <int>
+-                   1 <int>
+-           nested scopes:
+-             empty.
+-         
+-         CAstScope: 'Init'
+-           symbol table:
+-             [[
+-               [ $M        <int>               ]
+-               [ $N        <int>               ]
+-               [ %a        <ptr(4) to <array  of <array  of <int>>>>               ]
+-               [ $c        <int>               ]
+-               [ $i        <int>               ]
+-               [ $j        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ $N        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 1 <int>
+-             := <int>
+-               [ $M        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 2 <int>
+-             := <int>
+-               [ $c        <int> ] <int>
+-               0 <int>
+-             := <int>
+-               [ $i        <int> ] <int>
+-               0 <int>
+-             while cond
+-               < <bool>
+-                 [ $i        <int> ] <int>
+-                 [ $N        <int> ] <int>
+-             while-body
+-               := <int>
+-                 [ $j        <int> ] <int>
+-                 0 <int>
+-               while cond
+-                 < <bool>
+-                   [ $j        <int> ] <int>
+-                   [ $M        <int> ] <int>
+-               while-body
+-                 := <int>
+-                   [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <int>
+-                     [ $i        <int> ] <int>
+-                     [ $j        <int> ] <int>
+-                   [ $c        <int> ] <int>
+-                 := <int>
+-                   [ $c        <int> ] <int>
+-                   add <int>
+-                     [ $c        <int> ] <int>
+-                     1 <int>
+-                 := <int>
+-                   [ $j        <int> ] <int>
+-                   add <int>
+-                     [ $j        <int> ] <int>
+-                     1 <int>
+-               := <int>
+-                 [ $i        <int> ] <int>
+-                 add <int>
+-                   [ $i        <int> ] <int>
+-                   1 <int>
+-             call [ *Print(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL> ] <NULL>
+-               [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-           nested scopes:
+-             empty.
+-         
+-         CAstScope: 'Test'
+-           symbol table:
+-             [[
+-               [ $x        <array 3  of <array 3  of <int>>>               ]
+-             ]]
+-           statement list:
+-             call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-               11111111 <int>
+-             call [ *WriteLn() --> <NULL> ] <NULL>
+-             call [ *Print(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL> ] <NULL>
+-               &() <ptr(4) to <array  of <array  of <int>>>>
+-                 [ $x        <array 3  of <array 3  of <int>>> ] <array 3  of <array 3  of <int>>>
+-             call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-               22222222 <int>
+-             call [ *WriteLn() --> <NULL> ] <NULL>
+-             call [ *Init(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL> ] <NULL>
+-               &() <ptr(4) to <array  of <array  of <int>>>>
+-                 [ $x        <array 3  of <array 3  of <int>>> ] <array 3  of <array 3  of <int>>>
+-           nested scopes:
+-             empty.
+-         
+-     
+- 
+- 
+- run the following command to convert the .dot file into a PDF:
+-   dot -Tpdf -o./test/parser/array06.mod.ast.pdf ./test/parser/array06.mod.ast.dot
+running ./test/parser/array07.mod
+diff reference and yours
++ parse error : at 0:0 : 
+- successfully parsed.
+-   AST:
+-     CAstScope: 'array07'
+-       symbol table:
+-         [[
+-           [ *Add(<ptr(4) to <array  of <array  of <int>>>>,<ptr(4) to <array  of <array  of <int>>>>,<ptr(4) to <array  of <array  of <int>>>>) --> <NULL>           ]
+-           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+-           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+-           [ *Init(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL>           ]
+-           [ *Print(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL>           ]
+-           [ *ReadInt() --> <int>           ]
+-           [ *Test() --> <NULL>           ]
+-           [ *WriteChar(<char>) --> <NULL>           ]
+-           [ *WriteInt(<int>) --> <NULL>           ]
+-           [ *WriteLn() --> <NULL>           ]
+-           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+-           [ @sum      <array 5  of <array 5  of <int>>>           ]
+-         ]]
+-       statement list:
+-         call [ *Test() --> <NULL> ] <NULL>
+-         call [ *Print(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array  of <array  of <int>>>>
+-             [ @sum      <array 5  of <array 5  of <int>>> ] <array 5  of <array 5  of <int>>>
+-       nested scopes:
+-         CAstScope: 'Print'
+-           symbol table:
+-             [[
+-               [ $M        <int>               ]
+-               [ $N        <int>               ]
+-               [ %a        <ptr(4) to <array  of <array  of <int>>>>               ]
+-               [ $i        <int>               ]
+-               [ $j        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ $N        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 1 <int>
+-             := <int>
+-               [ $M        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 2 <int>
+-             := <int>
+-               [ $i        <int> ] <int>
+-               0 <int>
+-             while cond
+-               < <bool>
+-                 [ $i        <int> ] <int>
+-                 [ $N        <int> ] <int>
+-             while-body
+-               := <int>
+-                 [ $j        <int> ] <int>
+-                 0 <int>
+-               while cond
+-                 < <bool>
+-                   [ $j        <int> ] <int>
+-                   [ $M        <int> ] <int>
+-               while-body
+-                 call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-                   [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <int>
+-                     [ $i        <int> ] <int>
+-                     [ $j        <int> ] <int>
+-                 := <int>
+-                   [ $j        <int> ] <int>
+-                   add <int>
+-                     [ $j        <int> ] <int>
+-                     1 <int>
+-               := <int>
+-                 [ $i        <int> ] <int>
+-                 add <int>
+-                   [ $i        <int> ] <int>
+-                   1 <int>
+-           nested scopes:
+-             empty.
+-         
+-         CAstScope: 'Init'
+-           symbol table:
+-             [[
+-               [ $M        <int>               ]
+-               [ $N        <int>               ]
+-               [ %a        <ptr(4) to <array  of <array  of <int>>>>               ]
+-               [ $c        <int>               ]
+-               [ $i        <int>               ]
+-               [ $j        <int>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ $N        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 1 <int>
+-             := <int>
+-               [ $M        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 2 <int>
+-             := <int>
+-               [ $c        <int> ] <int>
+-               0 <int>
+-             := <int>
+-               [ $i        <int> ] <int>
+-               0 <int>
+-             while cond
+-               < <bool>
+-                 [ $i        <int> ] <int>
+-                 [ $N        <int> ] <int>
+-             while-body
+-               := <int>
+-                 [ $j        <int> ] <int>
+-                 0 <int>
+-               while cond
+-                 < <bool>
+-                   [ $j        <int> ] <int>
+-                   [ $M        <int> ] <int>
+-               while-body
+-                 := <int>
+-                   [ %a        <ptr(4) to <array  of <array  of <int>>>> ] <int>
+-                     [ $i        <int> ] <int>
+-                     [ $j        <int> ] <int>
+-                   [ $c        <int> ] <int>
+-                 := <int>
+-                   [ $c        <int> ] <int>
+-                   add <int>
+-                     [ $c        <int> ] <int>
+-                     1 <int>
+-                 := <int>
+-                   [ $j        <int> ] <int>
+-                   add <int>
+-                     [ $j        <int> ] <int>
+-                     1 <int>
+-               := <int>
+-                 [ $i        <int> ] <int>
+-                 add <int>
+-                   [ $i        <int> ] <int>
+-                   1 <int>
+-           nested scopes:
+-             empty.
+-         
+-         CAstScope: 'Add'
+-           symbol table:
+-             [[
+-               [ $M        <int>               ]
+-               [ $N        <int>               ]
+-               [ $c        <int>               ]
+-               [ %d        <ptr(4) to <array  of <array  of <int>>>>               ]
+-               [ $i        <int>               ]
+-               [ $j        <int>               ]
+-               [ %s1       <ptr(4) to <array  of <array  of <int>>>>               ]
+-               [ %s2       <ptr(4) to <array  of <array  of <int>>>>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ $N        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %d        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 1 <int>
+-             := <int>
+-               [ $M        <int> ] <int>
+-               call [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int> ] <int>
+-                 [ %d        <ptr(4) to <array  of <array  of <int>>>> ] <ptr(4) to <array  of <array  of <int>>>>
+-                 2 <int>
+-             := <int>
+-               [ $c        <int> ] <int>
+-               0 <int>
+-             := <int>
+-               [ $i        <int> ] <int>
+-               0 <int>
+-             while cond
+-               < <bool>
+-                 [ $i        <int> ] <int>
+-                 [ $N        <int> ] <int>
+-             while-body
+-               := <int>
+-                 [ $j        <int> ] <int>
+-                 0 <int>
+-               while cond
+-                 < <bool>
+-                   [ $j        <int> ] <int>
+-                   [ $M        <int> ] <int>
+-               while-body
+-                 := <int>
+-                   [ %d        <ptr(4) to <array  of <array  of <int>>>> ] <int>
+-                     [ $i        <int> ] <int>
+-                     [ $j        <int> ] <int>
+-                   add <int>
+-                     [ %s1       <ptr(4) to <array  of <array  of <int>>>> ] <int>
+-                       [ $i        <int> ] <int>
+-                       [ $j        <int> ] <int>
+-                     [ %s2       <ptr(4) to <array  of <array  of <int>>>> ] <int>
+-                       [ $i        <int> ] <int>
+-                       [ $j        <int> ] <int>
+-                 := <int>
+-                   [ $c        <int> ] <int>
+-                   add <int>
+-                     [ $c        <int> ] <int>
+-                     1 <int>
+-                 := <int>
+-                   [ $j        <int> ] <int>
+-                   add <int>
+-                     [ $j        <int> ] <int>
+-                     1 <int>
+-               := <int>
+-                 [ $i        <int> ] <int>
+-                 add <int>
+-                   [ $i        <int> ] <int>
+-                   1 <int>
+-           nested scopes:
+-             empty.
+-         
+-         CAstScope: 'Test'
+-           symbol table:
+-             [[
+-               [ $a        <array 5  of <array 5  of <int>>>               ]
+-               [ $b        <array 5  of <array 5  of <int>>>               ]
+-               [ $c        <array 5  of <int>>               ]
+-             ]]
+-           statement list:
+-             call [ *Init(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL> ] <NULL>
+-               &() <ptr(4) to <array  of <array  of <int>>>>
+-                 [ $a        <array 5  of <array 5  of <int>>> ] <array 5  of <array 5  of <int>>>
+-             call [ *Init(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL> ] <NULL>
+-               &() <ptr(4) to <array  of <array  of <int>>>>
+-                 [ $b        <array 5  of <array 5  of <int>>> ] <array 5  of <array 5  of <int>>>
+-             call [ *Add(<ptr(4) to <array  of <array  of <int>>>>,<ptr(4) to <array  of <array  of <int>>>>,<ptr(4) to <array  of <array  of <int>>>>) --> <NULL> ] <NULL>
+-               &() <ptr(4) to <array  of <array  of <int>>>>
+-                 [ $a        <array 5  of <array 5  of <int>>> ] <array 5  of <array 5  of <int>>>
+-               &() <ptr(4) to <array  of <array  of <int>>>>
+-                 [ $b        <array 5  of <array 5  of <int>>> ] <array 5  of <array 5  of <int>>>
+-               &() <ptr(4) to <array  of <array  of <int>>>>
+-                 [ @sum      <array 5  of <array 5  of <int>>> ] <array 5  of <array 5  of <int>>>
+-           nested scopes:
+-             empty.
+-         
+-     
+- 
+- 
+- run the following command to convert the .dot file into a PDF:
+-   dot -Tpdf -o./test/parser/array07.mod.ast.pdf ./test/parser/array07.mod.ast.dot
+running ./test/parser/char01.mod
+diff reference and yours
+all same
+running ./test/parser/char02.mod
+diff reference and yours
+all same
+running ./test/parser/char03.mod
+diff reference and yours
+all same
+running ./test/parser/char04.mod
+diff reference and yours
+all same
+running ./test/parser/string01.mod
+diff reference and yours
++ parse error : at 0:0 : 
+- successfully parsed.
+-   AST:
+-     CAstScope: 'string01'
+-       symbol table:
+-         [[
+-           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+-           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+-           [ *ReadInt() --> <int>           ]
+-           [ *WriteChar(<char>) --> <NULL>           ]
+-           [ *WriteInt(<int>) --> <NULL>           ]
+-           [ *WriteLn() --> <NULL>           ]
+-           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+-           [ @_str_1   <array 14  of <char>>           ]
+-             [ data: 'Hello, world\n' ]
+-           [ @_str_2   <array 23  of <char>>           ]
+-             [ data: 'This is pretty nice!\n\n' ]
+-         ]]
+-       statement list:
+-         call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array  of <char>>>
+-             "Hello, world\n" <array 14  of <char>>
+-         call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array  of <char>>>
+-             "This is pretty nice!\n\n" <array 23  of <char>>
+-       nested scopes:
+-         empty.
+-     
+- 
+- 
+- run the following command to convert the .dot file into a PDF:
+-   dot -Tpdf -o./test/parser/string01.mod.ast.pdf ./test/parser/string01.mod.ast.dot
+running ./test/parser/string02.mod
+diff reference and yours
++ parse error : at 0:0 : 
+- successfully parsed.
+-   AST:
+-     CAstScope: 'string02'
+-       symbol table:
+-         [[
+-           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+-           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+-           [ *ReadInt() --> <int>           ]
+-           [ *WriteChar(<char>) --> <NULL>           ]
+-           [ *WriteInt(<int>) --> <NULL>           ]
+-           [ *WriteLn() --> <NULL>           ]
+-           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+-           [ @_str_1   <array 17  of <char>>           ]
+-             [ data: 'Enter your age: ' ]
+-           [ @_str_2   <array 17  of <char>>           ]
+-             [ data: 'Enter the year: ' ]
+-           [ @_str_3   <array 39  of <char>>           ]
+-             [ data: 'You will be 100 years old in the year ' ]
+-           [ @_str_4   <array 3  of <char>>           ]
+-             [ data: '.\n' ]
+-           [ @age      <int>           ]
+-           [ @year     <int>           ]
+-         ]]
+-       statement list:
+-         call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array  of <char>>>
+-             "Enter your age: " <array 17  of <char>>
+-         := <int>
+-           [ @age      <int> ] <int>
+-           call [ *ReadInt() --> <int> ] <int>
+-         call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array  of <char>>>
+-             "Enter the year: " <array 17  of <char>>
+-         := <int>
+-           [ @year     <int> ] <int>
+-           call [ *ReadInt() --> <int> ] <int>
+-         call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array  of <char>>>
+-             "You will be 100 years old in the year " <array 39  of <char>>
+-         call [ *WriteInt(<int>) --> <NULL> ] <NULL>
+-           sub <int>
+-             add <int>
+-               [ @year     <int> ] <int>
+-               100 <int>
+-             [ @age      <int> ] <int>
+-         call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array  of <char>>>
+-             ".\n" <array 3  of <char>>
+-       nested scopes:
+-         empty.
+-     
+- 
+- 
+- run the following command to convert the .dot file into a PDF:
+-   dot -Tpdf -o./test/parser/string02.mod.ast.pdf ./test/parser/string02.mod.ast.dot
+running ./test/parser/test01.mod
+diff reference and yours
+all same
+running ./test/parser/test02.mod
+diff reference and yours
+- parse error : at 32:18 : invalid composite type for function.
++ successfully parsed.
++   AST:
++     CAstScope: 'test02'
++       symbol table:
++         [[
++           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
++           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
++           [ *ReadInt() --> <int>           ]
++           [ *WriteChar(<char>) --> <NULL>           ]
++           [ *WriteInt(<int>) --> <NULL>           ]
++           [ *WriteLn() --> <NULL>           ]
++           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
++           [ @a        <int>           ]
++           [ @arr      <array 3  of <array 3  of <int>>>           ]
++           [ @b        <int>           ]
++           [ *bar(<int>,<bool>,<char>) --> <NULL>           ]
++           [ @c        <int>           ]
++           [ @d        <bool>           ]
++           [ @e        <bool>           ]
++           [ @f        <bool>           ]
++           [ *fn() --> <bool>           ]
++           [ *fnc(<int>,<bool>) --> <int>           ]
++           [ *fncfnc(<int>,<char>) --> <array 5  of <char>>           ]
++           [ *fnfn(<int>,<ptr(4) to <array 5  of <bool>>>) --> <int>           ]
++           [ *fnfnfn(<int>,<ptr(4) to <array  of <array  of <bool>>>>) --> <array 5  of <char>>           ]
++           [ *foo() --> <NULL>           ]
++           [ *foobar(<ptr(4) to <array  of <array  of <int>>>>) --> <NULL>           ]
++           [ *func() --> <array 5  of <int>>           ]
++           [ @g        <char>           ]
++           [ @h        <char>           ]
++           [ @i        <char>           ]
++         ]]
++       statement list:
++         empty.
++       nested scopes:
++         CAstScope: 'foo'
++           symbol table:
++             [[
++             ]]
++           statement list:
++             empty.
++           nested scopes:
++             empty.
++         
++         CAstScope: 'bar'
++           symbol table:
++             [[
++               [ %param    <int>               ]
++               [ %parambool <bool>               ]
++               [ %paramchar <char>               ]
++             ]]
++           statement list:
++             empty.
++           nested scopes:
++             empty.
++         
++         CAstScope: 'foobar'
++           symbol table:
++             [[
++               [ %param    <ptr(4) to <array  of <array  of <int>>>>               ]
++             ]]
++           statement list:
++             empty.
++           nested scopes:
++             empty.
++         
++         CAstScope: 'fn'
++           symbol table:
++             [[
++             ]]
++           statement list:
++             empty.
++           nested scopes:
++             empty.
++         
++         CAstScope: 'func'
++           symbol table:
++             [[
++             ]]
++           statement list:
++             empty.
++           nested scopes:
++             empty.
++         
++         CAstScope: 'fnc'
++           symbol table:
++             [[
++               [ %a        <int>               ]
++               [ %b        <bool>               ]
++             ]]
++           statement list:
++             empty.
++           nested scopes:
++             empty.
++         
++         CAstScope: 'fncfnc'
++           symbol table:
++             [[
++               [ %a        <int>               ]
++               [ %c        <char>               ]
++             ]]
++           statement list:
++             empty.
++           nested scopes:
++             empty.
++         
++         CAstScope: 'fnfn'
++           symbol table:
++             [[
++               [ %a        <int>               ]
++               [ %b        <ptr(4) to <array 5  of <bool>>>               ]
++             ]]
++           statement list:
++             empty.
++           nested scopes:
++             empty.
++         
++         CAstScope: 'fnfnfn'
++           symbol table:
++             [[
++               [ %a        <int>               ]
++               [ %b        <ptr(4) to <array  of <array  of <bool>>>>               ]
++             ]]
++           statement list:
++             empty.
++           nested scopes:
++             empty.
++         
++     
++ 
++ 
++ run the following command to convert the .dot file into a PDF:
++   dot -Tpdf -o./test/parser/test02.mod.ast.pdf ./test/parser/test02.mod.ast.dot
+running ./test/parser/test03.mod
+diff reference and yours
+all same
+running ./test/parser/test04.mod
+diff reference and yours
+all same
+running ./test/parser/test05.mod
+diff reference and yours
+all same
+running ./test/parser/test06.mod
+diff reference and yours
+all same
+running ./test/parser/hell/call_latter_defined_function.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_return.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon1.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon10.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon11.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon12.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon13.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon14.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon15.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon16.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon17.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon2.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon3.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon4.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon5.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon6.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon7.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon8.mod
+diff reference and yours
+all same
+running ./test/parser/hell/invalid_semicolon9.mod
+diff reference and yours
+all same
+running ./test/parser/hell/procedure_return.mod
+diff reference and yours
+- parse error : at 7:10 : superfluous expression after return.
++ parse error : at 0:0 : 
+running ./test/parser/hell/recursive_call01.mod
+diff reference and yours
+- parse error : at 10:5 : invalid array index expression.
++ parse error : at 0:0 : 
+running ./test/parser/hell/reserved_keywords01.mod
+diff reference and yours
+- parse error : at 1:8 : expected 'tIdent', got 'tModule'
++ parse error : at 1:8 : expected 'tId', got 'tModule'
+running ./test/parser/strange/arrayaccessing_nonarray.mod
+diff reference and yours
+- parse error : at 7:3 : invalid array expression.
+- 
+- 
+- Done.
+running ./test/parser/strange/arraylength_notnumber.mod
+diff reference and yours
+- parse error : at 4:18 : expected 'tNumber', got 'tIdent'
++ parse error : at 4:18 : expected 'tNum', got 'tId'
+running ./test/parser/strange/array_out_of_bounds.mod
+diff reference and yours
++ parse error : at 0:0 : 
+- successfully parsed.
+-   AST:
+-     CAstScope: 'array_out_of_bounds'
+-       symbol table:
+-         [[
+-           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+-           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+-           [ *ReadInt() --> <int>           ]
+-           [ *WriteChar(<char>) --> <NULL>           ]
+-           [ *WriteInt(<int>) --> <NULL>           ]
+-           [ *WriteLn() --> <NULL>           ]
+-           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+-           [ @X        <array 3  of <array 4  of <int>>>           ]
+-           [ @Y        <array 3  of <array 4  of <int>>>           ]
+-           [ *f(<ptr(4) to <array 4  of <int>>>,<ptr(4) to <array 4  of <int>>>) --> <NULL>           ]
+-         ]]
+-       statement list:
+-         call [ *f(<ptr(4) to <array 4  of <int>>>,<ptr(4) to <array 4  of <int>>>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array 4  of <int>>>
+-             [ @X        <array 3  of <array 4  of <int>>> ] <array 4  of <int>>
+-               100 <int>
+-           &() <ptr(4) to <array 4  of <int>>>
+-             [ @Y        <array 3  of <array 4  of <int>>> ] <array 4  of <int>>
+-               100 <int>
+-       nested scopes:
+-         CAstScope: 'f'
+-           symbol table:
+-             [[
+-               [ %A        <ptr(4) to <array 4  of <int>>>               ]
+-               [ %B        <ptr(4) to <array 4  of <int>>>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ %A        <ptr(4) to <array 4  of <int>>> ] <int>
+-                 200 <int>
+-               [ %B        <ptr(4) to <array 4  of <int>>> ] <int>
+-                 200 <int>
+-           nested scopes:
+-             empty.
+-         
+-     
+- 
+- 
+- run the following command to convert the .dot file into a PDF:
+-   dot -Tpdf -o./test/parser/strange/array_out_of_bounds.mod.ast.pdf ./test/parser/strange/array_out_of_bounds.mod.ast.dot
+running ./test/parser/strange/assign_to_undefined.mod
+diff reference and yours
+all same
+running ./test/parser/strange/calling_integer.mod
+diff reference and yours
+all same
+running ./test/parser/strange/char_too_long.mod
+diff reference and yours
++ got 9:7: tUndefined (ab)
+- parse error : at 9:10 : factor expected.
++ parse error : at 9:7 : factor expected.
+running ./test/parser/strange/different_dimensions.mod
+diff reference and yours
+- parse error : at 18:3 : not enough arguments.
++ parse error : at 18:10 : number of arguments expected : 3, got : 2.
+running ./test/parser/strange/function_name_different.mod
+diff reference and yours
+all same
+running ./test/parser/strange/global_local_different_type.mod
+diff reference and yours
+all same
+running ./test/parser/strange/invalid_invalid_invalid.mod
+diff reference and yours
++ parse error : at 0:0 : Type of lhs and rhs are different.
+- parse error : at 7:14 : add: type mismatch.
+-   left  operand: <int>
+-   right operand: <char>
+running ./test/parser/strange/less_arg.mod
+diff reference and yours
+- parse error : at 18:3 : not enough arguments.
++ parse error : at 18:10 : number of arguments expected : 3, got : 2.
+running ./test/parser/strange/module_name_different.mod
+diff reference and yours
+all same
+running ./test/parser/strange/more_arg.mod
+diff reference and yours
+- parse error : at 18:3 : too many arguments.
++ parse error : at 18:14 : number of arguments expected : 3, got : 4.
+running ./test/parser/strange/multiple_procedure_declaration.mod
+diff reference and yours
+all same
+running ./test/parser/strange/multiple_type_formalparam.mod
+diff reference and yours
+- parse error : at 19:3 : not enough arguments.
++ parse error : at 19:10 : number of arguments expected : 4, got : 2.
+running ./test/parser/strange/multiple_variable_declaration.mod
+diff reference and yours
+all same
+running ./test/parser/strange/multiple_variable_declaration2.mod
+diff reference and yours
+all same
+running ./test/parser/strange/multiple_variable_declaration3.mod
+diff reference and yours
+all same
+running ./test/parser/strange/multiple_variable_declaration4.mod
+diff reference and yours
+all same
+running ./test/parser/strange/never_ending_char.mod
+diff reference and yours
++ got 7:13: tUndefined (\\0);\n  WriteLn()\nend write;\n\nbegin\n  write()\nend never_ending_char.\n)
+- parse error : at 7:16 : factor expected.
++ parse error : at 7:13 : factor expected.
+running ./test/parser/strange/never_ending_string.mod
+diff reference and yours
++ got 7:12: tUndefined (Unexpected end of stream)
+running ./test/parser/strange/null_string.mod
+diff reference and yours
++ parse error : at 0:0 : 
+- successfully parsed.
+-   AST:
+-     CAstScope: 'null_string'
+-       symbol table:
+-         [[
+-           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+-           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+-           [ *ReadInt() --> <int>           ]
+-           [ *WriteChar(<char>) --> <NULL>           ]
+-           [ *WriteInt(<int>) --> <NULL>           ]
+-           [ *WriteLn() --> <NULL>           ]
+-           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+-           [ @_str_1   <array 1  of <char>>           ]
+-             [ data: '' ]
+-           [ @_str_2   <array 2  of <char>>           ]
+-             [ data: '\t' ]
+-           [ @_str_3   <array 2  of <char>>           ]
+-             [ data: '\n' ]
+-           [ @a        <array 5  of <array 5  of <int>>>           ]
+-           [ @b        <array 5  of <array 5  of <int>>>           ]
+-           [ @c        <array 5  of <array 5  of <int>>>           ]
+-           [ @ch       <char>           ]
+-           [ @d        <array 5  of <array 5  of <int>>>           ]
+-           [ *write() --> <NULL>           ]
+-         ]]
+-       statement list:
+-         call [ *write() --> <NULL> ] <NULL>
+-       nested scopes:
+-         CAstScope: 'write'
+-           symbol table:
+-             [[
+-             ]]
+-           statement list:
+-             := <char>
+-               [ @ch       <char> ] <char>
+-               0 <char>
+-             call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+-               &() <ptr(4) to <array  of <char>>>
+-                 "" <array 1  of <char>>
+-             call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+-               &() <ptr(4) to <array  of <char>>>
+-                 "\t" <array 2  of <char>>
+-             call [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL> ] <NULL>
+-               &() <ptr(4) to <array  of <char>>>
+-                 "\n" <array 2  of <char>>
+-             call [ *WriteChar(<char>) --> <NULL> ] <NULL>
+-               0 <char>
+-             call [ *WriteChar(<char>) --> <NULL> ] <NULL>
+-               9 <char>
+-             call [ *WriteChar(<char>) --> <NULL> ] <NULL>
+-               10 <char>
+-             call [ *WriteLn() --> <NULL> ] <NULL>
+-           nested scopes:
+-             empty.
+-         
+-     
+- 
+- 
+- run the following command to convert the .dot file into a PDF:
+-   dot -Tpdf -o./test/parser/strange/null_string.mod.ast.pdf ./test/parser/strange/null_string.mod.ast.dot
+running ./test/parser/strange/passing_dereferenced_array.mod
+diff reference and yours
++ parse error : at 0:0 : 
+- successfully parsed.
+-   AST:
+-     CAstScope: 'passing_dereferenced_array'
+-       symbol table:
+-         [[
+-           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+-           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+-           [ *ReadInt() --> <int>           ]
+-           [ *WriteChar(<char>) --> <NULL>           ]
+-           [ *WriteInt(<int>) --> <NULL>           ]
+-           [ *WriteLn() --> <NULL>           ]
+-           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
+-           [ @X        <array 3  of <array 4  of <int>>>           ]
+-           [ @Y        <array 3  of <array 4  of <int>>>           ]
+-           [ *f(<ptr(4) to <array 4  of <int>>>,<ptr(4) to <array 4  of <int>>>) --> <NULL>           ]
+-         ]]
+-       statement list:
+-         call [ *f(<ptr(4) to <array 4  of <int>>>,<ptr(4) to <array 4  of <int>>>) --> <NULL> ] <NULL>
+-           &() <ptr(4) to <array 4  of <int>>>
+-             [ @X        <array 3  of <array 4  of <int>>> ] <array 4  of <int>>
+-               1 <int>
+-           &() <ptr(4) to <array 4  of <int>>>
+-             [ @Y        <array 3  of <array 4  of <int>>> ] <array 4  of <int>>
+-               1 <int>
+-       nested scopes:
+-         CAstScope: 'f'
+-           symbol table:
+-             [[
+-               [ %A        <ptr(4) to <array 4  of <int>>>               ]
+-               [ %B        <ptr(4) to <array 4  of <int>>>               ]
+-             ]]
+-           statement list:
+-             := <int>
+-               [ %A        <ptr(4) to <array 4  of <int>>> ] <int>
+-                 0 <int>
+-               [ %B        <ptr(4) to <array 4  of <int>>> ] <int>
+-                 0 <int>
+-             := <int>
+-               [ %A        <ptr(4) to <array 4  of <int>>> ] <int>
+-                 1 <int>
+-               [ %B        <ptr(4) to <array 4  of <int>>> ] <int>
+-                 1 <int>
+-             := <int>
+-               [ %A        <ptr(4) to <array 4  of <int>>> ] <int>
+-                 2 <int>
+-               [ %B        <ptr(4) to <array 4  of <int>>> ] <int>
+-                 2 <int>
+-             := <int>
+-               [ %A        <ptr(4) to <array 4  of <int>>> ] <int>
+-                 3 <int>
+-               [ %B        <ptr(4) to <array 4  of <int>>> ] <int>
+-                 3 <int>
+-           nested scopes:
+-             empty.
+-         
+-     
+- 
+- 
+- run the following command to convert the .dot file into a PDF:
+-   dot -Tpdf -o./test/parser/strange/passing_dereferenced_array.mod.ast.pdf ./test/parser/strange/passing_dereferenced_array.mod.ast.dot
+running ./test/parser/strange/procedure_name_different.mod
+diff reference and yours
+all same
+running ./test/parser/strange/procedure_variable_samename.mod
+diff reference and yours
+all same
+running ./test/parser/strange/strange_stuff_in_module.mod
+diff reference and yours
+all same
+running ./test/parser/strange/undeclared_function.mod
+diff reference and yours
+all same
+running ./test/parser/strange/wrong_argument_type.mod
+diff reference and yours
+- parse error : at 12:10 : parameter 2: argument type mismatch.
+-   expected <int>
+-   got      <char>
++ successfully parsed.
++   AST:
++     CAstScope: 'wrong_argument_type'
++       symbol table:
++         [[
++           [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
++           [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
++           [ *ReadInt() --> <int>           ]
++           [ *WriteChar(<char>) --> <NULL>           ]
++           [ *WriteInt(<int>) --> <NULL>           ]
++           [ *WriteLn() --> <NULL>           ]
++           [ *WriteStr(<ptr(4) to <array  of <char>>>) --> <NULL>           ]
++           [ @a        <int>           ]
++           [ *add(<int>,<int>) --> <int>           ]
++           [ @b        <int>           ]
++           [ @c        <char>           ]
++           [ @d        <char>           ]
++         ]]
++       statement list:
++         call [ *add(<int>,<int>) --> <int> ] <int>
++           [ @a        <int> ] <int>
++           [ @c        <char> ] <char>
++       nested scopes:
++         CAstScope: 'add'
++           symbol table:
++             [[
++               [ %A        <int>               ]
++               [ %B        <int>               ]
++             ]]
++           statement list:
++             return <int>
++               add <int>
++                 [ %A        <int> ] <int>
++                 [ %B        <int> ] <int>
++           nested scopes:
++             empty.
++         
++     
++ 
++ 
++ run the following command to convert the .dot file into a PDF:
++   dot -Tpdf -o./test/parser/strange/wrong_argument_type.mod.ast.pdf ./test/parser/strange/wrong_argument_type.mod.ast.dot
+
+score 44 / 70

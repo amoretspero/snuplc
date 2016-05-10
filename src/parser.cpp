@@ -212,7 +212,7 @@ CAstNode* CParser::Parse(void)
     if (_module != NULL) {
       CToken t;
       string msg;
-      //if (!_module->TypeCheck(&t, &msg)) SetError(t, msg);
+      if (!_module->TypeCheck(&t, &msg)) SetError(t, msg);
     }
   } catch (...) {
     _module = NULL;
@@ -481,7 +481,13 @@ CAstModule* CParser::module(void)
       }
       Consume(tColon);
       
+      CToken funcReturnTypeToken = _scanner->Peek(); // Token for checking return type.
       CType* funcReturnType = type(typeManager, false); // Gets return type of function.
+      if (!funcReturnType->IsScalar()) // Function return type should be scalar one.
+      {
+        SetError(funcReturnTypeToken, "invalid composite type for function.");
+      }
+      
       Consume(tSemicolon);
       
       CSymProc* funcSymbol = new CSymProc(funcName->GetValue(), funcReturnType); // Symbol for function. Return type is funcReturnType.
@@ -908,7 +914,7 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
     CToken t = _scanner->Peek();
     if (exp->GetType()->IsArray()) // When expression has return type of array.
     {
-      exp = new CAstSpecialOp(t, opAddress, exp); // Reference the array.
+      exp = new CAstSpecialOp(exp->GetToken(), opAddress, exp); // Reference the array.
     }
     _fc->AddArg(exp); // Add argument to functionCall.
     gotArgs++; // Count how many arguments are consumed.
@@ -920,7 +926,7 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
       t = _scanner->Peek();
       if (exp->GetType()->IsArray()) // When expression has return type of array.
       {
-        exp = new CAstSpecialOp(t, opAddress, exp); // Reference the array.
+        exp = new CAstSpecialOp(exp->GetToken(), opAddress, exp); // Reference the array.
       }
       _fc->AddArg(exp); // Add argument to functionCall.
       gotArgs++; // Count how many arguments are consumed.
@@ -1025,20 +1031,48 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
   {
     SetError(lhs, "undefined identifier.");
   }
+  
+  
 
-  if (_scanner->Peek().GetType() == tLBracket) // When LHS is qualident.
+  //if (_scanner->Peek().GetType() == tLBracket) // When LHS is qualident.
+  if (symbol->GetDataType()->IsArray() || symbol->GetDataType()->IsPointer())
   {
     CAstArrayDesignator* qualid = new CAstArrayDesignator(lhs, symbol); // Make qualident object.
+    
+    int lhsDim = -1;
+    
+    if (!symbol->GetDataType()->IsArray() && !symbol->GetDataType()->IsPointer())
+    {
+      //cout << "===(DEBUG)===At CAstStatAssign - qualident expected." << endl;
+      SetError(lhs, "invalid array expression.");
+    }
+    
+    if (symbol->GetDataType()->IsArray())
+    {
+      lhsDim = (dynamic_cast<const CArrayType*>(symbol->GetDataType()))->GetNDim();
+    }
+    if (symbol->GetDataType()->IsPointer())
+    {
+      lhsDim = (dynamic_cast<const CArrayType*>((dynamic_cast<const CPointerType*>(symbol->GetDataType()))->GetBaseType()))->GetNDim();
+    }
+    
+    int lhsIdxCnt = 0;
     while(_scanner->Peek().GetType() == tLBracket) // Gets all indices.
     {
       Consume(tLBracket);
       CAstExpression* idxExp = expression(s); // Get index.
       qualid->AddIndex(idxExp); // Set index of qualident.
       Consume(tRBracket);
+      lhsIdxCnt++;
     }
     qualid->IndicesComplete(); // Declare that indexing is finished.
     
     Consume(tAssign, &t);
+    //cout << "===(DEBUG)===At CAstStatAssign - lhs : " << lhs->GetValue() << ", lhsDim : " << lhsDim << ", lhsIdxCnt : " << lhsIdxCnt << endl;
+    if (lhsIdxCnt < lhsDim)
+    {
+      SetError(t, "assignments to compound types are not supported.");
+    }
     
     CAstExpression* rhs = expression(s); // Gets RHS.
         

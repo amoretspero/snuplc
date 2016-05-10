@@ -5,4 +5,5 @@
 module test;
 var a : integer;
 begin
+a := -(-2147483648)
 end test.
