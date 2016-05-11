@@ -401,21 +401,44 @@ CAstExpression* CAstStatAssign::GetRHS(void) const
 bool CAstStatAssign::TypeCheck(CToken *t, string *msg) const
 {
   //cout << "===(DEBUG)===TypeCheck at CAstStatAssign" << endl;
+  bool lhsTypeCheckRes = _lhs->TypeCheck(t, msg); // Type checks lhs.
+  bool rhsTypeCheckRes = _rhs->TypeCheck(t, msg); // Type checks rhs.
+  
+  if (!lhsTypeCheckRes || !rhsTypeCheckRes) // If either one fails, return false.
+  {
+    return false;
+  }
+  
   const CType* lhsType = _lhs->GetType(); // Gets the type of lhs.
   const CType* rhsType = _rhs->GetType(); // Gets the type of rhs.
   
   if (!lhsType->Match(rhsType)) // When type of rhs does not matches type of lhs.
   {
     *t = _rhs->GetToken();
+        
+    std::stringstream ssLHS;
+    ssLHS << _lhs->GetType();
+    std::stringstream ssRHS;
+    ssRHS << _rhs->GetType();
+    
     *msg = "Type of rhs and lhs does not match.";
+    *msg += "\n  LHS: ";
+    *msg += ssLHS.str() + "\n  RHS: " + ssRHS.str();
     return false;
   }
   
-  bool lhsTypeCheckRes = _lhs->TypeCheck(t, msg); // Type checks lhs.
-  bool rhsTypeCheckRes = _rhs->TypeCheck(t, msg); // Type checks rhs.
-  
-  if (!lhsTypeCheckRes || !rhsTypeCheckRes) // If either one fails, return false.
+  if (!GetLHS()->GetType()->IsScalar() && !GetLHS()->GetType()->IsPointer()) // When type of LHS is not assignment. SnuPL/1 does not support assignment to compound types.
   {
+    *t = _lhs->GetToken();
+    
+    std::stringstream ssLHS;
+    ssLHS << _lhs->GetType();
+    std::stringstream ssRHS;
+    ssRHS << _rhs->GetType();
+    
+    *msg = "assignments to compound types are not supported.\n";
+    *msg += "  ";
+    *msg += "LHS: " + ssLHS.str() + "\n  " + "RHS: " + ssRHS.str();
     return false;
   }
   
@@ -702,9 +725,9 @@ bool CAstStatIf::TypeCheck(CToken *t, string *msg) const
     return false;
   }
   
-  CAstStatement* ifStatSeq = GetIfBody();
+  CAstStatement* ifStatSeq = GetIfBody(); // Get if-body.
   bool ifStatSeqTypeCheckRes = true;
-  while (ifStatSeqTypeCheckRes && ifStatSeq != NULL) // TypeCheck for if-body.
+  while (ifStatSeqTypeCheckRes && ifStatSeq != NULL) // TypeCheck for if-body statements.
   {
     ifStatSeqTypeCheckRes = ifStatSeq->TypeCheck(t, msg);
     ifStatSeq = ifStatSeq->GetNext();
@@ -714,9 +737,9 @@ bool CAstStatIf::TypeCheck(CToken *t, string *msg) const
     return false;
   }
   
-  CAstStatement* elseStatSeq = GetElseBody();
+  CAstStatement* elseStatSeq = GetElseBody(); // Get else-body.
   bool elseStatSeqTypeCheckRes = true;
-  while (elseStatSeqTypeCheckRes && elseStatSeq != NULL) // If else-body exists, TypeCheck them.
+  while (elseStatSeqTypeCheckRes && elseStatSeq != NULL) // If else-body statements exists, TypeCheck them.
   {
     elseStatSeqTypeCheckRes = elseStatSeq->TypeCheck(t, msg);
     elseStatSeq = elseStatSeq->GetNext();
@@ -844,7 +867,7 @@ bool CAstStatWhile::TypeCheck(CToken *t, string *msg) const
     return false;
   }
   
-  CAstStatement* bodyStatSeq = GetBody();
+  CAstStatement* bodyStatSeq = GetBody(); // Get statements for while-body.
   bool bodyStatSeqTypeCheckRes = true;
   while (bodyStatSeqTypeCheckRes && bodyStatSeq != NULL) // TypeCheck the while-body.
   {
@@ -983,8 +1006,12 @@ bool CAstBinaryOp::TypeCheck(CToken *t, string *msg) const
   // Check1 : Typecheck for lhs, rhs.
   // Check2 : Check if GetType returns NULL. If NULL, types are different for lhs and rhs.
   bool lhsTypeCheck = GetLeft()->TypeCheck(t, msg); // TypeCheck the LHS.
+  if (!lhsTypeCheck) // If there is failed type check, return false.
+  {
+    return false;
+  }
   bool rhsTypeCheck = GetRight()->TypeCheck(t, msg); // TypeCheck the RHS.
-  if (!lhsTypeCheck || !rhsTypeCheck) // If there is failed type check, return false.
+  if (!rhsTypeCheck) // If there is failed type check, return false.
   {
     return false;
   }
@@ -993,7 +1020,28 @@ bool CAstBinaryOp::TypeCheck(CToken *t, string *msg) const
   if (getTypeRes == NULL)
   {
     *t = GetToken();
-    *msg = "Type of lhs and rhs are different.";
+    
+    std::stringstream ssLeft;
+    ssLeft << GetLeft()->GetType();
+    std::stringstream ssRight;
+    ssRight << GetRight()->GetType();
+    
+    string opStr = "";
+    if (GetOperation() == opAdd) { opStr = "add"; }
+    else if (GetOperation() == opSub) { opStr = "sub"; }
+    else if (GetOperation() == opMul) { opStr = "mul"; }
+    else if (GetOperation() == opDiv) { opStr = "div"; }
+    else if (GetOperation() == opAnd) { opStr = "and"; }
+    else if (GetOperation() == opOr) { opStr = "or"; }
+    else if (GetOperation() == opEqual) { opStr = "equal"; }
+    else if (GetOperation() == opNotEqual) { opStr = "notequal"; }
+    else if (GetOperation() == opBiggerEqual) { opStr = "biggerequal"; }
+    else if (GetOperation() == opBiggerThan) { opStr = "biggerthan"; }
+    else if (GetOperation() == opLessEqual) { opStr = "lessequal"; }
+    else if (GetOperation() == opLessThan) { opStr = "lessthan"; }
+    else { opStr = "invalid"; }
+    
+    *msg = opStr + ": type mismatch.\n" + "  " + "left  operand: " + ssLeft.str() + "\n  " + "right operand: " + ssRight.str();
     return false;
   }
   
@@ -1088,13 +1136,13 @@ bool CAstUnaryOp::TypeCheck(CToken *t, string *msg) const
 {
   //cout << "===(DEBUG)===TypeCheck at CAstUnaryOp" << endl;
   // Check1 : Typecheck for operand.
-  bool operandTypeCheckRes = GetOperand()->TypeCheck(t, msg);
+  bool operandTypeCheckRes = GetOperand()->TypeCheck(t, msg); // TypeCheck the operand.
   if (!operandTypeCheckRes)
   {
     return false;
   }
   
-  const CType* operandGetTypeRes = GetType();
+  const CType* operandGetTypeRes = GetType(); // Operand should not be NULL.
   if (operandGetTypeRes == NULL)
   {
     *msg = "Unary type is not valid.";
@@ -1189,7 +1237,7 @@ bool CAstSpecialOp::TypeCheck(CToken *t, string *msg) const
     //cout << "===(DEBUG)===TypeCheck at CAstSpecialOp - operand is not type of array." << endl;
   }
   
-  bool operandTypeCheckRes = opnd->TypeCheck(t, msg);
+  bool operandTypeCheckRes = opnd->TypeCheck(t, msg); // TypeChecks operand.
   if (!operandTypeCheckRes)
   {
     return false;
@@ -1318,15 +1366,15 @@ bool CAstFunctionCall::TypeCheck(CToken *t, string *msg) const
   // Check2 : Check for parameter number count with formal ones.
   // Check3 : Check whether arguments' type matches formal type of procedure/function.
   // Check4 : Check for scalar type return value type, i.e. return value type should not be array.
-  if (GetNArgs() != GetSymbol()->GetNParams())
+  if (GetNArgs() != GetSymbol()->GetNParams()) // Check if number of parameters needed matches provided.
   {
     *msg = "Parameter-Argument count mismatch.";
     return false;
   }
   
-  int argCnt = GetNArgs();
+  int argCnt = GetNArgs(); // Number of arguments given.
   bool argTypeCheckRes = true;
-  for (int cnt = 0; argTypeCheckRes && cnt < argCnt; cnt++)
+  for (int cnt = 0; argTypeCheckRes && cnt < argCnt; cnt++) // TypeChecks each arguments.
   {
     CAstExpression* arg = GetArg(cnt);
     //cout << "===(DEBUG)===TypeCheck at CAstFunctionCall - arg is : " << arg->GetToken().GetValue() << endl;
@@ -1339,20 +1387,27 @@ bool CAstFunctionCall::TypeCheck(CToken *t, string *msg) const
   
   bool argTypeMatchRes = true;
   int cnt = 0;
-  for (cnt = 0; argTypeMatchRes && cnt < argCnt; cnt++)
+  for (cnt = 0; argTypeMatchRes && cnt < argCnt; cnt++) // Checks if each argument type matches with expected type.
   {
     CAstExpression* arg = GetArg(cnt);
     //cout << "===(DEBUG)===TypeCheck at CAstFunctionCall - arg is : " << arg->GetToken().GetValue() << endl;
-    const CType* argType = arg->GetType();
-    const CType* paramType = GetSymbol()->GetParam(cnt)->GetDataType();
+    const CType* argType = arg->GetType(); // Type of given argument.
+    const CType* paramType = GetSymbol()->GetParam(cnt)->GetDataType(); // Type of expected parameter.
     if (!argType->Match(paramType))
     {
+      *t = arg->GetToken();
       argTypeMatchRes = false;
     }
   }
   if (!argTypeMatchRes)
   {
-    *msg = "parameter " + to_string(cnt) + ": argument type mismatch.";
+    const CSymParam* argExpected = GetSymbol()->GetParam(cnt-1);
+    CAstExpression* argGot = GetArg(cnt-1);
+    std::stringstream ssExpected;
+    ssExpected << argExpected->GetDataType();
+    std::stringstream ssGot;
+    ssGot << argGot->GetType();
+    *msg = "parameter " + to_string(cnt) + ": argument type mismatch.\n" + "  expected " + ssExpected.str() + "\n  " + "got      " + ssGot.str();
     return false;
   }
   
@@ -1525,8 +1580,28 @@ bool CAstArrayDesignator::TypeCheck(CToken *t, string *msg) const
 {
   //cout << "===(DEBUG)===TypeCheck at CAstArrayDesignator" << endl;
   bool result = true;
+  
+  if (!GetSymbol()->GetDataType()->IsArray() && !GetSymbol()->GetDataType()->IsPointer())
+  {
+    *t = GetToken();
+    *msg = "invalid array expression.";
+    return false;
+  }
 
-  assert(_done);
+  int providedDim = GetNIndices(); // Get number of indices given.
+  int idxTypeCheckCnt = 0;
+  for (idxTypeCheckCnt = 0; idxTypeCheckCnt < providedDim; idxTypeCheckCnt++) // Check if given indices have type(computed) of integer.
+  {
+    CAstExpression* curIdx = GetIndex(idxTypeCheckCnt); // Get index.
+    if (!curIdx->GetType()->IsInt())
+    {
+      *t = curIdx->GetToken();
+      *msg = "invalid array index expression.";
+      return false;
+    }
+  }
+
+  assert(_done); // Adding indices should be finished.
 
   return result;
 }
@@ -1571,7 +1646,14 @@ const CType* CAstArrayDesignator::GetType(void) const
       idxEnd = true;
     }
   }
-  return at;
+  if (GetNIndices() > 0)
+  {
+    return at;
+  }
+  else
+  {
+    return GetSymbol()->GetDataType();
+  }
 }
 
 ostream& CAstArrayDesignator::print(ostream &out, int indent) const

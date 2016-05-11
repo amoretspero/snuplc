@@ -28,4 +28,11 @@ Error messages should be updated.
   
 **2016-05-11 02:56 KST**  
 Non-open array check for variable declaration is now supported.  
-There may be corner cases, verification is needed.
+There may be corner cases, verification is needed.  
+  
+**2016-05-11 16:46 KST**  
+Changed some error messages to match with reference parser.  
+Also some typecheck order is changed to match with reference parser.  
+Generated line-by-line commented semantic tests.  
+Test generator is <code>script_gen.fs</code>.  
+Only works for windows. Other platforms will be supported later with different PL.

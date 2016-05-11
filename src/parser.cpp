@@ -905,7 +905,8 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
     Consume(tRBracketRound, t);
     if (nParams > gotArgs) // When there are no arguments, but argument(s) are needed, throw error.
     {
-      SetError(t, "number of arguments expected : " + to_string(nParams) + ", got : " + to_string(gotArgs) + ".");
+      //SetError(t, "number of arguments expected : " + to_string(nParams) + ", got : " + to_string(gotArgs) + ".");
+      SetError(t, "too many arguments.");
     }
     return;
   }
@@ -938,9 +939,17 @@ void CParser::AddArguments(CAstScope* s, CScanner* _scanner, CTypeManager* _tm, 
   }
   CToken* chk = new CToken();
   Consume(tRBracketRound, chk);
-  if (nParams != gotArgs) // when number of parameters does not match the number of arguments the parser got, throw error.
+  /*if (nParams != gotArgs) // when number of parameters does not match the number of arguments the parser got, throw error.
   {
     SetError(chk, "number of arguments expected : " + to_string(nParams) + ", got : " + to_string(gotArgs) + ".");
+  }*/
+  if (nParams > gotArgs)
+  {
+    SetError(_fc->GetToken(), "not enough arguments.");
+  }
+  if (nParams < gotArgs)
+  {
+    SetError(_fc->GetToken(), "too many arguments.");
   }
 }
 
@@ -1042,6 +1051,7 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
   if (symbol->GetDataType()->IsArray() || symbol->GetDataType()->IsPointer())
   {
     CAstArrayDesignator* qualid = new CAstArrayDesignator(lhs, symbol); // Make qualident object.
+    //cout << "===(DEBUG)===At CAstStatAssign - qualid type is : " << qualid->GetType() << ", symbol type is : " << symbol->GetDataType() << endl;
     
     int lhsDim = -1;
     
@@ -1065,7 +1075,15 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
     {
       Consume(tLBracket);
       CAstExpression* idxExp = expression(s); // Get index.
+      //if (!idxExp->GetType()->IsInt())
+      //{
+      //  cout << "===(DEBUG)===At CAstStatAssign - qualident case - idxExp type is not integer type." << endl;
+      //}
       qualid->AddIndex(idxExp); // Set index of qualident.
+      //if (!qualid->GetIndex(lhsIdxCnt)->GetType()->IsInt())
+      //{
+      //  cout << "===(DEBUG)===At CAstStatAssign - qualident case - idxExp type is not integer type." << endl;
+      //}
       Consume(tRBracket);
       lhsIdxCnt++;
     }
@@ -1073,10 +1091,10 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
     
     Consume(tAssign, &t);
     //cout << "===(DEBUG)===At CAstStatAssign - lhs : " << lhs->GetValue() << ", lhsDim : " << lhsDim << ", lhsIdxCnt : " << lhsIdxCnt << endl;
-    if (lhsIdxCnt < lhsDim)
-    {
-      SetError(t, "assignments to compound types are not supported.");
-    }
+    //if (lhsIdxCnt < lhsDim)
+    //{
+    //  SetError(t, "assignments to compound types are not supported.");
+    //}
     
     CAstExpression* rhs = expression(s); // Gets RHS.
         
@@ -1085,7 +1103,10 @@ CAstStatAssign* CParser::assignment(CAstScope *s, CToken* lhs)
   else // When LHS is ident.
   {
     CAstDesignator* id = new CAstDesignator(lhs, symbol); // Make ident object.
-        
+    if (_scanner->Peek().GetType() != tAssign)
+    {
+      SetError(lhs, "invalid array expression.");
+    }
     Consume(tAssign, &t);
         
     CAstExpression *rhs = expression(s); // Gets RHS.
@@ -1304,6 +1325,11 @@ CAstExpression* CParser::factor(CAstScope *s)
       if (qualIdSymbol->GetSymbolType() == stProcedure) // When there is symbol but is type of procedure/function, throw error.
       {
         SetError(factorId, "designator expected.");
+      }
+      //cout << "===(DEBUG)===At factor - qualIdSymbol type is : " << qualIdSymbol->GetDataType() << endl;
+      if (!qualIdSymbol->GetDataType()->IsArray() && !qualIdSymbol->GetDataType()->IsPointer()) // When it is not array type.
+      {
+        SetError(factorId, "invalid array expression.");
       }
       CAstArrayDesignator* qualid = new CAstArrayDesignator(factorId, qualIdSymbol); // Construct qualident variable.
       while(tt == tLBracket) // Set indices of qualident variable.

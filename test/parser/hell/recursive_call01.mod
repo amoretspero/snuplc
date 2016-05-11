@@ -8,6 +8,7 @@ procedure rec_arr(a: integer[][][]; b: boolean[][][]);
 var i, j, k: integer;
 begin
   a[a[a[2][3][5]]] := a[j][a[2][k][j]][i];
+  a[a[2][3][5]] := a[j][a[2][k][j]][i];
   b[a[2][a[4][1][2]][i+k]] := false || false || b[a[2][a[i*k][2][3]][i/k]]
 end rec_arr;
 
