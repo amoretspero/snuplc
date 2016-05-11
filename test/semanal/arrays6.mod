@@ -15,7 +15,7 @@ module arrays;
 
 var A: integer[10];             // pass
     B: integer[10][5][10];      // pass
-    C: integer[5];              // pass
+//    C: integer[];               // fail
     D: boolean[5];              // pass
 
 
@@ -30,15 +30,15 @@ begin
   i := A[i];                      // pass
   i := A[A[A[i]]];                // pass
 
-  c := 'c';                       // pass
-  b := true;                      // pass
+//  c := A[0];                      // fail
+//  b := A[0];                      // fail
 
   A[0] := A[0];                   // pass
   A := B;                         // pass (pointer-copy)
-  //A := C;                         // fail (incompatible pointer types)
-  //X := Y;                         // fail (array assignments not supported)
+//  A := C;                         // fail (incompatible pointer types)
+//  X := Y;                         // fail (array assignments not supported)
 
-  A := B[0];                      // fail
+//  A := B[0];                      // fail
   A[0] := B;                      // fail
 
   A[A] := i;                      // fail

@@ -1,0 +1,11 @@
+//
+// test01.mod : Test module with no subroutine, only global variables and basic types.
+//
+
+module test;
+var a : integer;
+    i : integer;
+		j : integer;
+begin
+i := -(-(2147483647 * (-(-((j)))) / (-(i)) + ((-(-2147483648)))) * (-i / (i) + j)) / ((-2147483648 *(-j * ((-i + 2147383647) * (-2147483648)) + (-j)))) // pass
+end test.

@@ -4,16 +4,4 @@ digraph AST {
   edge  [fontname="Times New Roman",fontsize=10];
 
   node0 [label="m test",shape=box];
-  node6 [label=":=",shape=box];
-  node1 [label="a",shape=ellipse];
-  node6->node1;
-  node5 [label="neg",shape=box];
-  node4 [label="add",shape=box];
-  node2 [label="a",shape=ellipse];
-  node4->node2;
-  node3 [label="2147483648",shape=ellipse];
-  node4->node3;
-  node5->node4;
-  node6->node5;
-  node0 -> node6 [style=dotted];
 }

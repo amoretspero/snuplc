@@ -20,7 +20,12 @@ let writeOneFile (fileIdx : int) (fileContent : string []) =
         File.Delete("./test/semanal/semantics"+fileIdx.ToString()+".mod")
     let fileContentConcat = String.Join("\n", fileContent)
     File.WriteAllLines("./test/semanal/semantics"+fileIdx.ToString()+".mod", fileContent)
-    //File.WriteAllText("./test/semanal/semantics"+fileIdx.ToString()+".mod", fileContentConcat)
+
+let writeOneFileDistinct (fileIdx : int) (fileContent : string []) =
+    if File.Exists("./test/semanal/semantics_distinct"+fileIdx.ToString()+".mod") then
+        File.Delete("./test/semanal/semantics_distinct"+fileIdx.ToString()+".mod")
+    let fileContentConcat = String.Join("\n", fileContent)
+    File.WriteAllLines("./test/semanal/semantics_distinct"+fileIdx.ToString()+".mod", fileContent)
 
 let main() =
     let originalFile = File.ReadAllLines("./test/semanal/semantics.mod")
@@ -33,5 +38,6 @@ let main() =
     for i = 0 to idxLen - 1 do
         //writeOneFile (i+1) (generateOneFile (Array.take (i+1) idx.Value) originalFile)
         writeOneFile (i+1) (generateOneFile idx.Value.[..i] originalFile)
+        writeOneFileDistinct (i+1) (generateOneFile (Array.ofSeq (idx.Value.Except([idx.Value.[i]]))) originalFile)
 
 main()

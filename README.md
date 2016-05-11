@@ -70,4 +70,9 @@ Now <code>parser.cpp</code> uses RELAXED scheme for processing integer constant.
 Added comment for changed integer constant processing.  
   
 **2016-05-14 21:57 KST**  
-Fixing bug with RELAXED scheme.
+Fixing bug with RELAXED scheme.  
+  
+**2016-05-15 02:53 KST**  
+Fixing bug with RELAXED scheme.  
+Added more sophisticated tests for integer constants.  
+Distinct tests (with only one fail line) are added.

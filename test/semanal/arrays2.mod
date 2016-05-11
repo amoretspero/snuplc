@@ -15,7 +15,7 @@ module arrays;
 
 var A: integer[10];             // pass
     B: integer[10][5][10];      // pass
-    C: integer[5];              // pass
+//    C: integer[];               // fail
     D: boolean[5];              // pass
 
 
@@ -30,7 +30,7 @@ begin
   i := A[i];                      // pass
   i := A[A[A[i]]];                // pass
 
-  c := A[0];                      // fail
+//  c := A[0];                      // fail
   b := A[0];                      // fail
 
   A[0] := A[0];                   // pass
