@@ -42,4 +42,8 @@ Changed <code>script_gen.fs</code> to be compilable in F# 3.0 also.
 Fixed bug in parameter duplication check.  Now <code>GetOneTypeParam()</code> function takes iterative with vector approach.  
 Added support for multiple integer negation, for example <code>-(-(-12345))</code> will be parsed as just <code>-12345</code>.  
 Changed some error messages.  
-Changed line end characters from <code>\r\n</code> to <code>\n</code>.
+Changed line end characters from <code>\r\n</code> to <code>\n</code>.  
+  
+**2016-05-12 18:17 KST**  
+Added some more test in <code>semantics.mod</code>  
+Need to be scripted.

@@ -1,0 +1,31 @@
+digraph AST {
+  graph [fontname="Times New Roman",fontsize=10];
+  node  [fontname="Courier New",fontsize=10];
+  edge  [fontname="Times New Roman",fontsize=10];
+
+  node0 [label="m invalid_function_return",shape=box];
+  node9 [label="p/f returnInt",shape=box];
+  node17 [label=":=",shape=box];
+  node14 [label="b",shape=ellipse];
+  node17->node14;
+  node15 [label="A[]",shape=ellipse];
+  node16 [label="a",shape=ellipse];
+  node15-> node16;
+  node17->node15;
+  node9 -> node17 [style=dotted];
+  node19 [label="return",shape=box];
+  node18 [label="b",shape=ellipse];
+  node19->node18;
+  node17 -> node19 [style=dotted];
+  node0 -> node9;
+  node20 [label="p/f invalidReturn",shape=box];
+  node27 [label="return",shape=box];
+  node24 [label="call returnInt",shape=box];
+  node25 [label="a",shape=ellipse];
+  node24->node25;
+  node26 [label="A",shape=ellipse];
+  node24->node26;
+  node27->node24;
+  node20 -> node27 [style=dotted];
+  node0 -> node20;
+}
