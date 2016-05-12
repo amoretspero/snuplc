@@ -619,16 +619,13 @@ bool CParser::CheckParamDups (vector<vector<CSymParam*> >* paramVec, const strin
   return res;
 }
 
-CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<CSymParam*>* paramVec, vector<vector<CSymParam*> >* originVec, int idx)
+// This function is deprecated. New one has been implemented below.
+/*CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<CSymParam*>* paramVec, vector<vector<CSymParam*> >* originVec, int idx)
 {
   CToken* paramId = new CToken();
   Consume(tId, paramId); // Get identifier for parameter.
   
-  bool checkDupRes = CheckParamDups(originVec, paramId->GetValue()); // Check for parameter duplication.
-  if (checkDupRes) // If duplication occurs, throw error.
-  {
-    SetError(paramId, "duplicate variable declaration '" + paramId->GetValue() + "'.");
-  }
+  cout << "===(DEBUG)===At GetOneTypeParams - before CheckParamDups, number of parameters read : " << originVec->at(0).size() << endl;
     
   CType* paramType = NULL;
   
@@ -636,6 +633,11 @@ CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<
   {
     Consume(tComma);
     paramType = GetOneTypeParams(_scanner, _tm, paramVec, originVec, idx+1); // Recursive call.
+    bool checkDupRes = CheckParamDups(originVec, paramId->GetValue()); // Check for parameter duplication.
+    if (checkDupRes) // If duplication occurs, throw error.
+    {
+      SetError(paramId, "duplicate variable declaration '" + paramId->GetValue() + "'.");
+    }
     paramVec->push_back(new CSymParam(idx, paramId->GetValue(), paramType)); // When above recursive call returns type, add parameter to procedure symbol.
   }
   else // When there are no more identifier(s) of same type.
@@ -646,9 +648,60 @@ CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<
     {
       cout << "Type error!" << endl;
     }
+    bool checkDupRes = CheckParamDups(originVec, paramId->GetValue()); // Check for parameter duplication.
+    if (checkDupRes) // If duplication occurs, throw error.
+    {
+      SetError(paramId, "duplicate variable declaration '" + paramId->GetValue() + "'.");
+    }
     paramVec->push_back(new CSymParam(idx, paramId->GetValue(), paramType)); // Add parameter to CSymParam* vector.
   }
+  
   return paramType; // Return the type for recursive call.
+}*/
+
+
+CType* CParser::GetOneTypeParams (CScanner* _scanner, CTypeManager* _tm, vector<CSymParam*>* paramVec, vector<vector<CSymParam*> >* originVec, int idx)
+{
+  vector<CToken*> tokenTemp; // Vector containing read CToken pointers temporarily.
+  
+  while (_scanner->Peek().GetType() == tId) // When there is identifier to be processed, check for duplication and add token to above temporary vector.
+  {
+    bool checkDupResOriginVec = CheckParamDups(originVec, _scanner->Peek().GetValue()); // Check for duplication with other types.
+    bool checkDupResCurrentVec = false;
+    vector<CToken*>::iterator checkDupIter = tokenTemp.begin();
+    while (checkDupIter != tokenTemp.end()) // Check for duplication with current type parameters.
+    {
+      if ((*checkDupIter)->GetValue() == _scanner->Peek().GetValue())
+      {
+        checkDupResCurrentVec = true;
+        break;
+      }
+      checkDupIter++;
+    }
+    if (checkDupResOriginVec || checkDupResCurrentVec) // At least one of duplication has been detected, error.
+    {
+      SetError(_scanner->Peek(), "duplicate variable declaration '" + _scanner->Peek().GetValue() + "'.");
+    }
+    CToken* paramId = new CToken();
+    Consume(tId, paramId); // Get the token.
+    tokenTemp.push_back(paramId); // Add to temporary token vector.
+    if (_scanner->Peek().GetType() == tComma) // If there is more to read, loop again.
+    {
+      Consume(tComma);
+    }
+  }
+  Consume(tColon);
+  CType* paramType = NULL;
+  paramType = type(_tm, true); // Get type of parameters.
+  vector<CToken*>::iterator tempIter = tokenTemp.begin();
+  int tokenIdx = idx;
+  while (tempIter != tokenTemp.end()) // Iterates through temporary token vectors, add each of them to paramVec.
+  {
+    paramVec->push_back(new CSymParam(tokenIdx, (*tempIter)->GetValue(), paramType)); // Push to the paramVec.
+    tokenIdx++;
+    tempIter++;
+  }
+  return paramType; // Return read type of parameters.
 }
 
 CType* CParser::GetParams (CScanner* _scanner, CTypeManager* _tm, vector<vector<CSymParam*> >* paramVec, int lastIdx)
@@ -1194,11 +1247,31 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
     {
       char** endPtr = 0;
       Consume(tNum, numtok);
-      n = new CAstConstant(numtok, CTypeManager::Get()->GetInt(), -(strtoll(numtok->GetValue().c_str(), endPtr, 10))); // Negated number.
+      long long numCheck = strtoll(numtok->GetValue().c_str(), endPtr, 10);
+      if (0-numCheck > 2147483647 || 0-numCheck < -2147483648)
+      {
+        SetError(numtok, "integer constant outside valid range.");
+      }
+      n = new CAstConstant(numtok, CTypeManager::Get()->GetInt(), -numCheck); // Negated number.
     }
     else
     {
-      n = new CAstUnaryOp(unaryOp, opNeg, term(s)); // Construct term with unary operator included.
+      CAstExpression* termRes = term(s);
+      //cout << "===(DEBUG)===At term - termRes type is : " << termRes->GetType() << endl;
+      CAstConstant* constTerm = dynamic_cast<CAstConstant*>(termRes);
+      if (constTerm != NULL && constTerm->GetType()->IsInt())
+      {
+        long long numCheck = -(constTerm->GetValue());
+        if (numCheck > 2147483647 || numCheck < -2147483648)
+        {
+          SetError(constTerm->GetToken(), "integer constant outside valid range.");
+        }
+        n = new CAstConstant(constTerm->GetToken(), CTypeManager::Get()->GetInt(), -(constTerm->GetValue()));
+      }
+      else
+      {
+        n = new CAstUnaryOp(unaryOp, opNeg, termRes); // Construct term with unary operator included.
+      }
     }
   }
   else // When no unary operator prefixed.
@@ -1347,7 +1420,7 @@ CAstExpression* CParser::factor(CAstScope *s)
     {
       if (s->GetSymbolTable()->FindSymbol(factorId->GetValue()) == NULL) // When there is no such symbol.
       {
-        SetError(factorId, "undefined identifier");
+        SetError(factorId, "undefined identifier.");
       }
       const CSymbol* idSymbol = s->GetSymbolTable()->FindSymbol(factorId->GetValue()); // Find symbol for ident.
       if (idSymbol->GetSymbolType() == stProcedure) // When there is symbol but is type of procedure/function, throw error.
@@ -1413,7 +1486,7 @@ CAstExpression* CParser::factor(CAstScope *s)
   }
   else // Invalid factor.
   {
-    cout << "got " << _scanner->Peek() << endl;
+    //cout << "got " << _scanner->Peek() << endl;
     SetError(_scanner->Peek(), "factor expected.");
   }
 

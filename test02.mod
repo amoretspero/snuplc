@@ -29,7 +29,7 @@ function fn(): boolean;
 begin
 end fn;
 
-function func(): integer[5];
+function func(): integer;
 begin
 end func;
 
@@ -37,7 +37,7 @@ function fnc(a: integer; b: boolean): integer;
 begin
 end fnc;
 
-function fncfnc(a: integer; c: char): char[5];
+function fncfnc(a: integer; c: char): char;
 begin
 end fncfnc;
 
@@ -45,9 +45,10 @@ function fnfn(a: integer; b: boolean[5]): integer;
 begin
 end fnfn;
 
-function fnfnfn(a: integer; b: boolean[][]): char[5];
+function fnfnfn(a: integer; b: boolean[][]): char;
 begin
 end fnfnfn;
 
 begin
+  a := -(-1)
 end test02.

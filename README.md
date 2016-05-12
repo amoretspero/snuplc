@@ -35,4 +35,11 @@ Changed some error messages to match with reference parser.
 Also some typecheck order is changed to match with reference parser.  
 Generated line-by-line commented semantic tests.  
 Test generator is <code>script_gen.fs</code>.  
-Only works for windows. Other platforms will be supported later with different PL.
+Only works for windows. Other platforms will be supported later with different PL.  
+  
+**2016-05-12 16:15 KST**  
+Changed <code>script_gen.fs</code> to be compilable in F# 3.0 also.  
+Fixed bug in parameter duplication check.  Now <code>GetOneTypeParam()</code> function takes iterative with vector approach.  
+Added support for multiple integer negation, for example <code>-(-(-12345))</code> will be parsed as just <code>-12345</code>.  
+Changed some error messages.  
+Changed line end characters from <code>\r\n</code> to <code>\n</code>.

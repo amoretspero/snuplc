@@ -106,19 +106,19 @@ When non-subroutineCall is expected, it will throw error if <code>stProcedure</c
 Test for subroutineCall is done with <code>dynamic_cast</code> to <code>const CSymProc*</code>,
 and test for non-subroutineCall is done with <code>GetSymbolType()</code> function.  
   
-**2016-04-27 01:11 KST**
+**2016-04-27 01:11 KST**  
 Commented <code>parser.cpp</code>.  
   
 **2016-04-27 13:17 KST**  
 Commented <code>parser.h</code>, <code>ast.cpp</code>.  
 Need to get rid of unused functions.  
   
-**2016-04-27 19:25 KST**
+**2016-04-27 19:25 KST**  
 Removed debugging code.  
 Code with debugging code is in seperate folder.  
   
-**2016-04-28 23:36 KST**
-Generated doxygen documents, added more tests for invalid usage of semicolons.
+**2016-04-28 23:36 KST**  
+Generated doxygen documents, added more tests for invalid usage of semicolons.  
 Parser phase is submitted.  
 LAST COMMIT of PARSER phase.  
    
