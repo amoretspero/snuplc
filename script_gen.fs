@@ -16,14 +16,14 @@ let generateOneFile (idxArr : int []) (file : string []) =
     fileContent.Value
 
 let writeOneFile (fileIdx : int) (fileContent : string []) =
-    if File.Exists("./test/semanal/strings"+fileIdx.ToString()+".mod") then
-        File.Delete("./test/semanal/strings"+fileIdx.ToString()+".mod")
+    if File.Exists("./test/semanal/semantics"+fileIdx.ToString()+".mod") then
+        File.Delete("./test/semanal/semantics"+fileIdx.ToString()+".mod")
     let fileContentConcat = String.Join("\n", fileContent)
-    File.WriteAllLines("./test/semanal/strings"+fileIdx.ToString()+".mod", fileContent)
-    //File.WriteAllText("./test/semanal/strings"+fileIdx.ToString()+".mod", fileContentConcat)
+    File.WriteAllLines("./test/semanal/semantics"+fileIdx.ToString()+".mod", fileContent)
+    //File.WriteAllText("./test/semanal/semantics"+fileIdx.ToString()+".mod", fileContentConcat)
 
 let main() =
-    let originalFile = File.ReadAllLines("./test/semanal/strings.mod")
+    let originalFile = File.ReadAllLines("./test/semanal/semantics.mod")
     let fileLineCnt = originalFile.Length
     let mutable idx = ref ([| |] : int [])
     for i = 0 to fileLineCnt - 1 do

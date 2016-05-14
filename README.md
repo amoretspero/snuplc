@@ -3,8 +3,7 @@ This is compiler implementation for **SnuPL/1 language**,
 for **2016-spring Compilers class @ Seoul National University**.
 
 ## SnuPL/1
-SnuPL/1 language is based on Oberon programming language.
-(Add more.)
+SnuPL/1 language is based on Oberon programming language.  
 
 ## Compiler
 Compiler for SnuPL/1 programming language is implemented as
@@ -46,4 +45,8 @@ Changed line end characters from <code>\r\n</code> to <code>\n</code>.
   
 **2016-05-12 18:17 KST**  
 Added some more test in <code>semantics.mod</code>  
-Need to be scripted.
+Need to be scripted.  
+  
+**2016-05-14 13:43 KST**  
+Generated more test for <code>semantics.mode</code>  
+Line end characters changed from CRLF to LF.

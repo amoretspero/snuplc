@@ -92,8 +92,8 @@ begin
 //  j := 0 + '0';               // fail
   i := 3 + 4 / 2 * 5 - 3 + 3; // pass
 //  i := 3 + + 4;               // fail
-  i := 3 - ;                  // fail
-  j := 3 / / 3;               // fail
+//  i := 3 - ;                  // fail
+//  j := 3 / / 3;               // fail
 
   a := true
 end Constants;
@@ -106,17 +106,17 @@ begin
   i := j;                     // pass
   i := k;                     // pass
   i := x;                     // pass
-  i := z;                     // fail
-  i := i + z;                 // fail
+//  i := z;                     // fail
+//  i := i + z;                 // fail
 
   i := 0
 end UseBeforeDef;
 
 
 // multiple definitions
-procedure MultipleDef(i,i: integer); // fail (parameter - parameter)
-var i: integer;               // fail (parameter - local var)
-    m,m: integer;             // fail (local var - local var)
+//procedure MultipleDef(i,i: integer); // fail (parameter - parameter)
+//var i: integer;               // fail (parameter - local var)
+//    m,m: integer;             // fail (local var - local var)
 begin
   i := 1
 end MultipleDef;
@@ -125,11 +125,11 @@ end MultipleDef;
 // parameters: too many/few/wrong type of parameters
 procedure Parameters(p1, p2: integer);
 begin
-  Parameters();             // fail
-  Parameters(1);            // fail
-  Parameters(true, false);  // fail
-  Parameters(1,2,3);        // fail
-  Parameters(1,2,3,4);      // fail
+//  Parameters();             // fail
+//  Parameters(1);            // fail
+//  Parameters(true, false);  // fail
+//  Parameters(1,2,3);        // fail
+//  Parameters(1,2,3,4);      // fail
 
   Parameters(p2,p1);        // pass
   Parameters(1,2)           // pass
@@ -142,14 +142,14 @@ var A, A1: integer[5];
     C, C1: integer[5][7][9];
     D, D1: boolean[7];
 begin
-  Parameters1();                    // fail
-  Parameters1(A, C);                // fail
+//  Parameters1();                    // fail
+//  Parameters1(A, C);                // fail
   Parameters1(A, B, C, D);          // pass
-  Parameters1(A, B, C, D, D1);      // fail
-  Parameters1(B, C, D, A);          // fail
+//  Parameters1(A, B, C, D, D1);      // fail
+//  Parameters1(B, C, D, A);          // fail
   Parameters1(B1[2], B, C, D);      // pass
   Parameters1(B1[3], C1[1], C, D);  // pass
-  Parameters1(A, C[1], C[1], C, D); // fail
+//  Parameters1(A, C[1], C[1], C, D); // fail
   Parameters1(A, B, C, D);          // pass
 end Parameters1;
 
@@ -160,17 +160,17 @@ var a,b,c: boolean;
     i,j,k: integer;
     A    : integer[10];
 begin
-  a := 1 + true;            // fail
-  a := true + false;        // fail
-  a := b + c;               // fail
-  a := a > b;               // fail
+//  a := 1 + true;            // fail
+//  a := true + false;        // fail
+//  a := b + c;               // fail
+//  a := a > b;               // fail
   a := !!!b;                // pass
   a := a && (!b);           // pass
 
-  i := j + b;               // fail
-  i := j && k || p1;        // fail
-  i := !j;                  // fail
-  i := j + -k;              // fail
+//  i := j + b;               // fail
+//  i := j && k || p1;        // fail
+//  i := !j;                  // fail
+//  i := j + -k;              // fail
   i := j + (-k);            // pass
 
   a := a && !b && (i < j)   // pass
@@ -188,13 +188,13 @@ var a: boolean;
     D: char[5];
     E: boolean[20];
 begin
-  a := i[0];                  // fail
-  a[0] := true;               // fail
+//  a := i[0];                  // fail
+//  a[0] := true;               // fail
   A[0] := i;                  // pass
   A[-1] := B[0][0];           // pass
-  A[0][0] := i;               // fail
+//  A[0][0] := i;               // fail
   B[0][0] := i;               // pass
-  D[1] := A[0];               // fail
+//  D[1] := A[0];               // fail
   E[0] := B[A[0]][A[1]] > 0   // pass
 end Arrays;
 
@@ -204,38 +204,38 @@ procedure Assignments(p1, p2, p3, p4: integer);
 var a,b,c: boolean;
     i,j,k: integer;
 begin
-  a := i;                   // fail
-  i := a;                   // fail
-  i := ProcedureCall()      // fail
+//  a := i;                   // fail
+//  i := a;                   // fail
+//  i := ProcedureCall()      // fail
 end Assignments;
 
 
 // return statements type checks
 procedure ProcReturn();
 begin
-  return 5                  // fail
+//  return 5                  // fail
 end ProcReturn;
 
 function NoReturn(): integer;
 begin
-  return                    // fail
+//  return                    // fail
 end NoReturn;
 
 function IntReturn(): integer;
 begin
-  return 1 > 2              // fail
+//  return 1 > 2              // fail
 end IntReturn;
 
 function BoolReturn(): boolean;
 begin
-  return 1 + 2              // fail
+//  return 1 + 2              // fail
 end BoolReturn;
 
 
 // condition type checking
 procedure If(p1, p2: integer);
 begin
-  if (p1 + p2 > 0) then         // fail
+//  if (p1 + p2 > 0) then         // fail
     return
   else
     return

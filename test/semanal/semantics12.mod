@@ -24,6 +24,9 @@ var u,v: boolean;             // pass
     str: char[256];           // pass
 //    d  : integer;             // fail
 //    t1 : integer[];           // fail
+//    e  : char;                // fail
+//    arr: integer[5][][7];     // fail
+//    ar : integer[][2];        // fail
 
 
 // empty procedure
@@ -55,24 +58,42 @@ begin
 //  a := +false;                // fail
 //  a := 'a';                   // fail
 //  a := 0;                     // fail
+//  a := 1;                     // fail
+  a := (true);                // pass
+//  a := (true + 0);            // fail
+  a := (false || true);       // pass
+  b := a;                     // pass
+  b := a && b;                // pass
+//  b := (true && !true && 1)   // fail
 
   // character variables
   c := 'a';                   // pass
   d := '\n';                  // pass
-//  c := +'0';                  // fail
-//  c := true;                  // fail
-//  d := 0;                     // fail
+  c := +'0';                  // fail
+  c := true;                  // fail
+  d := 0;                     // fail
+  c := c + d;                 // fail
+  c := 1 + c;                 // fail
+  d := '0' + '1';             // fail
+  a := c # d;                 // pass
 
+  // integer variables
   i := -0;                    // pass
   i := +0;                    // pass
-//  i := --0;                   // fail
-//  i := +-0;                   // fail
+  i := --0;                   // fail
+  i := +-0;                   // fail
   i := -2147483648;           // pass (min int)
   j :=  2147483647;           // pass (max int)
-//  i := -2147483649;           // fail (<min int)
+  i := -2147483649;           // fail (<min int)
   j :=  2147483648;           // fail (>max int)
   i := true;                  // fail
   i := 'a';                   // fail
+  j := i + j;                 // pass
+  j := 0 + '0';               // fail
+  i := 3 + 4 / 2 * 5 - 3 + 3; // pass
+  i := 3 + + 4;               // fail
+  i := 3 - ;                  // fail
+  j := 3 / / 3;               // fail
 
   a := true
 end Constants;
@@ -86,6 +107,7 @@ begin
   i := k;                     // pass
   i := x;                     // pass
   i := z;                     // fail
+  i := i + z;                 // fail
 
   i := 0
 end UseBeforeDef;
@@ -112,6 +134,24 @@ begin
   Parameters(p2,p1);        // pass
   Parameters(1,2)           // pass
 end Parameters;
+
+// parameters: array-type invalid parameters
+procedure Parameters1(p1: integer[]; p2: integer[][]; p3: integer[][][]; b1: boolean[]);
+var A, A1: integer[5];
+    B, B1: integer[5][7];
+    C, C1: integer[5][7][9];
+    D, D1: boolean[7];
+begin
+  Parameters1();                    // fail
+  Parameters1(A, C);                // fail
+  Parameters1(A, B, C, D);          // pass
+  Parameters1(A, B, C, D, D1);      // fail
+  Parameters1(B, C, D, A);          // fail
+  Parameters1(B1[2], B, C, D);      // pass
+  Parameters1(B1[3], C1[1], C, D);  // pass
+  Parameters1(A, C[1], C[1], C, D); // fail
+  Parameters1(A, B, C, D);          // pass
+end Parameters1;
 
 
 // type checks
