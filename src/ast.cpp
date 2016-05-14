@@ -1053,7 +1053,7 @@ const CType* CAstBinaryOp::GetType(void) const
   EOperation _operator = GetOperation(); // Performed operation.
   if (_operator == opAdd || _operator == opSub || _operator == opMul || _operator == opDiv) // When integer/char operator.
   {
-    if (GetLeft()->GetType() != GetRight()->GetType() || GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL) // If LHS or RHS is NULL.
+    if (!GetLeft()->GetType()->Match(GetRight()->GetType()) || GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL) // If LHS or RHS is NULL.
     {
       return NULL;
     }
@@ -1061,7 +1061,7 @@ const CType* CAstBinaryOp::GetType(void) const
   }
   else // When boolean operator.
   {
-    if (GetLeft()->GetType() != GetRight()->GetType() || GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL) // If LHS or RHS is NULL.
+    if (!GetLeft()->GetType()->Match(GetRight()->GetType()) || GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL) // If LHS or RHS is NULL.
     {
       return NULL;
     }
@@ -1393,7 +1393,8 @@ bool CAstFunctionCall::TypeCheck(CToken *t, string *msg) const
     //cout << "===(DEBUG)===TypeCheck at CAstFunctionCall - arg is : " << arg->GetToken().GetValue() << endl;
     const CType* argType = arg->GetType(); // Type of given argument.
     const CType* paramType = GetSymbol()->GetParam(cnt)->GetDataType(); // Type of expected parameter.
-    if (!argType->Match(paramType))
+    //if (!argType->Match(paramType))
+    if (!paramType->Match(argType))
     {
       *t = arg->GetToken(); // Set token for error reporting to current(type-mismatched) token.
       argTypeMatchRes = false;

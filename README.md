@@ -60,3 +60,7 @@ Added tests should be scripted.
 **2016-05-14 16:30 KST**  
 Generated more test for integer constants. Now total of 103 tests in <code>test/semanal/</code>.  
 Need to add integer range check for prefix <code>+</code> and no-prefix case.
+  
+**2016-05-14 18:23 KST**  
+Changed source files to newly bugfixed ones.  
+Fixed <code>ast.cpp</code> to use only <code>Match()</code> function when comparing types.

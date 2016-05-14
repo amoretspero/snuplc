@@ -1235,8 +1235,37 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
   if (_scanner->Peek().GetValue() == "+") // Unary positive operator.
   {
     CToken* unaryOp = new CToken();
+    CToken* numtok = new CToken();
     Consume(tTerm, unaryOp); // Get unary operator token.
-    n = new CAstUnaryOp(unaryOp, opPos, term(s)); // Construct term with unary operator included.
+    if (_scanner->Peek().GetType() == tNum)
+    {
+      char** endPtr = 0;
+      Consume(tNum, numtok);
+      long long numCheck = strtoll(numtok->GetValue().c_str(), endPtr, 10);
+      if (numCheck > 2147483647 || numCheck < -2147483648)
+      {
+        SetError(numtok, "integer constant outside valid range.");
+      }
+      n = new CAstConstant(numtok, CTypeManager::Get()->GetInt(), numCheck);
+    }
+    else
+    {
+      CAstExpression* termRes = term(s);
+      CAstConstant* constTerm = dynamic_cast<CAstConstant*>(termRes);
+      if (constTerm != NULL && constTerm->GetType()->IsInt())
+      {
+        long long numCheck = constTerm->GetValue();
+        if (numCheck > 2147483647 || numCheck < -2147583648)
+        {
+          SetError(constTerm->GetToken(), "integer constant outside valid range.");
+        }
+        n = new CAstConstant(constTerm->GetToken(), CTypeManager::Get()->GetInt(), numCheck);
+      }
+      else
+      {
+        n = new CAstUnaryOp(unaryOp, opPos, termRes); // Construct term with unary operator included.
+      }
+    }
   }
   else if (_scanner->Peek().GetValue() == "-") // Unary negative operator.
   {
