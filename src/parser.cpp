@@ -1230,6 +1230,8 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
   //
   // simpleexpr          = ["+"|"-"] term { termOp term }.
   //
+  // For negative/positive integer constants, RELAXED scheme is used.
+  //
   CAstExpression *n = NULL;
   
   if (_scanner->Peek().GetValue() == "+") // Unary positive operator.
@@ -1237,31 +1239,31 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
     CToken* unaryOp = new CToken();
     CToken* numtok = new CToken();
     Consume(tTerm, unaryOp); // Get unary operator token.
-    if (_scanner->Peek().GetType() == tNum)
+    if (_scanner->Peek().GetType() == tNum) // When number comes right after unary operator, leave its sign.
     {
       char** endPtr = 0;
       Consume(tNum, numtok);
       long long numCheck = strtoll(numtok->GetValue().c_str(), endPtr, 10);
-      if (numCheck > 2147483647 || numCheck < -2147483648)
+      if (numCheck > 2147483647 || numCheck < -2147483648) // Check for valid range.
       {
         SetError(numtok, "integer constant outside valid range.");
       }
       n = new CAstConstant(numtok, CTypeManager::Get()->GetInt(), numCheck);
     }
-    else
+    else // When next is not number.
     {
       CAstExpression* termRes = term(s);
-      CAstConstant* constTerm = dynamic_cast<CAstConstant*>(termRes);
-      if (constTerm != NULL && constTerm->GetType()->IsInt())
+      CAstConstant* constTerm = dynamic_cast<CAstConstant*>(termRes); // Check if term is constant.
+      if (constTerm != NULL && constTerm->GetType()->IsInt()) // Is it is constant and integer, fold it.
       {
         long long numCheck = constTerm->GetValue();
-        if (numCheck > 2147483647 || numCheck < -2147583648)
+        if (numCheck > 2147483647 || numCheck < -2147583648) // Check for valid range.
         {
           SetError(constTerm->GetToken(), "integer constant outside valid range.");
         }
         n = new CAstConstant(constTerm->GetToken(), CTypeManager::Get()->GetInt(), numCheck);
       }
-      else
+      else // Case of other terms.
       {
         n = new CAstUnaryOp(unaryOp, opPos, termRes); // Construct term with unary operator included.
       }
@@ -1277,27 +1279,27 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
       char** endPtr = 0;
       Consume(tNum, numtok);
       long long numCheck = strtoll(numtok->GetValue().c_str(), endPtr, 10);
-      if (0-numCheck > 2147483647 || 0-numCheck < -2147483648)
+      if (0-numCheck > 2147483647 || 0-numCheck < -2147483648) // Check for valid integer range.
       {
         SetError(numtok, "integer constant outside valid range.");
       }
       n = new CAstConstant(numtok, CTypeManager::Get()->GetInt(), -numCheck); // Negated number.
     }
-    else
+    else // When next term is not number.
     {
       CAstExpression* termRes = term(s);
       //cout << "===(DEBUG)===At term - termRes type is : " << termRes->GetType() << endl;
-      CAstConstant* constTerm = dynamic_cast<CAstConstant*>(termRes);
-      if (constTerm != NULL && constTerm->GetType()->IsInt())
+      CAstConstant* constTerm = dynamic_cast<CAstConstant*>(termRes); // Check if term is constant.
+      if (constTerm != NULL && constTerm->GetType()->IsInt()) // Is it is constant and integer, fold it.
       {
         long long numCheck = -(constTerm->GetValue());
-        if (numCheck > 2147483647 || numCheck < -2147483648)
+        if (numCheck > 2147483647 || numCheck < -2147483648) // Check for valid integer range.
         {
           SetError(constTerm->GetToken(), "integer constant outside valid range.");
         }
         n = new CAstConstant(constTerm->GetToken(), CTypeManager::Get()->GetInt(), -(constTerm->GetValue()));
       }
-      else
+      else // Case of other terms.
       {
         n = new CAstUnaryOp(unaryOp, opNeg, termRes); // Construct term with unary operator included.
       }
@@ -1305,7 +1307,21 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
   }
   else // When no unary operator prefixed.
   {
-    n = term(s); // Construct term.
+    CAstExpression* termRes = term(s);
+    CAstConstant* constTerm = dynamic_cast<CAstConstant*>(termRes); // Check if term is constant.
+    if (constTerm != NULL && constTerm->GetType()->IsInt()) // Is it is constant and integer, fold it.
+    {
+      long long numCheck = constTerm->GetValue();
+      if (numCheck > 2147483647 || numCheck < -2147483648) // Check for valid integer range.
+      {
+        SetError(constTerm->GetToken(), "integer constant outside valid range.");
+      }
+      n = new CAstConstant(constTerm->GetToken(), CTypeManager::Get()->GetInt(), constTerm->GetValue());
+    }
+    else // Case of other terms.
+    {
+      n = termRes; // Constructed term.
+    }
   }
 
   while (_scanner->Peek().GetType() == tTerm) // Until there are no term left, iterate and construct simpleexpr. Previous term will be left side of Binary operator, new term will be right side.

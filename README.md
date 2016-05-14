@@ -63,4 +63,8 @@ Need to add integer range check for prefix <code>+</code> and no-prefix case.
   
 **2016-05-14 18:23 KST**  
 Changed source files to newly bugfixed ones.  
-Fixed <code>ast.cpp</code> to use only <code>Match()</code> function when comparing types.
+Fixed <code>ast.cpp</code> to use only <code>Match()</code> function when comparing types.  
+  
+**2016-05-14 19:36 KST**  
+Now <code>parser.cpp</code> uses RELAXED scheme for processing integer constant.  
+Added comment for changed integer constant processing.
