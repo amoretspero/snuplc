@@ -49,4 +49,10 @@ Need to be scripted.
   
 **2016-05-14 13:43 KST**  
 Generated more test for <code>semantics.mode</code>  
-Line end characters changed from CRLF to LF.
+Line end characters changed from CRLF to LF.  
+  
+**2016-05-14 14:37 KST**  
+Added comments to <code>ast.cpp</code>.  
+Changed parts of <code>parser.cpp</code> are also commented.  
+Added reference parser for different integer constant handling, and appropriate tests are added.  
+Added tests should be scripted.
