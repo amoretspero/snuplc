@@ -55,4 +55,8 @@ Line end characters changed from CRLF to LF.
 Added comments to <code>ast.cpp</code>.  
 Changed parts of <code>parser.cpp</code> are also commented.  
 Added reference parser for different integer constant handling, and appropriate tests are added.  
-Added tests should be scripted.
+Added tests should be scripted.  
+  
+**2016-05-14 16:30 KST**  
+Generated more test for integer constants. Now total of 103 tests in <code>test/semanal/</code>.  
+Need to add integer range check for prefix <code>+</code> and no-prefix case.
