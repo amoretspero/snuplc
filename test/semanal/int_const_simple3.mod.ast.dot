@@ -43,11 +43,23 @@ digraph AST {
   node25->node24;
   node26->node25;
   node20 -> node26 [style=dotted];
-  node30 [label=":=",shape=box];
+  node32 [label=":=",shape=box];
   node27 [label="i",shape=ellipse];
-  node30->node27;
-  node29 [label="0",shape=ellipse];
+  node32->node27;
+  node31 [label="neg",shape=box];
+  node30 [label="mul",shape=box];
+  node28 [label="2147483648",shape=ellipse];
+  node30->node28;
+  node29 [label="3",shape=ellipse];
   node30->node29;
-  node26 -> node30 [style=dotted];
+  node31->node30;
+  node32->node31;
+  node26 -> node32 [style=dotted];
+  node36 [label=":=",shape=box];
+  node33 [label="i",shape=ellipse];
+  node36->node33;
+  node35 [label="0",shape=ellipse];
+  node36->node35;
+  node32 -> node36 [style=dotted];
   node0 -> node1;
 }

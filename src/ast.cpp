@@ -1147,7 +1147,49 @@ bool CAstUnaryOp::TypeCheck(CToken *t, string *msg) const
   {
     *msg = "Unary type is not valid.";
     return false;
-  } 
+  }
+  
+  if (GetOperation() == opNeg)
+  {
+    if (!operandGetTypeRes->IsInt())
+    {
+      std::stringstream ss;
+      ss << GetOperand()->GetType();
+      *msg = "neg: type mismatch.\n";
+      *msg += "  operand:       ";
+      *msg += ss.str();
+      *t = GetToken();
+      return false;
+    }
+  }
+  
+  if (GetOperation() == opPos)
+  {
+    if (!operandGetTypeRes->IsInt())
+    {
+      std::stringstream ss;
+      ss << GetOperand()->GetType();
+      *msg = "pos: type mismatch.\n";
+      *msg += "  operand:       ";
+      *msg += ss.str();
+      *t = GetToken();
+      return false;
+    }
+  }
+  
+  if (GetOperation() == opNot)
+  {
+    if (!operandGetTypeRes->IsBoolean())
+    {
+      std::stringstream ss;
+      ss << GetOperand()->GetType();
+      *msg = "not: type mismatch.\n";
+      *msg += "  operand:       ";
+      *msg += ss.str();
+      *t = GetToken();
+      return false;
+    }
+  }
   
   return true;
 }
@@ -1156,11 +1198,13 @@ const CType* CAstUnaryOp::GetType(void) const
 {
   if (GetOperation() == opNeg || GetOperation() == opPos) // When integer/char operator.
   {
-    return CTypeManager::Get()->GetInt();
+    return GetOperand()->GetType();
+    //return CTypeManager::Get()->GetInt();
   }
   else // When boolean operator.
   {
-    return CTypeManager::Get()->GetBool();
+    return GetOperand()->GetType();
+    //return CTypeManager::Get()->GetBool();
   }
 }
 

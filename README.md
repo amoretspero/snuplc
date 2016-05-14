@@ -67,4 +67,7 @@ Fixed <code>ast.cpp</code> to use only <code>Match()</code> function when compar
   
 **2016-05-14 19:36 KST**  
 Now <code>parser.cpp</code> uses RELAXED scheme for processing integer constant.  
-Added comment for changed integer constant processing.
+Added comment for changed integer constant processing.  
+  
+**2016-05-14 21:57 KST**  
+Fixing bug with RELAXED scheme.
