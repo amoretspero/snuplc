@@ -1,5 +1,5 @@
 //
-// test01.mod : Test module with no subroutine, only global variables and basic types.
+// test04.mod : Test module with no subroutine, only global variables and basic types.
 //
 
 module test;

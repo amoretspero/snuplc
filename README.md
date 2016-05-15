@@ -75,4 +75,9 @@ Fixing bug with RELAXED scheme.
 **2016-05-15 02:53 KST**  
 Fixing bug with RELAXED scheme.  
 Added more sophisticated tests for integer constants.  
-Distinct tests (with only one fail line) are added.
+Distinct tests (with only one fail line) are added.  
+  
+**2016-05-15 19:12 KST**  
+Fixing bug with RELAXED scheme.  
+Almost dealt with integer constant foldings.  
+Should solve segfault problem for binary addition.

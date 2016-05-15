@@ -1,0 +1,76 @@
+parsing 'test05.mod'...
+===(DEBUG)===At term - unary is negative, binary term has been read. Binary operation : mul
+===(DEBUG)===At term - unary is negative, binary LHS is constant. Value : 2147483648
+===(DEBUG)===At term - termRes is CAstConstant
+===(DEBUG)===At term - unary is negative, binary term has been read. Binary operation : mul
+===(DEBUG)===At term - unary is negative, binary LHS is constant. Value : 2147483647
+successfully parsed.
+  AST:
+    CAstScope: 'test05'
+      symbol table:
+        [[
+          [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+          [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+          [ *ReadInt() --> <int>           ]
+          [ *WriteChar(<char>) --> <NULL>           ]
+          [ *WriteInt(<int>) --> <NULL>           ]
+          [ *WriteLn() --> <NULL>           ]
+          [ *WriteStr(<ptr(4) to <array of <char>>>) --> <NULL>           ]
+          [ @i        <int>           ]
+          [ @j        <int>           ]
+        ]]
+      statement list:
+        := <int>
+          [ @i        <int> ] <int>
+          neg <int>
+            mul <int>
+              -2147483648 <int>
+              add <int>
+                neg <int>
+                  [ @i        <int> ] <int>
+                mul <int>
+                  [ @j        <int> ] <int>
+                  neg <int>
+                    [ @j        <int> ] <int>
+        := <int>
+          [ @i        <int> ] <int>
+          neg <int>
+            mul <int>
+              neg <int>
+                mul <int>
+                  sub <int>
+                    add <int>
+                      div <int>
+                        mul <int>
+                          2147483647 <int>
+                          neg <int>
+                            neg <int>
+                              [ @j        <int> ] <int>
+                        neg <int>
+                          [ @i        <int> ] <int>
+                      2147483647 <int>
+                    -2147483648 <int>
+                  add <int>
+                    neg <int>
+                      [ @i        <int> ] <int>
+                    [ @j        <int> ] <int>
+              neg <int>
+                mul <int>
+                  -2147483647 <int>
+                  add <int>
+                    neg <int>
+                      [ @i        <int> ] <int>
+                    mul <int>
+                      [ @j        <int> ] <int>
+                      neg <int>
+                        [ @j        <int> ] <int>
+      nested scopes:
+        empty.
+    
+
+
+run the following command to convert the .dot file into a PDF:
+  dot -Tpdf -otest05.mod.ast.pdf test05.mod.ast.dot
+
+
+Done.

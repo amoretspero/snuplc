@@ -1260,7 +1260,7 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
       if (constTerm != NULL && constTerm->GetType()->IsInt()) // Is it is constant and integer, fold it.
       {
         long long numCheck = constTerm->GetValue();
-        if (numCheck > 2147483647 || numCheck < -2147583648) // Check for valid range.
+        if (numCheck > 2147483647 || numCheck < -2147483648) // Check for valid range.
         {
           SetError(constTerm->GetToken(), "integer constant outside valid range.");
         }
@@ -1268,14 +1268,42 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
       }
       else if (binaryTerm != NULL && binaryTerm->GetType()->IsInt())
       {
+        //cout << "===(DEBUG)===At term - case of positive unary operator, binary operator is : " << binaryTerm->GetOperation() << endl;
         CAstConstant* constLHS = dynamic_cast<CAstConstant*>(binaryTerm->GetLeft()); // Check if LHS is integer constant. If then, we should leave that value.
-        if (constLHS != NULL && constLHS->GetType()->IsInt()) // Case when LHS is integer constant.
+        CAstConstant* constRHS = dynamic_cast<CAstConstant*>(binaryTerm->GetRight()); // Check if RHS is integer constant. If then, we should leave that value.
+        //if (constLHS != NULL) { cout << "===(DEBUG)===At term - unary is positive, binary LHS is constant. Value : " << constLHS->GetValue() << endl; }
+        //if (constRHS != NULL) { cout << "===(DEBUG)===At term - unary is positive, binary RHS is constant. Value : " << constRHS->GetValue() << endl; }
+        if (constLHS != NULL && constLHS->GetType()->IsInt() && constRHS != NULL && constRHS->GetType()->IsInt()) // Case when LHS and RHS are both integer constant.
         {
+          if (constRHS->GetValue() > 2147483647 || constRHS->GetValue() < -2147483648)
+          {
+            SetError(constRHS->GetToken(), "integer constant outside valid range.");
+          }
+          if (constLHS->GetValue() > 2147483647 || constLHS->GetValue() < -2147483648)
+          {
+            SetError(constLHS->GetToken(), "integer constant outside valid range.");
+          }
+          n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstConstant(constLHS->GetToken(), CTypeManager::Get()->GetInt(), constLHS->GetValue()), new CAstConstant(constRHS->GetToken(), CTypeManager::Get()->GetInt(), constRHS->GetValue()));
+        }
+        else if (constLHS != NULL && constLHS->GetType()->IsInt())
+        {
+          if (constLHS->GetValue() > 2147483647 || constLHS->GetValue() < -2147483648)
+          {
+            SetError(constLHS->GetToken(), "integer constant outside valid range.");
+          }
           n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstConstant(constLHS->GetToken(), CTypeManager::Get()->GetInt(), constLHS->GetValue()), binaryTerm->GetRight());
+        }
+        else if (constRHS != NULL && constRHS->GetType()->IsInt())
+        {
+          if (constRHS->GetValue() > 2147483647 || constRHS->GetValue() < -2147483648)
+          {
+            SetError(constRHS->GetToken(), "integer constant outside valid range.");
+          }
+          n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opPos, binaryTerm->GetLeft()), constRHS);
         }
         else // Case when LHS it not integer constant.
         {
-          n = new CAstUnaryOp(unaryOp, opPos, termRes);
+          n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opPos, binaryTerm->GetLeft()), binaryTerm->GetRight());
         }
       }
       else // Case of other terms.
@@ -1326,14 +1354,42 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
         }
         else if (binaryTerm != NULL && binaryTerm->GetType()->IsInt())
         {
+          //cout << "===(DEBUG)===At term - unary is negative, binary term has been read. Binary operation : " << binaryTerm->GetOperation() << endl;
           CAstConstant* constLHS = dynamic_cast<CAstConstant*>(binaryTerm->GetLeft()); // Check if LHS is integer constant. If then, we should negate that value.
-          if (constLHS != NULL && constLHS->GetType()->IsInt()) // Case when LHS is integer constant.
+          CAstConstant* constRHS = dynamic_cast<CAstConstant*>(binaryTerm->GetRight()); // Check if RHS is integer constant. If then, we should leave that value.
+          //if (constLHS != NULL) { cout << "===(DEBUG)===At term - unary is negative, binary LHS is constant. Value : " << constLHS->GetValue() << endl; }
+          //if (constRHS != NULL) { cout << "===(DEBUG)===At term - unary is negative, binary RHS is constant. Value : " << constRHS->GetValue() << endl; }
+          if (constLHS != NULL && constLHS->GetType()->IsInt() && constRHS != NULL && constRHS->GetType()->IsInt()) // Case when LHS and RHS are both integer constant.
           {
+            if (constRHS->GetValue() > 2147483647 || constRHS->GetValue() < -2147483648)
+            {
+              SetError(constRHS->GetToken(), "integer constant outside valid range.");
+            }
+            if ((0 - constLHS->GetValue()) > 2147483647 || (0 - constLHS->GetValue()) < -2147483648)
+            {
+              SetError(constLHS->GetToken(), "integer constant outside valid range.");
+            }
+            n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstConstant(constLHS->GetToken(), CTypeManager::Get()->GetInt(), 0 - constLHS->GetValue()), constRHS);
+          }
+          else if (constLHS != NULL && constLHS->GetType()->IsInt())
+          {
+            if ((0 - constLHS->GetValue()) > 2147483647 || (0 - constLHS->GetValue()) < -2147483648)
+            {
+              SetError(constLHS->GetToken(), "integer constant outside valid range.");
+            }
             n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstConstant(constLHS->GetToken(), CTypeManager::Get()->GetInt(), 0 - constLHS->GetValue()), binaryTerm->GetRight());
+          }
+          else if (constRHS != NULL && constRHS->GetType()->IsInt())
+          {
+            if (constRHS->GetValue() > 2147483647 || constRHS->GetValue() < -2147483648)
+            {
+              SetError(constRHS->GetToken(), "integer constant outside valid range.");
+            }
+            n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opNeg, binaryTerm->GetLeft()) , constRHS);
           }
           else // Case when LHS is not integer constant.
           {
-            n = new CAstUnaryOp(unaryOp, opNeg, termRes);
+            n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opNeg, binaryTerm->GetLeft()) , binaryTerm->GetRight());
           }
         }
         else // Case of other terms.
@@ -1353,6 +1409,7 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
     CAstExpression* termRes = term(s);
     //cout << "===(DEBUG)===At term - when no unary, termRes type is : " << termRes->GetType() << ", token for termRes is : " << termRes->GetToken() << endl;
     CAstConstant* constTerm = dynamic_cast<CAstConstant*>(termRes); // Check if term is constant.
+    CAstBinaryOp* binaryTerm = dynamic_cast<CAstBinaryOp*>(termRes);
     if (constTerm != NULL && constTerm->GetType()->IsInt()) // Is it is constant and integer, fold it.
     {
       long long numCheck = constTerm->GetValue();
@@ -1362,6 +1419,43 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
         SetError(constTerm->GetToken(), "integer constant outside valid range.");
       }
       n = new CAstConstant(constTerm->GetToken(), CTypeManager::Get()->GetInt(), constTerm->GetValue());
+    }
+    else if (binaryTerm != NULL && binaryTerm->GetType()->IsInt()) // If it is binary term, check each side.
+    {
+      CAstConstant* constLHS = dynamic_cast<CAstConstant*>(binaryTerm->GetLeft());
+      CAstConstant* constRHS = dynamic_cast<CAstConstant*>(binaryTerm->GetRight());
+      if (constLHS != NULL && constLHS->GetType()->IsInt() && constRHS != NULL && constRHS->GetType()->IsInt())
+      {
+        if (constRHS->GetValue() > 2147483647 || constRHS->GetValue() < -2147483648)
+        {
+          SetError(constRHS->GetToken(), "integer constant outside valid range.");
+        }
+        if (constLHS->GetValue() > 2147483647 || constLHS->GetValue() < -2147483648)
+        {
+          SetError(constLHS->GetToken(), "integer constant outside valid range.");
+        }
+        n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), constLHS, constRHS);
+      }
+      else if (constLHS != NULL && constLHS->GetType()->IsInt())
+      {
+        if (constLHS->GetValue() > 2147483647 || constLHS->GetValue() < -2147483648)
+        {
+          SetError(constLHS->GetToken(), "integer constant outside valid range.");
+        }
+        n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), constLHS, binaryTerm->GetRight());
+      }
+      else if (constRHS != NULL && constRHS->GetType()->IsInt())
+      {
+        if (constRHS->GetValue() > 2147483647 || constRHS->GetValue() < -2147483648)
+        {
+          SetError(constRHS->GetToken(), "integer constant outside valid range.");
+        }
+        n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), binaryTerm->GetLeft(), constRHS);
+      }
+      else // Case when LHS is not integer constant.
+      {
+        n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), binaryTerm->GetLeft(), binaryTerm->GetRight());
+      }
     }
     else // Case of other terms.
     {
@@ -1378,12 +1472,50 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
 
     r = term(s); // Get RHS term.
     
-    CAstConstant* constRHS = dynamic_cast<CAstConstant*>(r);
-    if (constRHS != NULL)
+    CAstConstant* constRHSTerm = dynamic_cast<CAstConstant*>(r);
+    CAstBinaryOp* binaryTerm = dynamic_cast<CAstBinaryOp*>(r);
+    if (constRHSTerm != NULL && constRHSTerm->GetType()->IsInt())
     {
-      if (constRHS->GetValue() > 2147483647 || constRHS->GetValue() < -2147483648)
+      if (constRHSTerm->GetValue() > 2147483647 || constRHSTerm->GetValue() < -2147483648)
       {
-        SetError(constRHS->GetToken(), "integer constant outside valid range.");
+        SetError(constRHSTerm->GetToken(), "integer constant outside valid range.");
+      }
+    }
+    if (binaryTerm != NULL && binaryTerm->GetType()->IsInt())
+    {
+      CAstConstant* constLHS = dynamic_cast<CAstConstant*>(binaryTerm->GetLeft());
+      CAstConstant* constRHS = dynamic_cast<CAstConstant*>(binaryTerm->GetRight());
+      if (constLHS != NULL && constLHS->GetType()->IsInt() && constRHS != NULL && constRHS->GetType()->IsInt())
+      {
+        if (constRHS->GetValue() > 2147483647 || constRHS->GetValue() < -2147483648)
+        {
+          SetError(constRHS->GetToken(), "integer constant outside valid range.");
+        }
+        if (constLHS->GetValue() > 2147483647 || constLHS->GetValue() < -2147483648)
+        {
+          SetError(constLHS->GetToken(), "integer constant outside valid range.");
+        }
+        r = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), constLHS, constRHS);
+      }
+      else if (constLHS != NULL && constLHS->GetType()->IsInt())
+      {
+        if (constLHS->GetValue() > 2147483647 || constLHS->GetValue() < -2147483648)
+        {
+          SetError(constLHS->GetToken(), "integer constant outside valid range.");
+        }
+        r = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), constLHS, binaryTerm->GetRight());
+      }
+      else if (constRHS != NULL && constRHS->GetType()->IsInt())
+      {
+        if (constRHS->GetValue() > 2147483647 || constRHS->GetValue() < -2147483648)
+        {
+          SetError(constRHS->GetToken(), "integer constant outside valid range.");
+        }
+        r = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), binaryTerm->GetLeft(), constRHS);
+      }
+      else // Case when LHS is not integer constant.
+      {
+        r = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), binaryTerm->GetLeft(), binaryTerm->GetRight());
       }
     }
     
