@@ -1266,7 +1266,7 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
         }
         n = new CAstConstant(constTerm->GetToken(), CTypeManager::Get()->GetInt(), numCheck);
       }
-      else if (binaryTerm != NULL && binaryTerm->GetType()->IsInt())
+      else if (binaryTerm != NULL && binaryTerm->GetType() != NULL && binaryTerm->GetType()->IsInt())
       {
         //cout << "===(DEBUG)===At term - case of positive unary operator, binary operator is : " << binaryTerm->GetOperation() << endl;
         CAstConstant* constLHS = dynamic_cast<CAstConstant*>(binaryTerm->GetLeft()); // Check if LHS is integer constant. If then, we should leave that value.
@@ -1352,7 +1352,7 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
           }
           n = new CAstConstant(constTerm->GetToken(), CTypeManager::Get()->GetInt(), -(constTerm->GetValue()));
         }
-        else if (binaryTerm != NULL && binaryTerm->GetType()->IsInt())
+        else if (binaryTerm != NULL && binaryTerm->GetType() != NULL && binaryTerm->GetType()->IsInt())
         {
           //cout << "===(DEBUG)===At term - unary is negative, binary term has been read. Binary operation : " << binaryTerm->GetOperation() << endl;
           CAstConstant* constLHS = dynamic_cast<CAstConstant*>(binaryTerm->GetLeft()); // Check if LHS is integer constant. If then, we should negate that value.
@@ -1420,7 +1420,7 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
       }
       n = new CAstConstant(constTerm->GetToken(), CTypeManager::Get()->GetInt(), constTerm->GetValue());
     }
-    else if (binaryTerm != NULL && binaryTerm->GetType()->IsInt()) // If it is binary term, check each side.
+    else if (binaryTerm != NULL && binaryTerm->GetType() != NULL && binaryTerm->GetType()->IsInt()) // If it is binary term, check each side.
     {
       CAstConstant* constLHS = dynamic_cast<CAstConstant*>(binaryTerm->GetLeft());
       CAstConstant* constRHS = dynamic_cast<CAstConstant*>(binaryTerm->GetRight());
@@ -1481,7 +1481,7 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
         SetError(constRHSTerm->GetToken(), "integer constant outside valid range.");
       }
     }
-    if (binaryTerm != NULL && binaryTerm->GetType()->IsInt())
+    if (binaryTerm != NULL && binaryTerm->GetType() != NULL && binaryTerm->GetType()->IsInt())
     {
       CAstConstant* constLHS = dynamic_cast<CAstConstant*>(binaryTerm->GetLeft());
       CAstConstant* constRHS = dynamic_cast<CAstConstant*>(binaryTerm->GetRight());

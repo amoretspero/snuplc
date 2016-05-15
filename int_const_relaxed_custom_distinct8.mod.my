@@ -1,0 +1,253 @@
+parsing 'test/semanal_distinct/int_const_relaxed_custom_distinct8.mod'...
+successfully parsed.
+  AST:
+    CAstScope: 'int_const_relaxed_custom'
+      symbol table:
+        [[
+          [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>           ]
+          [ *DOFS(<ptr(4) to <NULL>>) --> <int>           ]
+          [ *ReadInt() --> <int>           ]
+          [ *WriteChar(<char>) --> <NULL>           ]
+          [ *WriteInt(<int>) --> <NULL>           ]
+          [ *WriteLn() --> <NULL>           ]
+          [ *WriteStr(<ptr(4) to <array of <char>>>) --> <NULL>           ]
+          [ *relaxed_custom() --> <NULL>           ]
+        ]]
+      statement list:
+        empty.
+      nested scopes:
+        CAstScope: 'relaxed_custom'
+          symbol table:
+            [[
+              [ $b        <bool>               ]
+              [ $c        <char>               ]
+              [ $i        <int>               ]
+              [ $j        <int>               ]
+            ]]
+          statement list:
+            := <int>
+              [ $i        <int> ] <int>
+              -2147483648 <int>
+            := <int>
+              [ $i        <int> ] <int>
+              add <int>
+                -2147483648 <int>
+                12345 <int>
+            := <int>
+              [ $i        <int> ] <int>
+              add <int>
+                -2147483648 <int>
+                2147483647 <int>
+            := <int>
+              [ $i        <int> ] <int>
+              add <int>
+                -2147483648 <int>
+                neg <int>
+                  -2147483647 <int>
+            := <int>
+              [ $i        <int> ] <int>
+              sub <int>
+                neg <int>
+                  -2147483648 <int>
+                2147483647 <int>
+            := <int>
+              [ $i        <int> ] <int>
+              sub <int>
+                neg <int>
+                  neg <int>
+                    2147483647 <int>
+                neg <int>
+                  -2147483648 <int>
+            := <int>
+              [ $i        <int> ] <int>
+              neg <int>
+                mul <int>
+                  neg <int>
+                    2147483647 <int>
+                  2147483647 <int>
+            := <int>
+              [ $i        <int> ] <int>
+              neg <int>
+                div <int>
+                  neg <int>
+                    -2147483648 <int>
+                  neg <int>
+                    -2147483648 <int>
+            := <int>
+              [ $i        <int> ] <int>
+              neg <int>
+                mul <int>
+                  add <int>
+                    neg <int>
+                      mul <int>
+                        2147483647 <int>
+                        -2147483648 <int>
+                    2147483647 <int>
+                  sub <int>
+                    2147483647 <int>
+                    mul <int>
+                      -2147483648 <int>
+                      -2147483648 <int>
+            := <int>
+              [ $i        <int> ] <int>
+              add <int>
+                neg <int>
+                  [ $j        <int> ] <int>
+                mul <int>
+                  neg <int>
+                    [ $i        <int> ] <int>
+                  2147483647 <int>
+            := <int>
+              [ $i        <int> ] <int>
+              sub <int>
+                div <int>
+                  neg <int>
+                    mul <int>
+                      [ $i        <int> ] <int>
+                      neg <int>
+                        neg <int>
+                          [ $j        <int> ] <int>
+                  2147483647 <int>
+                add <int>
+                  neg <int>
+                    [ $j        <int> ] <int>
+                  mul <int>
+                    2147483647 <int>
+                    -2147483648 <int>
+            := <int>
+              [ $i        <int> ] <int>
+              neg <int>
+                mul <int>
+                  neg <int>
+                    mul <int>
+                      sub <int>
+                        add <int>
+                          div <int>
+                            mul <int>
+                              2147483647 <int>
+                              neg <int>
+                                neg <int>
+                                  [ $j        <int> ] <int>
+                            neg <int>
+                              [ $i        <int> ] <int>
+                          2147483647 <int>
+                        -2147483648 <int>
+                      add <int>
+                        neg <int>
+                          [ $i        <int> ] <int>
+                        [ $j        <int> ] <int>
+                  neg <int>
+                    mul <int>
+                      -2147483648 <int>
+                      add <int>
+                        neg <int>
+                          [ $i        <int> ] <int>
+                        mul <int>
+                          [ $j        <int> ] <int>
+                          neg <int>
+                            [ $j        <int> ] <int>
+            := <int>
+              [ $i        <int> ] <int>
+              neg <int>
+                div <int>
+                  neg <int>
+                    mul <int>
+                      add <int>
+                        div <int>
+                          mul <int>
+                            2147483647 <int>
+                            neg <int>
+                              neg <int>
+                                [ $j        <int> ] <int>
+                          neg <int>
+                            [ $i        <int> ] <int>
+                        neg <int>
+                          -2147483648 <int>
+                      add <int>
+                        div <int>
+                          neg <int>
+                            [ $i        <int> ] <int>
+                          [ $i        <int> ] <int>
+                        [ $j        <int> ] <int>
+                  mul <int>
+                    -2147483648 <int>
+                    add <int>
+                      mul <int>
+                        neg <int>
+                          [ $j        <int> ] <int>
+                        mul <int>
+                          add <int>
+                            neg <int>
+                              [ $i        <int> ] <int>
+                            2147383647 <int>
+                          -2147483648 <int>
+                      neg <int>
+                        [ $j        <int> ] <int>
+            := <int>
+              [ $i        <int> ] <int>
+              add <int>
+                pos <int>
+                  [ $i        <int> ] <int>
+                [ $j        <int> ] <int>
+            := <int>
+              [ $i        <int> ] <int>
+              pos <int>
+                mul <int>
+                  pos <int>
+                    [ $i        <int> ] <int>
+                  add <int>
+                    neg <int>
+                      [ $j        <int> ] <int>
+                    [ $i        <int> ] <int>
+            := <int>
+              [ $i        <int> ] <int>
+              add <int>
+                pos <int>
+                  [ $i        <int> ] <int>
+                mul <int>
+                  pos <int>
+                    [ $j        <int> ] <int>
+                  div <int>
+                    pos <int>
+                      [ $i        <int> ] <int>
+                    neg <int>
+                      neg <int>
+                        add <int>
+                          [ $j        <int> ] <int>
+                          pos <int>
+                            neg <int>
+                              pos <int>
+                                sub <int>
+                                  pos <int>
+                                    [ $i        <int> ] <int>
+                                  pos <int>
+                                    neg <int>
+                                      pos <int>
+                                        pos <int>
+                                          [ $j        <int> ] <int>
+            := <int>
+              [ $i        <int> ] <int>
+              mul <int>
+                -2147483648 <int>
+                neg <int>
+                  mul <int>
+                    2147483647 <int>
+                    sub <int>
+                      [ $i        <int> ] <int>
+                      -2147483648 <int>
+            := <int>
+              [ $i        <int> ] <int>
+              add <int>
+                [ $i        <int> ] <int>
+                [ $j        <int> ] <int>
+          nested scopes:
+            empty.
+        
+    
+
+
+run the following command to convert the .dot file into a PDF:
+  dot -Tpdf -otest/semanal_distinct/int_const_relaxed_custom_distinct8.mod.ast.pdf test/semanal_distinct/int_const_relaxed_custom_distinct8.mod.ast.dot
+
+
+Done.

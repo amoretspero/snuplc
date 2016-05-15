@@ -1053,7 +1053,7 @@ const CType* CAstBinaryOp::GetType(void) const
   EOperation _operator = GetOperation(); // Performed operation.
   if (_operator == opAdd || _operator == opSub || _operator == opMul || _operator == opDiv) // When integer/char operator.
   {
-    if (!GetLeft()->GetType()->Match(GetRight()->GetType()) || GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL) // If LHS or RHS is NULL.
+    if (GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL || !GetLeft()->GetType()->Match(GetRight()->GetType())) // If LHS or RHS is NULL.
     {
       return NULL;
     }
@@ -1061,7 +1061,7 @@ const CType* CAstBinaryOp::GetType(void) const
   }
   else // When boolean operator.
   {
-    if (!GetLeft()->GetType()->Match(GetRight()->GetType()) || GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL) // If LHS or RHS is NULL.
+    if (GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL || !GetLeft()->GetType()->Match(GetRight()->GetType())) // If LHS or RHS is NULL.
     {
       return NULL;
     }

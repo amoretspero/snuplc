@@ -80,4 +80,10 @@ Distinct tests (with only one fail line) are added.
 **2016-05-15 19:12 KST**  
 Fixing bug with RELAXED scheme.  
 Almost dealt with integer constant foldings.  
-Should solve segfault problem for binary addition.
+Should solve segfault problem for binary addition.  
+  
+**2016-05-15 20:35 KST**  
+Almost fixed bug with RELAXED scheme.  
+Need to get response to bug report about reference RELAXED scheme parser.  
+Bug : ref parser parses <code>-a * b + c</code> as <code>neg(add(mul(a, b), c))</code> where as
+appropriate parsing should be <code>add(neg(mul(a, b)), c)</code> which SIMPLE scheme parser does.
