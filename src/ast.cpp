@@ -721,7 +721,7 @@ bool CAstStatIf::TypeCheck(CToken *t, string *msg) const
   if (!cond->GetType()->Match(CTypeManager::Get()->GetBool())) // Check if condition type is boolean.
   {
     *t = _cond->GetToken(); // Get token for error reporting.
-    *msg = "If-cond does not have boolean type."; // Set error message.
+    *msg = "boolean expression expected."; // Set error message.
     return false;
   }
   
@@ -864,6 +864,13 @@ bool CAstStatWhile::TypeCheck(CToken *t, string *msg) const
   bool condTypeCheckRes = cond->TypeCheck(t, msg); // TypeCheck the condition.
   if (!condTypeCheckRes) // When typecheck for condition fails.
   {
+    return false;
+  }
+  
+  if (!cond->GetType()->Match(CTypeManager::Get()->GetBool())) // Check if condition type is boolean.
+  {
+    *t = _cond->GetToken(); // Get token for error reporting.
+    *msg = "boolean expression expected."; // Set error message.
     return false;
   }
   
@@ -1149,9 +1156,9 @@ bool CAstUnaryOp::TypeCheck(CToken *t, string *msg) const
     return false;
   }
   
-  if (GetOperation() == opNeg)
+  if (GetOperation() == opNeg) // Case when operation is negation.
   {
-    if (!operandGetTypeRes->IsInt())
+    if (!operandGetTypeRes->IsInt()) // If operand is not type of integer, error.
     {
       std::stringstream ss;
       ss << GetOperand()->GetType();
@@ -1163,9 +1170,9 @@ bool CAstUnaryOp::TypeCheck(CToken *t, string *msg) const
     }
   }
   
-  if (GetOperation() == opPos)
+  if (GetOperation() == opPos) // Case when operation is positive.
   {
-    if (!operandGetTypeRes->IsInt())
+    if (!operandGetTypeRes->IsInt()) // If operand is not type of integer, error.
     {
       std::stringstream ss;
       ss << GetOperand()->GetType();
@@ -1177,9 +1184,9 @@ bool CAstUnaryOp::TypeCheck(CToken *t, string *msg) const
     }
   }
   
-  if (GetOperation() == opNot)
+  if (GetOperation() == opNot) // Case when operation is boolean-not.
   {
-    if (!operandGetTypeRes->IsBoolean())
+    if (!operandGetTypeRes->IsBoolean()) // If operand is not type of boolean, error.
     {
       std::stringstream ss;
       ss << GetOperand()->GetType();
@@ -1691,11 +1698,11 @@ const CType* CAstArrayDesignator::GetType(void) const
       idxEnd = true;
     }
   }
-  if (GetNIndices() > 0)
+  if (GetNIndices() > 0) // If at least one index is given, return appropriate inner type computed in above for-loop.
   {
     return at;
   }
-  else
+  else // If no index is given, Just return the type of array.
   {
     return GetSymbol()->GetDataType();
   }

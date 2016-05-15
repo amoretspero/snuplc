@@ -86,4 +86,11 @@ Should solve segfault problem for binary addition.
 Almost fixed bug with RELAXED scheme.  
 Need to get response to bug report about reference RELAXED scheme parser.  
 Bug : ref parser parses <code>-a * b + c</code> as <code>neg(add(mul(a, b), c))</code> where as
-appropriate parsing should be <code>add(neg(mul(a, b)), c)</code> which SIMPLE scheme parser does.
+appropriate parsing should be <code>add(neg(mul(a, b)), c)</code> which SIMPLE scheme parser does.  
+  
+**2016-05-15 23:37 KST**  
+Fixed bug with parser. While-statement condition is only boolean-allowed, and error message for the situation
+when there are no arguments but arguments are needed to appropriate one.  
+Commented <code>TypeCheck()</code> and <code>GetType()</code> methods in <code>ast.cpp</code>.  
+Commented changed parts of <code>parser.cpp</code>.  
+Bug report response is needed.
