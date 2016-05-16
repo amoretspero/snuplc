@@ -127,9 +127,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a27ce2e9d1613583a698d190a57a10247"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCType.html">CType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a27ce2e9d1613583a698d190a57a10247">GetParams</a> (<a class="el" href="classCScanner.html">CScanner</a> *<a class="el" href="classCParser.html#a90bb0e8599f6a4513e9c31d34384c7bd">_scanner</a>, <a class="el" href="classCTypeManager.html">CTypeManager</a> *_tm, vector&lt; vector&lt; <a class="el" href="classCSymParam.html">CSymParam</a> * &gt; &gt; *paramVec1, int lastIdx)</td></tr>
 <tr class="memdesc:a27ce2e9d1613583a698d190a57a10247"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets parameters for procedure/function.  <a href="#a27ce2e9d1613583a698d190a57a10247">More...</a><br/></td></tr>
 <tr class="separator:a27ce2e9d1613583a698d190a57a10247"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61ad142e9fdd526823c9c1269cffae13"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classCType.html">CType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a61ad142e9fdd526823c9c1269cffae13">GenerateArrayType</a> (<a class="el" href="classCScanner.html">CScanner</a> *<a class="el" href="classCParser.html#a90bb0e8599f6a4513e9c31d34384c7bd">_scanner</a>, <a class="el" href="classCTypeManager.html">CTypeManager</a> *_tm, <a class="el" href="classCType.html">CType</a> *_baseType)</td></tr>
-<tr class="memdesc:a61ad142e9fdd526823c9c1269cffae13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets Array type for given base type. May use recursive call to this function for getting multiple dimension array.  <a href="#a61ad142e9fdd526823c9c1269cffae13">More...</a><br/></td></tr>
-<tr class="separator:a61ad142e9fdd526823c9c1269cffae13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a365792f62ff3fc86556b7be7b4459025"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classCType.html">CType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a365792f62ff3fc86556b7be7b4459025">GenerateArrayType</a> (<a class="el" href="classCScanner.html">CScanner</a> *<a class="el" href="classCParser.html#a90bb0e8599f6a4513e9c31d34384c7bd">_scanner</a>, <a class="el" href="classCTypeManager.html">CTypeManager</a> *_tm, <a class="el" href="classCType.html">CType</a> *_baseType, bool _isParam)</td></tr>
+<tr class="memdesc:a365792f62ff3fc86556b7be7b4459025"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets Array type for given base type. May use recursive call to this function for getting multiple dimension array.  <a href="#a365792f62ff3fc86556b7be7b4459025">More...</a><br/></td></tr>
+<tr class="separator:a365792f62ff3fc86556b7be7b4459025"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1efca0ae8ffe0a78cea3ca6908e4779d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classCType.html">CType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a1efca0ae8ffe0a78cea3ca6908e4779d">GeneratePointerType</a> (<a class="el" href="classCScanner.html">CScanner</a> *<a class="el" href="classCParser.html#a90bb0e8599f6a4513e9c31d34384c7bd">_scanner</a>, <a class="el" href="classCTypeManager.html">CTypeManager</a> *_tm, <a class="el" href="classCType.html">CType</a> *_baseType)</td></tr>
 <tr class="separator:a1efca0ae8ffe0a78cea3ca6908e4779d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51c0eb96d443f7155ac1f2270af4e712"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a51c0eb96d443f7155ac1f2270af4e712">AddArguments</a> (<a class="el" href="classCAstScope.html">CAstScope</a> *s, <a class="el" href="classCScanner.html">CScanner</a> *<a class="el" href="classCParser.html#a90bb0e8599f6a4513e9c31d34384c7bd">_scanner</a>, <a class="el" href="classCTypeManager.html">CTypeManager</a> *_tm, <a class="el" href="classCAstFunctionCall.html">CAstFunctionCall</a> *_fc, int nParams)</td></tr>
@@ -280,7 +280,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00886">886</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00949">949</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -331,7 +331,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01011">1011</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01083">1083</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -376,7 +376,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00590">590</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00596">596</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -468,7 +468,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01059">1059</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01171">1171</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -508,11 +508,11 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01216">1216</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01580">1580</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a61ad142e9fdd526823c9c1269cffae13"></a>
+<a class="anchor" id="a365792f62ff3fc86556b7be7b4459025"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -535,7 +535,13 @@ License</h1>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classCType.html">CType</a> *&#160;</td>
-          <td class="paramname"><em>_baseType</em>&#160;</td>
+          <td class="paramname"><em>_baseType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_isParam</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -560,7 +566,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00684">684</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00743">743</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -718,7 +724,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00616">616</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00663">663</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -777,7 +783,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00648">648</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00707">707</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -822,7 +828,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00663">663</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00722">722</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -897,7 +903,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00937">937</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01009">1009</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1049,7 +1055,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00990">990</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01062">1062</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1134,7 +1140,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01114">1114</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01226">1226</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1174,7 +1180,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00780">780</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00843">843</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1232,7 +1238,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00865">865</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00928">928</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1272,7 +1278,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01175">1175</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01539">1539</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1323,7 +1329,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00709">709</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00772">772</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1363,7 +1369,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00968">968</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01040">1040</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1519,7 +1525,7 @@ License</h1>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 27 2016 10:28:02 for SnuPL Compiler by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon May 16 2016 07:03:00 for SnuPL Compiler by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

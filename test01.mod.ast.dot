@@ -8,8 +8,8 @@ digraph AST {
   node4 [label="i",shape=ellipse];
   node9->node4;
   node8 [label="neg",shape=box];
-  node7 [label="sub",shape=box];
-  node5 [label="3",shape=ellipse];
+  node7 [label="add",shape=box];
+  node5 [label="i",shape=ellipse];
   node7->node5;
   node6 [label="2",shape=ellipse];
   node7->node6;

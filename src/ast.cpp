@@ -165,7 +165,6 @@ CAstStatement* CAstScope::GetStatementSequence(void) const
 
 bool CAstScope::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstScope" << endl;
   bool result = true;
   
   try
@@ -400,7 +399,6 @@ CAstExpression* CAstStatAssign::GetRHS(void) const
 
 bool CAstStatAssign::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstStatAssign" << endl;
   bool lhsTypeCheckRes = _lhs->TypeCheck(t, msg); // Type checks lhs.
   bool rhsTypeCheckRes = _rhs->TypeCheck(t, msg); // Type checks rhs.
   
@@ -506,7 +504,6 @@ CAstFunctionCall* CAstStatCall::GetCall(void) const
 
 bool CAstStatCall::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstStatCall" << endl;
   return GetCall()->TypeCheck(t, msg); // Typechecks the call.
 }
 
@@ -564,9 +561,7 @@ CAstExpression* CAstStatReturn::GetExpression(void) const
 
 bool CAstStatReturn::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstStatReturn" << endl;
   const CType* st = GetScope()->GetType();
-  //cout << "===(DEBUG)===Scope name is : <" << GetScope()->GetName() << ">." << endl;
   CAstExpression* e = GetExpression();
   
   if (st->Match(CTypeManager::Get()->GetNull())) // When return type is NULL. Should not return anything.
@@ -700,7 +695,6 @@ CAstStatement* CAstStatIf::GetElseBody(void) const
 
 bool CAstStatIf::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstStatIf" << endl;
   // Check1 : Typecheck for if-expression.(should not be NULL)
   // Check2 : Check the type of if-expression matches CBoolType.
   // Check3 : Iteratively typecheck for if-body.
@@ -849,7 +843,6 @@ CAstStatement* CAstStatWhile::GetBody(void) const
 
 bool CAstStatWhile::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstStatWhile" << endl;
   // Check1 : Check if condition exists.
   // Check2 : Typecheck for condition. Check if type is bool.
   // Check3 : Typecheck for statement sequences.
@@ -1007,9 +1000,7 @@ CAstExpression* CAstBinaryOp::GetRight(void) const
 }
 
 bool CAstBinaryOp::TypeCheck(CToken *t, string *msg) const
-{
-  //cout << "===(DEBUG)===TypeCheck at CAstStatAssign" << endl;
-  
+{  
   // Check1 : Typecheck for lhs, rhs.
   // Check2 : Check if GetType returns NULL. If NULL, types are different for lhs and rhs.
   bool lhsTypeCheck = GetLeft()->TypeCheck(t, msg); // TypeCheck the LHS.
@@ -1141,8 +1132,8 @@ CAstExpression* CAstUnaryOp::GetOperand(void) const
 
 bool CAstUnaryOp::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstUnaryOp" << endl;
   // Check1 : Typecheck for operand.
+  // Check2 : Check if operand is appropriate for type of operand.
   bool operandTypeCheckRes = GetOperand()->TypeCheck(t, msg); // TypeCheck the operand.
   if (!operandTypeCheckRes)
   {
@@ -1206,12 +1197,10 @@ const CType* CAstUnaryOp::GetType(void) const
   if (GetOperation() == opNeg || GetOperation() == opPos) // When integer/char operator.
   {
     return GetOperand()->GetType();
-    //return CTypeManager::Get()->GetInt();
   }
   else // When boolean operator.
   {
     return GetOperand()->GetType();
-    //return CTypeManager::Get()->GetBool();
   }
 }
 
@@ -1279,13 +1268,10 @@ CAstExpression* CAstSpecialOp::GetOperand(void) const
 
 bool CAstSpecialOp::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstSpecialOp" << endl;
   CAstExpression* opnd = GetOperand(); // Get operand of this operator.
-  //cout << "===(DEBUG)===TypeCheck at CAstSpecialOp - operand is : " << opnd->GetToken().GetValue() << endl;
   
   if (!opnd->GetType()->IsArray()) // This if statement is not used anymore.
   {
-    //cout << "===(DEBUG)===TypeCheck at CAstSpecialOp - operand is not type of array." << endl;
   }
   
   bool operandTypeCheckRes = opnd->TypeCheck(t, msg); // TypeChecks operand.
@@ -1412,7 +1398,6 @@ CAstExpression* CAstFunctionCall::GetArg(int index) const
 
 bool CAstFunctionCall::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstFunctionCall" << endl;
   // Check1 : Perform Typecheck for each arguments.
   // Check2 : Check for parameter number count with formal ones.
   // Check3 : Check whether arguments' type matches formal type of procedure/function.
@@ -1428,7 +1413,6 @@ bool CAstFunctionCall::TypeCheck(CToken *t, string *msg) const
   for (int cnt = 0; argTypeCheckRes && cnt < argCnt; cnt++) // TypeChecks each arguments.
   {
     CAstExpression* arg = GetArg(cnt);
-    //cout << "===(DEBUG)===TypeCheck at CAstFunctionCall - arg is : " << arg->GetToken().GetValue() << endl;
     argTypeCheckRes = argTypeCheckRes && arg->TypeCheck(t, msg);
   }
   if (!argTypeCheckRes) // At least one of argument failed with its typecheck.
@@ -1441,10 +1425,8 @@ bool CAstFunctionCall::TypeCheck(CToken *t, string *msg) const
   for (cnt = 0; argTypeMatchRes && cnt < argCnt; cnt++) // Checks if each argument type matches with expected type.
   {
     CAstExpression* arg = GetArg(cnt);
-    //cout << "===(DEBUG)===TypeCheck at CAstFunctionCall - arg is : " << arg->GetToken().GetValue() << endl;
     const CType* argType = arg->GetType(); // Type of given argument.
     const CType* paramType = GetSymbol()->GetParam(cnt)->GetDataType(); // Type of expected parameter.
-    //if (!argType->Match(paramType))
     if (!paramType->Match(argType))
     {
       *t = arg->GetToken(); // Set token for error reporting to current(type-mismatched) token.
@@ -1462,10 +1444,7 @@ bool CAstFunctionCall::TypeCheck(CToken *t, string *msg) const
     *msg = "parameter " + to_string(cnt) + ": argument type mismatch.\n" + "  expected " + ssExpected.str() + "\n  " + "got      " + ssGot.str();
     return false;
   }
-  
-  //const CSymProc* procSym = GetSymbol();
-  //cout << "===(DEBUG)===TypeCheck at CAstFunctionCall - symbol name is : " << procSym->GetName() << endl;
-  
+    
   return true;
 }
 
@@ -1547,7 +1526,6 @@ const CSymbol* CAstDesignator::GetSymbol(void) const
 
 bool CAstDesignator::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstDesignator. CToken : <" << t->GetValue() << ">" << endl;
   return true;
 }
 
@@ -1630,7 +1608,6 @@ CAstExpression* CAstArrayDesignator::GetIndex(int index) const
 
 bool CAstArrayDesignator::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstArrayDesignator" << endl;
   bool result = true;
   
   if (!GetSymbol()->GetDataType()->IsArray() && !GetSymbol()->GetDataType()->IsPointer()) // Type of symbol should be one of pointer to array(parameter) or array(otherwise).
@@ -1671,7 +1648,6 @@ const CType* CAstArrayDesignator::GetType(void) const
   
   if (at == NULL) // Nor array or pointer to array.
   {
-    //return CTypeManager::Get()->GetNull();
     return NULL;
   }
   
@@ -1790,7 +1766,6 @@ string CAstConstant::GetValueStr(void) const
 
 bool CAstConstant::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstConstant" << endl;
   return true;
 }
 
@@ -1867,7 +1842,6 @@ const string CAstStringConstant::GetValueStr(void) const
 
 bool CAstStringConstant::TypeCheck(CToken *t, string *msg) const
 {
-  //cout << "===(DEBUG)===TypeCheck at CAstStringConstant" << endl;
   return true;
 }
 

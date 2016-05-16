@@ -93,4 +93,12 @@ Fixed bug with parser. While-statement condition is only boolean-allowed, and er
 when there are no arguments but arguments are needed to appropriate one.  
 Commented <code>TypeCheck()</code> and <code>GetType()</code> methods in <code>ast.cpp</code>.  
 Commented changed parts of <code>parser.cpp</code>.  
-Bug report response is needed.
+Bug report response is needed.  
+  
+**2016-05-16 16:15 KST**  
+Got bug report response.  
+Result : Reference parser bug.  
+<code>-a + b</code> should be parsed as <code>add(neg(a), b)</code>.  
+But there is no specific semantic rule in SnuPL/1, so implementation might vary.  
+Saved <code>snuplc</code> folder with debug codes in seperate folder.  
+Deleted all debug codes.
