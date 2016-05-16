@@ -101,4 +101,9 @@ Result : Reference parser bug.
 <code>-a + b</code> should be parsed as <code>add(neg(a), b)</code>.  
 But there is no specific semantic rule in SnuPL/1, so implementation might vary.  
 Saved <code>snuplc</code> folder with debug codes in seperate folder.  
-Deleted all debug codes.
+Deleted all debug codes.  
+  
+**2016-05-16 16:36 KST**  
+Finished with all code and report.  
+Semantic Analysis phase is submitted.  
+LAST COMMIT of SEMANTIC ANALYSIS PHASE.
