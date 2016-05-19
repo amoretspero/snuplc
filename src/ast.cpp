@@ -250,6 +250,19 @@ void CAstScope::toDot(ostream &out, int indent) const
 
 CTacAddr* CAstScope::ToTac(CCodeBlock *cb)
 {
+  assert(cb != NULL);
+  
+  CAstStatement* s = GetStatementSequence();
+  while (s != NULL)
+  {
+    CTacLabel* next = cb->CreateLabel();
+    s->ToTac(cb, next);
+    cb->AddInstr(next);
+    s = s->GetNext();
+  }
+  
+  cb->CleanupControlFlow();
+  
   return NULL;
 }
 
@@ -372,6 +385,8 @@ CAstStatement* CAstStatement::GetNext(void) const
 
 CTacAddr* CAstStatement::ToTac(CCodeBlock *cb, CTacLabel *next)
 {
+  
+  
   return NULL;
 }
 
@@ -484,6 +499,69 @@ void CAstStatAssign::toDot(ostream &out, int indent) const
 
 CTacAddr* CAstStatAssign::ToTac(CCodeBlock *cb, CTacLabel *next)
 {
+  // Case 1: RHS is boolean binary operation.
+  // Case 1-1: RHS is boolean input boolean output binary operation.
+  // Case 1-2: RHS is non-boolean input boolean output binary operation.
+  // Case 2: RHS is non-boolean binary operation.
+  // Case 3: RHS is boolean unary operation.
+  // Case 4: RHS is non-boolean unary operation.
+  // Case 5: RHS is special operation.
+  CAstBinaryOp* binaryOpRHS = dynamic_cast<CAstBinaryOp*>(GetRHS());
+  if (binaryOpRHS != NULL) // When RHS is binary operation. Case 1 or 2.
+  {
+    EOperation RHSOp = binaryOpRHS->GetOperation();
+    if (RHSOp == opAnd || RHSOp == opOr) // When RHS is boolean input boolean output binary operation. Case 1-1.
+    {
+      CTacLabel* rhsTrueLabel = cb->CreateLabel(); // Label for case when RHS of assignment is true.
+      CTacLabel* rhsFalseLabel = cb->CreateLabel(); // Label for case when RHS of assignment is false.
+      CTacLabel* assignLabel = cb->CreateLabel(); // Label for assignment.
+      CTacTemp* tempRes = cb->CreateTemp(GetType()); // Temporary variable to contain value.
+      
+      binaryOpRHS->ToTac(cb, rhsTrueLabel, rhsFalseLabel); // Call ToTac of RHS.
+      
+      cb->AddInstr(rhsTrueLabel); // When RHS is true.
+      cb->AddInstr(new CTacInstr(opAssign, tempRes, new CTacConst(1))); // Assign 1(true) to temporary variable.
+      cb->AddInstr(new CTacInstr(opGoto, assignLabel, NULL, NULL)); // Go to assignment to real LHS.
+      
+      cb->AddInstr(rhsFalseLabel); // When RHS is false.
+      cb->AddInstr(new CTacInstr(opAssign, tempRes, new CTacConst(0))); // Assign 0(false) to temporary variable.
+      cb->AddInstr(new CTacInstr(opGoto, assignLabel, NULL, NULL)); // Go to assignment to real LHS.
+      
+      cb->AddInstr(assignLabel); // Label for assigning to real LHS.
+      cb->AddInstr(new CTacInstr(opAssign, GetLHS()->ToTac(cb), tempRes)); // Assign to real LHS.
+    }
+    else if (RHSOp == opBiggerThan || RHSOp == opBiggerEqual || RHSOp == opLessThan || RHSOp == opLessEqual || 
+             RHSOp == opEqual || RHSOp == opNotEqual) // When RHS is non-boolean input boolean output binary operation. Case 1-2.
+    {
+      CTacLabel* rhsTrueLabel = cb->CreateLabel();
+      CTacLabel* rhsFalseLabel = cb->CreateLabel();
+      CTacLabel* assignLabel = cb->CreateLabel();
+      
+      binaryOpRHS->ToTac(cb, rhsTrueLabel, rhsFalseLabel);
+      
+      CTacTemp* tempRes = cb->CreateTemp(GetType());
+      
+      cb->AddInstr(rhsTrueLabel); // When RHS is true.
+      cb->AddInstr(new CTacInstr(opAssign, tempRes, new CTacConst(1)));
+      cb->AddInstr(new CTacInstr(opGoto, assignLabel, NULL, NULL));
+      
+      cb->AddInstr(rhsFalseLabel); // When RHS is false.
+      cb->AddInstr(new CTacInstr(opAssign, tempRes, new CTacConst(0)));
+      cb->AddInstr(new CTacInstr(opGoto, assignLabel, NULL, NULL));
+      
+      cb->AddInstr(assignLabel);
+      cb->AddInstr(new CTacInstr(opAssign, GetLHS()->ToTac(cb), tempRes));
+    }
+    else
+    {
+      cb->AddInstr(new CTacInstr(opAssign, GetLHS()->ToTac(cb), GetRHS()->ToTac(cb), NULL));
+    }
+  }
+  else
+  {
+    cb->AddInstr(new CTacInstr(opAssign, GetLHS()->ToTac(cb), GetRHS()->ToTac(cb), NULL));
+  }
+  // TODO
   return NULL;
 }
 
@@ -1105,13 +1183,152 @@ void CAstBinaryOp::toDot(ostream &out, int indent) const
 
 CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb)
 {
-  return NULL;
+  // This should be called when operation is integer type.
+  CTacTemp* tempRes = cb->CreateTemp(GetType());
+  cb->AddInstr(new CTacInstr(GetOperation(), tempRes, GetLeft()->ToTac(cb), GetRight()->ToTac(cb)));
+  return tempRes;
+  //return NULL;
 }
 
 CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb,
                               CTacLabel *ltrue, CTacLabel *lfalse)
 {
-  return NULL;
+  //
+  // a && b :
+  //  if a = 1 then goto test_b
+  //  goto lbl_false
+  // test_b :
+  //  if b = 1 then goto lbl_true
+  //  goto lbl_false
+  //
+  // a || b :
+  //  if a = 1 then goto lbl_true
+  //  if b = 1 then goto lbl_true
+  //  goto lbl_false
+  //
+  // This should be called when operation is boolean type.
+  //
+  
+  EOperation binaryOperation = GetOperation();
+  
+  if (binaryOperation == opAnd)
+  {
+    CTacLabel* leftTrueLabel = cb->CreateLabel();
+    
+    /*CAstBinaryOp* lhsBinaryOp = dynamic_cast<CAstBinaryOp*>(GetLeft());
+    if (lhsBinaryOp != NULL)
+    {
+      EOperation lhsOperation = lhsBinaryOp->GetOperation();
+      if (lhsOperation == opAnd || lhsOperation == opOr)
+      {
+        lhsBinaryOp->ToTac(cb, leftTrueLabel, lfalse);
+      }
+      else
+      {
+        lhsBinaryOp->ToTac(cb);
+      }
+    }
+    else
+    {
+      cb->AddInstr(new CTacInstr(opEqual, leftTrueLabel, GetLeft()->ToTac(cb), new CTacConst(1)));
+    }
+    cb->AddInstr(new CTacInstr(opGoto, lfalse));*/
+    
+    GetLeft()->ToTac(cb, leftTrueLabel, lfalse);
+    
+    cb->AddInstr(leftTrueLabel);
+    
+    /*CAstBinaryOp* rhsBinaryOp = dynamic_cast<CAstBinaryOp*>(GetRight());
+    if (rhsBinaryOp != NULL)
+    {
+      EOperation rhsOperation = rhsBinaryOp->GetOperation();
+      if (rhsOperation == opAnd || rhsOperation == opOr)
+      {
+        rhsBinaryOp->ToTac(cb, ltrue, lfalse);
+      }
+      else
+      {
+        rhsBinaryOp->ToTac(cb);
+      }
+    }
+    else
+    {
+      cb->AddInstr(new CTacInstr(opEqual, ltrue, GetRight()->ToTac(cb), new CTacConst(1)));
+    }
+    cb->AddInstr(new CTacInstr(opGoto, lfalse));*/
+    
+    GetRight()->ToTac(cb, ltrue, lfalse);
+    
+    return NULL;
+  }
+  else if (binaryOperation == opOr)
+  {
+    CTacLabel* leftFalseLabel = cb->CreateLabel();
+    
+    /*CAstBinaryOp* lhsBinaryOp = dynamic_cast<CAstBinaryOp*>(GetLeft());
+    if (lhsBinaryOp != NULL)
+    {
+      EOperation lhsOperation = lhsBinaryOp->GetOperation();
+      if (lhsOperation == opAnd || lhsOperation == opOr)
+      {
+        lhsBinaryOp->ToTac(cb, ltrue, leftFalseLabel);
+      }
+      else
+      {
+        lhsBinaryOp->ToTac(cb);
+      }
+    }
+    else
+    {
+      cb->AddInstr(new CTacInstr(opEqual, ltrue, GetLeft()->ToTac(cb), new CTacConst(1)));
+    }
+    cb->AddInstr(new CTacInstr(opGoto, leftFalseLabel));*/
+    
+    GetLeft()->ToTac(cb, ltrue, leftFalseLabel);
+    
+    cb->AddInstr(leftFalseLabel);
+    
+    /*CAstBinaryOp* rhsBinaryOp = dynamic_cast<CAstBinaryOp*>(GetRight());
+    if (rhsBinaryOp != NULL)
+    {
+      EOperation rhsOperation = rhsBinaryOp->GetOperation();
+      if (rhsOperation == opAnd || rhsOperation == opOr)
+      {
+        rhsBinaryOp->ToTac(cb, ltrue, lfalse);
+      }
+      else
+      {
+        rhsBinaryOp->ToTac(cb);
+      }
+    }
+    else
+    {
+      cb->AddInstr(new CTacInstr(opEqual, ltrue, GetRight()->ToTac(cb), new CTacConst(1)));
+    }
+    cb->AddInstr(new CTacInstr(opGoto, lfalse));*/
+    
+    GetRight()->ToTac(cb, ltrue, lfalse);
+    
+    return NULL;
+  }
+  else if (binaryOperation == opBiggerThan || binaryOperation == opBiggerEqual || binaryOperation == opLessThan || binaryOperation == opLessEqual ||
+           binaryOperation == opEqual || binaryOperation == opNotEqual)
+  {
+    CTacTemp* lhsTemp = dynamic_cast<CTacTemp*>(GetLeft()->ToTac(cb)); // LHS should have value of integer. So, store it in temporary variable.
+    CTacTemp* rhsTemp = dynamic_cast<CTacTemp*>(GetRight()->ToTac(cb)); // RHS should have value of integer. So, store it in temporary variable.
+    
+    assert(lhsTemp != NULL && rhsTemp != NULL); // ToTac(CCodeBlock*) method should return CTacTemp* type value.
+    
+    cb->AddInstr(new CTacInstr(binaryOperation, ltrue, lhsTemp, rhsTemp));
+    cb->AddInstr(new CTacInstr(opGoto, lfalse));
+    
+    return NULL;
+  }
+  else
+  {
+    return NULL;
+  }
+  //return NULL;
 }
 
 
@@ -1565,12 +1782,18 @@ void CAstDesignator::toDot(ostream &out, int indent) const
 
 CTacAddr* CAstDesignator::ToTac(CCodeBlock *cb)
 {
-  return NULL;
+  return new CTacName(GetSymbol());
+  //return NULL;
 }
 
 CTacAddr* CAstDesignator::ToTac(CCodeBlock *cb,
                                 CTacLabel *ltrue, CTacLabel *lfalse)
 {
+  assert(GetType()->IsBoolean()); // This should be called with only boolean designator.
+  
+  cb->AddInstr(new CTacInstr(opEqual, ltrue, new CTacName(GetSymbol()), new CTacConst(1)));
+  cb->AddInstr(new CTacInstr(opGoto, lfalse, NULL, NULL));
+  
   return NULL;
 }
 
@@ -1797,12 +2020,16 @@ string CAstConstant::dotAttr(void) const
 
 CTacAddr* CAstConstant::ToTac(CCodeBlock *cb)
 {
-  return NULL;
+  return (new CTacConst(GetValue()));
+  //return NULL;
 }
 
 CTacAddr* CAstConstant::ToTac(CCodeBlock *cb,
                                 CTacLabel *ltrue, CTacLabel *lfalse)
 {
+  cb->AddInstr(new CTacInstr(opEqual, ltrue, new CTacConst(GetValue()), new CTacConst(1)));
+  cb->AddInstr(new CTacInstr(opGoto, lfalse, NULL, NULL));
+  
   return NULL;
 }
 

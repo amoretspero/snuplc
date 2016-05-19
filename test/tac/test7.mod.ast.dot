@@ -1,0 +1,29 @@
+digraph AST {
+  graph [fontname="Times New Roman",fontsize=10];
+  node  [fontname="Courier New",fontsize=10];
+  edge  [fontname="Times New Roman",fontsize=10];
+
+  node0 [label="m test7",shape=box];
+  node14 [label="if",shape=box];
+  node9 [label="and",shape=box];
+  node4 [label="<",shape=box];
+  node1 [label="i",shape=ellipse];
+  node4->node1;
+  node3 [label="3",shape=ellipse];
+  node4->node3;
+  node9->node4;
+  node8 [label=">",shape=box];
+  node5 [label="i",shape=ellipse];
+  node8->node5;
+  node7 [label="0",shape=ellipse];
+  node8->node7;
+  node9->node8;
+  node14->node9;
+  node13 [label=":=",shape=box];
+  node10 [label="i",shape=ellipse];
+  node13->node10;
+  node12 [label="0",shape=ellipse];
+  node13->node12;
+  node14 -> node13 [style=dotted];
+  node0 -> node14 [style=dotted];
+}

@@ -32,11 +32,11 @@ def main():
           #print("running", f)
           #print("diff reference and yours")
 
-          ref = subprocess.Popen(["./reference/3_test_parser.relaxed", f], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+          ref = subprocess.Popen(["./reference/4_test_ir", f], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
           refout.write(ref.stdout.read().decode())
           refout.write(ref.stderr.read().decode())
 
-          yours = subprocess.Popen(["./test_parser", f], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+          yours = subprocess.Popen(["./test_ir", f], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
           youout.write(yours.stdout.read().decode())
           youout.write(yours.stderr.read().decode())
 

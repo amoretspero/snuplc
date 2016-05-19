@@ -17,4 +17,8 @@ Sementic Analysis Phase.
 ### Detailed status
 **2016-05-18 15:46 KST**  
 Added Intermediate Code Generation phase.  
-Start Phase 4. 
+Start Phase 4.  
+  
+**2016-05-20 01:13 KST**  
+Implemented boolean assignments. Scalar type only.  
+Very basics of them are implemented, so continuous verification is needed.

@@ -1,0 +1,12 @@
+digraph IR {
+  graph [fontname="Times New Roman",fontsize=10];
+  node  [fontname="Courier New",fontsize=10];
+  edge  [fontname="Times New Roman",fontsize=10];
+
+  // scope 'test2'
+  test2_cb [label="test2\r",shape=box]
+  // scope 'foo'
+  foo_cb [label="foo\r  0:     assign \l",shape=box]
+  // scope 'bar'
+  bar_cb [label="bar\r",shape=box]
+};
