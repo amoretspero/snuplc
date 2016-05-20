@@ -21,4 +21,8 @@ Start Phase 4.
   
 **2016-05-20 01:13 KST**  
 Implemented boolean assignments. Scalar type only.  
-Very basics of them are implemented, so continuous verification is needed.
+Very basics of them are implemented, so continuous verification is needed.  
+  
+**2016-05-21 00:45 KST**  
+Implemented basic binary operations, unary operations. Scalar type only.  
+Assignments using above operations are possible.  
