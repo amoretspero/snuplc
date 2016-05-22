@@ -29,4 +29,13 @@ Assignments using above operations are possible.
   
 **2016-05-22 16:02 KST**  
 Added dummy label in <code>CAstBinaryOp::ToTac</code> for relational operators.  
-Implemented <code>if</code> and <code>while</code> statements.
+Implemented <code>if</code> and <code>while</code> statements.  
+  
+**2016-05-23 00:37 KST**  
+Implemented <code>return</code> statement and function calls.  
+For return statement, boolean type return and other scalar type return values are distinguished.  
+For function calls, <code>CAstStatCall</code> is for function call as statement itself, i.e. <code>foo(1);</code>,
+whereas <code>CAstFunctionCall</code> is for function call as expression, i.e. <code>i := foo(2);</code>.  
+<code>CAstStatCall</code> will just call its function call's <code>ToTac</code> method.  
+<code>CAstFunctionCall</code> will do all the TAC generating part. And for return value of function, it will return them in temporary variable.  
+More improvement is needed with more tests.

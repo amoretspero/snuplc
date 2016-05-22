@@ -513,6 +513,7 @@ CTacAddr* CAstStatAssign::ToTac(CCodeBlock *cb, CTacLabel *next)
   CAstBinaryOp* binaryOpRHS = dynamic_cast<CAstBinaryOp*>(GetRHS()); // To check if RHS is binary operation.
   CAstUnaryOp* unaryOpRHS = dynamic_cast<CAstUnaryOp*>(GetRHS()); // To check if RHS is unary operation.
   CAstSpecialOp* specialOpRHS = dynamic_cast<CAstSpecialOp*>(GetRHS()); // To check if RHS is special operation.
+  CAstFunctionCall* funcCallRHS = dynamic_cast<CAstFunctionCall*>(GetRHS()); // To check if RHS is function call.
   if (binaryOpRHS != NULL) // When RHS is binary operation. Case 1 or 2.
   {
     EOperation RHSOp = binaryOpRHS->GetOperation();
@@ -652,6 +653,10 @@ void CAstStatCall::toDot(ostream &out, int indent) const
 
 CTacAddr* CAstStatCall::ToTac(CCodeBlock *cb, CTacLabel *next)
 {
+  GetCall()->ToTac(cb);
+  
+  cb->AddInstr(new CTacInstr(opGoto, next, NULL, NULL));
+  
   return NULL;
 }
 
@@ -780,6 +785,38 @@ void CAstStatReturn::toDot(ostream &out, int indent) const
 
 CTacAddr* CAstStatReturn::ToTac(CCodeBlock *cb, CTacLabel *next)
 {
+  if (GetScope()->GetType()->IsNull()) // Procedure.
+  {
+    cb->AddInstr(new CTacInstr(opReturn, NULL, NULL, NULL));
+  }
+  else // Function.
+  {
+    if (GetType()->IsBoolean()) // Boolean type return value.
+    {
+      CTacLabel* returnTrueLabel = cb->CreateLabel(); // Label for return of true.
+      CTacLabel* returnFalseLabel = cb->CreateLabel(); // Label for return of false.
+      CTacLabel* returnValueLabel = cb->CreateLabel(); // Label for returning the value.
+      CTacTemp* returnValueTemp = cb->CreateTemp(GetType()); // Temporary variable containing return value.
+      
+      GetExpression()->ToTac(cb, returnTrueLabel, returnFalseLabel); // Call ToTac of return expression.
+      
+      cb->AddInstr(returnTrueLabel); // Indicates the true(constant 1) case of return value.
+      cb->AddInstr(new CTacInstr(opAssign, returnValueTemp, new CTacConst(1), NULL)); // Assign 1 to temporary variable.
+      cb->AddInstr(new CTacInstr(opGoto, returnValueLabel, NULL, NULL)); // Go to returning label.
+      
+      cb->AddInstr(returnFalseLabel); // Indicates the false(constant 0) case of return value.
+      cb->AddInstr(new CTacInstr(opAssign, returnValueTemp, new CTacConst(0), NULL)); // Assign 0 to temporary variable.
+      cb->AddInstr(new CTacInstr(opGoto, returnValueLabel, NULL, NULL)); // Go to returning label.
+      
+      cb->AddInstr(returnValueLabel); // Indicates the returning part.
+      cb->AddInstr(new CTacInstr(opReturn, NULL, returnValueTemp, NULL)); // Return the value.
+    }
+    else // Other scalar type return value.
+    {
+      cb->AddInstr(new CTacInstr(opReturn, NULL, GetExpression()->ToTac(cb), NULL)); // Call ToTac of expression and return that.
+    }
+  }
+  cb->AddInstr(new CTacInstr(opGoto, next, NULL, NULL)); // Go to next expression.
   return NULL;
 }
 
@@ -1280,10 +1317,11 @@ CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb)
 {
   // This should be called when operation is integer type.
   CTacAddr* rhsRes = dynamic_cast<CTacAddr*>(GetRight()->ToTac(cb));
+  CTacAddr* lhsRes = dynamic_cast<CTacAddr*>(GetLeft()->ToTac(cb));
   
   CTacTemp* tempRes = cb->CreateTemp(GetType());
   
-  cb->AddInstr(new CTacInstr(GetOperation(), tempRes, GetLeft()->ToTac(cb), rhsRes));
+  cb->AddInstr(new CTacInstr(GetOperation(), tempRes, lhsRes, rhsRes));
   
   return tempRes;
 }
@@ -1750,12 +1788,41 @@ void CAstFunctionCall::toDot(ostream &out, int indent) const
 
 CTacAddr* CAstFunctionCall::ToTac(CCodeBlock *cb)
 {
+  int paramCnt = GetNArgs();
+  int cnt = 0;
+  for (cnt = 0; cnt < paramCnt; cnt++) // Add parameters.
+  {
+    cb->AddInstr(new CTacInstr(opParam, new CTacConst(cnt), GetArg(cnt)->ToTac(cb), NULL));
+  }
+  if (GetType()->IsNull()) // When return type is NULL, i.e. procedure.
+  {
+    cb->AddInstr(new CTacInstr(opCall, NULL, new CTacName(GetSymbol()), NULL));
+    return NULL;
+  }
+  else // When return type is not NULL, i.e. function.
+  {
+    CTacTemp* tempRes = cb->CreateTemp(GetType());
+    cb->AddInstr(new CTacInstr(opCall, tempRes, new CTacName(GetSymbol()), NULL));
+    return tempRes;
+  }
   return NULL;
 }
 
 CTacAddr* CAstFunctionCall::ToTac(CCodeBlock *cb,
                                   CTacLabel *ltrue, CTacLabel *lfalse)
 {
+  int paramCnt = GetNArgs();
+  int cnt = 0;
+  for (cnt = 0; cnt < paramCnt; cnt++)
+  {
+    cb->AddInstr(new CTacInstr(opParam, new CTacConst(cnt), GetArg(cnt)->ToTac(cb), NULL));
+  }
+  CTacTemp* tempRes = cb->CreateTemp(GetType());
+  cb->AddInstr(new CTacInstr(opCall, tempRes, new CTacName(GetSymbol()), NULL));
+  
+  cb->AddInstr(new CTacInstr(opEqual, ltrue, tempRes, new CTacConst(1)));
+  cb->AddInstr(new CTacInstr(opGoto, lfalse));
+  
   return NULL;
 }
 
