@@ -599,6 +599,7 @@ CTacAddr* CAstStatAssign::ToTac(CCodeBlock *cb, CTacLabel *next)
     cb->AddInstr(new CTacInstr(opAssign, GetLHS()->ToTac(cb), GetRHS()->ToTac(cb), NULL));
   }
   // TODO
+  cb->AddInstr(new CTacInstr(opGoto, next));
   return NULL;
 }
 
@@ -932,6 +933,39 @@ void CAstStatIf::toDot(ostream &out, int indent) const
 
 CTacAddr* CAstStatIf::ToTac(CCodeBlock *cb, CTacLabel *next)
 {
+  CTacLabel* condTrueLabel = cb->CreateLabel("if_true"); // Label for true condition.
+  CTacLabel* condFalseLabel = cb->CreateLabel("if_false"); // Label for false condition.
+  
+  GetCondition()->ToTac(cb, condTrueLabel, condFalseLabel); // Make TAC for condition.
+  
+  cb->AddInstr(condTrueLabel); // Label indicating true condition statements.
+  
+  CAstStatement* ifBody = GetIfBody();
+  
+  while (ifBody != NULL) // If if-body exists, call ToTac for each of them.
+  {
+    CTacLabel* ifBodyNext = cb->CreateLabel();
+    ifBody->ToTac(cb, ifBodyNext);
+    cb->AddInstr(ifBodyNext);
+    ifBody = ifBody->GetNext();
+  }
+  
+  cb->AddInstr(new CTacInstr(opGoto, next, NULL, NULL)); // After executing true condition statements, go to end.
+  
+  CAstStatement* elseBody = GetElseBody();
+  
+  cb->AddInstr(condFalseLabel); // Label indicating false condition statements.
+  
+  while (elseBody != NULL) // If else-body exists, call ToTac for each of them.
+  {
+    CTacLabel* elseBodyNext = cb->CreateLabel();
+    elseBody->ToTac(cb, elseBodyNext);
+    cb->AddInstr(elseBodyNext);
+    elseBody = elseBody->GetNext();
+  }
+  
+  cb->AddInstr(new CTacInstr(opGoto, next, NULL, NULL)); // After executing true condition statements, go to end.
+  
   return NULL;
 }
 
@@ -1047,6 +1081,30 @@ void CAstStatWhile::toDot(ostream &out, int indent) const
 
 CTacAddr* CAstStatWhile::ToTac(CCodeBlock *cb, CTacLabel *next)
 {
+  CTacLabel* whileCondLabel = cb->CreateLabel("while_cond"); // Label for while condition.
+  CTacLabel* whileBodyLabel = cb->CreateLabel("while_body"); // Label for while body.
+  
+  cb->AddInstr(new CTacInstr(opGoto, whileCondLabel, NULL, NULL)); // Go to while condition.
+  
+  cb->AddInstr(whileCondLabel); // Label indicating while-cond expressions.
+  
+  GetCondition()->ToTac(cb, whileBodyLabel, next); // Get TAC for while condition.
+  
+  cb->AddInstr(whileBodyLabel); // Label indicating while-body statements.
+  
+  CAstStatement* whileBody = GetBody(); // Get while-body statements.
+  
+  while (whileBody != NULL) // If while-body exists, call ToTac for each of them.
+  {
+    CTacLabel* whileBodyNext = cb->CreateLabel();
+    whileBody->ToTac(cb, whileBodyNext);
+    cb->AddInstr(whileBodyNext);
+    whileBody = whileBody->GetNext();
+  }
+  cb->AddInstr(new CTacInstr(opGoto, whileCondLabel, NULL, NULL)); // Get back to while condition.
+  
+  cb->AddInstr(new CTacInstr(opGoto, next, NULL, NULL)); // Go to next statement.
+  
   return NULL;
 }
 
@@ -1278,10 +1336,15 @@ CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb,
   else if (binaryOperation == opBiggerThan || binaryOperation == opBiggerEqual || binaryOperation == opLessThan || binaryOperation == opLessEqual ||
            binaryOperation == opEqual || binaryOperation == opNotEqual)
   {
-    CTacTemp* lhsTemp = dynamic_cast<CTacTemp*>(GetLeft()->ToTac(cb)); // LHS should have value of integer. So, store it in temporary variable.
-    CTacTemp* rhsTemp = dynamic_cast<CTacTemp*>(GetRight()->ToTac(cb)); // RHS should have value of integer. So, store it in temporary variable.
+    CTacLabel* temp = cb->CreateLabel(); // TODO: Do we really need this label?
     
-    assert(lhsTemp != NULL && rhsTemp != NULL); // ToTac(CCodeBlock*) method should return CTacTemp* type value.
+    //CTacTemp* lhsTemp = dynamic_cast<CTacTemp*>(GetLeft()->ToTac(cb)); // LHS should have value of integer. So, store it in temporary variable.
+    //CTacTemp* rhsTemp = dynamic_cast<CTacTemp*>(GetRight()->ToTac(cb)); // RHS should have value of integer. So, store it in temporary variable.
+    
+    CTacAddr* lhsTemp = GetLeft()->ToTac(cb); // Get the TAC of left side.
+    CTacAddr* rhsTemp = GetRight()->ToTac(cb); // Get the TAC of right side.
+    
+    //assert(lhsTemp != NULL && rhsTemp != NULL); // ToTac(CCodeBlock*) method should return CTacTemp* type value.
     
     cb->AddInstr(new CTacInstr(binaryOperation, ltrue, lhsTemp, rhsTemp));
     cb->AddInstr(new CTacInstr(opGoto, lfalse));

@@ -1,0 +1,8 @@
+digraph IR {
+  graph [fontname="Times New Roman",fontsize=10];
+  node  [fontname="Courier New",fontsize=10];
+  edge  [fontname="Times New Roman",fontsize=10];
+
+  // scope 'test03'
+  test03_cb [label="test03\r  0:     assign i <- 0\l  1:     assign j <- 5\l  2:     if     i < j goto 3_if_true\l  3:     goto   4_if_false\l  4: 3_if_true:\l  5:     add    t0 <- k, 1\l  6:     assign k <- t0\l  7:     goto   2\l  8: 4_if_false:\l  9: 2:\l 10:     assign i <- 10\l 11:     assign j <- 10\l 12:     if     c = 1 goto 11\l 13:     assign t1 <- 1\l 14:     goto   12\l 15: 11:\l 16:     assign t1 <- 0\l 17: 12:\l 18:     assign b <- t1\l",shape=box]
+};

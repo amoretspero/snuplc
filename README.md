@@ -26,3 +26,7 @@ Very basics of them are implemented, so continuous verification is needed.
 **2016-05-21 00:45 KST**  
 Implemented basic binary operations, unary operations. Scalar type only.  
 Assignments using above operations are possible.  
+  
+**2016-05-22 16:02 KST**  
+Added dummy label in <code>CAstBinaryOp::ToTac</code> for relational operators.  
+Implemented <code>if</code> and <code>while</code> statements.
