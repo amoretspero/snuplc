@@ -38,4 +38,9 @@ For function calls, <code>CAstStatCall</code> is for function call as statement 
 whereas <code>CAstFunctionCall</code> is for function call as expression, i.e. <code>i := foo(2);</code>.  
 <code>CAstStatCall</code> will just call its function call's <code>ToTac</code> method.  
 <code>CAstFunctionCall</code> will do all the TAC generating part. And for return value of function, it will return them in temporary variable.  
-More improvement is needed with more tests.
+More improvement is needed with more tests.  
+  
+**2016-05-24 02:48 KST**  
+Implemented <code>ToTac()</code> methods for <code>CAstArrayDesignator</code> and <code>CAstFunctionCall</code>.  
+Need more tests, especially for those with array in function call arguments. And boolean related ones also need more tests.  
+Should implement <code>ToTac()</code> method for boolean type <code>CAstArrayDesignator</code> and <code>ToTac()</code> for <code>CAstStringConstant</code>.  

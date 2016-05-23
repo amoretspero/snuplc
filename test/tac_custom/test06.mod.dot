@@ -1,0 +1,19 @@
+digraph IR {
+  graph [fontname="Times New Roman",fontsize=10];
+  node  [fontname="Courier New",fontsize=10];
+  edge  [fontname="Times New Roman",fontsize=10];
+
+  // scope 'test05'
+
+  // scope 'foo'
+  foo_cb [label="foo\r  0:     assign H <- G\l  1:     param  1 <- 2\l  2:     param  0 <- G\l  3:     call   t0 <- DIM\l  4:     mul    t1 <- 2, t0\l  5:     add    t2 <- t1, 3\l  6:     mul    t3 <- t2, 4\l  7:     param  0 <- G\l  8:     call   t4 <- DOFS\l  9:     add    t5 <- t3, t4\l 10:     add    t6 <- G, t5\l 11:     param  1 <- 2\l 12:     param  0 <- H\l 13:     call   t7 <- DIM\l 14:     mul    t8 <- 1, t7\l 15:     add    t9 <- t8, 2\l 16:     mul    t10 <- t9, 4\l 17:     param  0 <- H\l 18:     call   t11 <- DOFS\l 19:     add    t12 <- t10, t11\l 20:     add    t13 <- H, t12\l 21:     assign @t13 <- @t6\l 22:     return 1\l",shape=box]
+  // scope 'bar'
+  bar_cb [label="bar\r  0:     assign I <- J\l  1:     param  1 <- 2\l  2:     param  0 <- J\l  3:     call   t0 <- DIM\l  4:     mul    t1 <- 2, t0\l  5:     add    t2 <- t1, 3\l  6:     mul    t3 <- t2, 1\l  7:     param  0 <- J\l  8:     call   t4 <- DOFS\l  9:     add    t5 <- t3, t4\l 10:     add    t6 <- J, t5\l 11:     param  1 <- 2\l 12:     param  0 <- I\l 13:     call   t7 <- DIM\l 14:     mul    t8 <- 1, t7\l 15:     add    t9 <- t8, 2\l 16:     mul    t10 <- t9, 1\l 17:     param  0 <- I\l 18:     call   t11 <- DOFS\l 19:     add    t12 <- t10, t11\l 20:     add    t13 <- I, t12\l 21:     assign @t13 <- @t6\l 22:     return 0\l",shape=box]
+  // scope 'foobar'
+  foobar_cb [label="foobar\r  0:     mul    t0 <- 2, 4\l  1:     param  0 <- J\l  2:     call   t1 <- DOFS\l  3:     add    t2 <- t0, t1\l  4:     add    t3 <- J, t2\l  5:     mul    t4 <- 1, 4\l  6:     param  0 <- I\l  7:     call   t5 <- DOFS\l  8:     add    t6 <- t4, t5\l  9:     add    t7 <- I, t6\l 10:     assign @t7 <- @t3\l 11:     return 0\l",shape=box]
+  // scope 'simple'
+  simple_cb [label="simple\r  0:     mul    t0 <- 1, 4\l  1:     param  0 <- A\l  2:     call   t1 <- DOFS\l  3:     add    t2 <- t0, t1\l  4:     add    t3 <- A, t2\l  5:     assign @t3 <- 2\l  6:     return 1\l",shape=box]
+  // scope 'fun'
+  fun_cb [label="fun\r  0:     return 1\l",shape=box]
+};
+am  1 <- 2\l 74:     &()    t50 <- C\l 75:     param  0 <- t50\l 76:     call   t51 <- DIM\l 77:     mul    t52 <- 2, t51\l 78:     add    t53 <- t52, 0\l 79:     mul    t54 <- t53, 4\l 80:     &()    t55 <- C\l 81:     param  0 <- t55\l 82:     call   t56 <- DOFS\l 83:     add    t57 <- t54, t56\l 84:     add    t58 <- t49, t57\l 85:     &()    t59 <- @t58\l 86:     param  0 <- t59\l 87:     call   t60 <- simple\l 88:     if     t60 = 1 goto 4\l 89:     goto   5\l 90: 4:\l 91:     assign t61 <- 1\l 92:     goto   6\l 93: 5:\l 94:     assign t61 <- 0\l 95: 6:\l 96:     assign b <- t61\l",shape=box]
