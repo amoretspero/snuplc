@@ -1,0 +1,26 @@
+Array :
+1) function/procedure call parameter - whole indices / partial indices
+2) Assignment - boolean, integer, char, pointer
+3) binaryOp - boolean, integer, char
+4) if statement - condition
+5) while statement - condition
+6) return statement - return expression - whole indices / partial indices / array in expression evaluated to scalar type
+7) unaryOp - boolean, integer, char
+
+Boolean :
+1) function/procedure call parameter - as constant / as variable / as expression
+2) Assignment - as constant / as variable / as expression
+3) binaryOp - as constant / as variable / as expression
+4) if statement - condition
+5) while statement - condition
+6) return statement - return expression - as constant / as variable / as expression
+7) unaryOp - as constant / as variable / as expression
+
+Function Call :
+1) function/procedure call parameter - integer / boolean / char
+2) Assignment - integer / boolean / char
+3) binaryOp - integer / boolean / char
+4) if statement - condition
+5) while statement - condition
+6) return statement - return expression - integer / boolean / char
+7) unaryOp - integer / boolean / char

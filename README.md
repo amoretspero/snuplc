@@ -44,3 +44,8 @@ More improvement is needed with more tests.
 Implemented <code>ToTac()</code> methods for <code>CAstArrayDesignator</code> and <code>CAstFunctionCall</code>.  
 Need more tests, especially for those with array in function call arguments. And boolean related ones also need more tests.  
 Should implement <code>ToTac()</code> method for boolean type <code>CAstArrayDesignator</code> and <code>ToTac()</code> for <code>CAstStringConstant</code>.  
+  
+**2016-05-25 03:03 KST**  
+Implemented all <code>ToTac()</code> methods.  
+Passing intensive array tests(<code>test/tac_custom/test07.mod</code>).  
+Failing intensive boolean tests(<code>test/tac_custom/test08.mod</code>).

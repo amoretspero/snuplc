@@ -45,7 +45,9 @@ begin
 	F[1][2][3] := i;
 	b := fun(C[1][2]);
 	b := simple(C[1]);
-	b := simple(C[1]) && simple(C[2])
+	b := simple(C[1]) && simple(C[2]);
+	b := B[1] && B[2];
+	WriteStr("Hello, World!")
 	//b := foo(C, C1);
 	//b := foobar(C[1], C1[2])
 	//A[3] := i
