@@ -13,15 +13,23 @@ var i0, i1, i2 : integer;
 
 function booltest2(p1, p2 : boolean; p3, p4 : boolean[5]) : boolean;
 begin
-	if (p3[2] && p4[1] && !p1) then
-		WriteStr("Hello, World!\n");
-		if (p3[0]) then
-			return true
+	if (true) then
+		if (false) then
+			if (p3[2] && p4[1] && !p1) then
+				WriteStr("Hello, World!\n");
+				if (p3[0]) then
+					return true
+				else
+					return false
+				end
+			else
+				return p3[2] && BoolArr1[1][2] || !BoolArr2[1][4][3] || (!p3[1] && (!(!(!p4[1]))))
+			end
 		else
-			return false
+			return p1
 		end
 	else
-		return p3[2] && BoolArr1[1][2] || !BoolArr2[1][4][3] || (!p3[1] && (!(!(!p4[1]))))
+		return p3[1]
 	end;
 	return false
 end booltest2;

@@ -797,14 +797,17 @@ CTacAddr* CAstStatReturn::ToTac(CCodeBlock *cb, CTacLabel *next)
   }
   else // Function.
   {
-    if (GetType()->IsBoolean() && dynamic_cast<CAstConstant*>(GetExpression()) == NULL) // Boolean type return value.
+    if (GetType()->IsBoolean() && dynamic_cast<CAstConstant*>(GetExpression()) == NULL && dynamic_cast<CAstDesignator*>(GetExpression()) == NULL) // Boolean type return value.
+    //if (GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetExpression()) == NULL) // Boolean type non-designator return value.
     {
       CTacLabel* returnTrueLabel = cb->CreateLabel(); // Label for return of true.
       CTacLabel* returnFalseLabel = cb->CreateLabel(); // Label for return of false.
       CTacLabel* returnValueLabel = cb->CreateLabel(); // Label for returning the value.
-      CTacTemp* returnValueTemp = cb->CreateTemp(GetType()); // Temporary variable containing return value.
       
       GetExpression()->ToTac(cb, returnTrueLabel, returnFalseLabel); // Call ToTac of return expression.
+      
+      CTacTemp* returnValueTemp = cb->CreateTemp(GetType()); // Temporary variable containing return value.
+      //cout << "===(DEBUG)===At CAstStatReturn::ToTac, temp variable is : " << returnValueTemp->GetSymbol()->GetName() << endl;
       
       cb->AddInstr(returnTrueLabel); // Indicates the true(constant 1) case of return value.
       cb->AddInstr(new CTacInstr(opAssign, returnValueTemp, new CTacConst(1), NULL)); // Assign 1 to temporary variable.
@@ -1671,9 +1674,39 @@ CTacAddr* CAstSpecialOp::ToTac(CCodeBlock *cb)
   //cout << "===(DEBUG)===At CAstSpecialOp::ToTac - token for operand is : " << GetOperand()->GetToken() << ", type of operand is : " << GetOperand()->GetType() << endl;
   //CTacTemp* refRes = cb->CreateTemp(CTypeManager::Get()->GetPointer(this->GetOperand()->GetType()));
   CTacName* operandResCast = dynamic_cast<CTacName*>(operandRes);
+  CAstArrayDesignator* operandResArrayCast = dynamic_cast<CAstArrayDesignator*>(GetOperand());
+  //if (operandResArrayCast != NULL)
+  //{
+    //const CArrayType* operandResArrayType = dynamic_cast<const CArrayType*>(operandResArrayCast->GetSymbol()->GetDataType());
+  //}
   if (operandResCast != NULL)
   {
-    CTacTemp* refRes = cb->CreateTemp(CTypeManager::Get()->GetPointer(operandResCast->GetSymbol()->GetDataType()));
+    //CTacTemp* refRes = NULL;
+    //if (operandResArrayType != NULL)
+    //{
+      //refRes = cb->CreateTemp(CTypeManager::Get()->GetPointer(operandResArrayType->GetBaseType()));
+    //}
+    //else
+    //{
+      //refRes = cb->CreateTemp(CTypeManager::Get()->GetPointer(operandResCast->GetSymbol()->GetDataType()));
+    //}
+    CTacTemp* refRes = NULL;
+    if (operandResArrayCast != NULL)
+    {
+      const CArrayType* operandResArrayType = dynamic_cast<const CArrayType*>(operandResArrayCast->GetSymbol()->GetDataType());
+      if (operandResArrayType != NULL)
+      {
+        refRes = cb->CreateTemp(CTypeManager::Get()->GetPointer(operandResArrayType->GetBaseType()));
+      }
+      else
+      {
+        refRes = cb->CreateTemp(CTypeManager::Get()->GetPointer(operandResCast->GetSymbol()->GetDataType()));
+      }
+    }
+    else
+    {
+      refRes = cb->CreateTemp(CTypeManager::Get()->GetPointer(operandResCast->GetSymbol()->GetDataType()));
+    }
     cb->AddInstr(new CTacInstr(opAddress, refRes, operandRes, NULL));
     return refRes;
   }
@@ -2147,17 +2180,20 @@ CTacAddr* CAstArrayDesignator::ToTac(CCodeBlock *cb)
       cb->AddInstr(new CTacInstr(opCall, callDIMRes, new CTacName(GetSymbol()->GetSymbolTable()->FindSymbol("DIM")), NULL));
       CTacTemp* multDIMSizeRes = cb->CreateTemp(CTypeManager::Get()->GetInt());
       cb->AddInstr(new CTacInstr(opMul, multDIMSizeRes, idxExp, callDIMRes));
-      CTacTemp* sumIdxExpRes = cb->CreateTemp(CTypeManager::Get()->GetInt());
-      if (idxCalcCnt == GetNIndices())
+      CTacTemp* sumIdxExpRes = NULL;
+      if (idxCalcCnt >= GetNIndices())
       {
+        sumIdxExpRes = cb->CreateTemp(CTypeManager::Get()->GetInt());
         cb->AddInstr(new CTacInstr(opAdd, sumIdxExpRes, multDIMSizeRes, new CTacConst(0)));
-        idxExp = sumIdxExpRes;
-        break;
+        //idxExp = sumIdxExpRes;
+        //break;
       }
       else
       {
         //cout << "===(DEBUG)===Before GetIndex(" << idxCalcCnt << ") - array" << endl;
-        cb->AddInstr(new CTacInstr(opAdd, sumIdxExpRes, multDIMSizeRes, GetIndex(idxCalcCnt)->ToTac(cb)));
+        CTacAddr* getIdxRes = GetIndex(idxCalcCnt)->ToTac(cb);
+        sumIdxExpRes = cb->CreateTemp(CTypeManager::Get()->GetInt());
+        cb->AddInstr(new CTacInstr(opAdd, sumIdxExpRes, multDIMSizeRes, getIdxRes));
         //cout << "===(DEBUG)===After GetIndex(" << idxCalcCnt << ") - array" << endl;
       }
       idxExp = sumIdxExpRes;
@@ -2198,10 +2234,22 @@ CTacAddr* CAstArrayDesignator::ToTac(CCodeBlock *cb)
       cb->AddInstr(new CTacInstr(opCall, callDIMRes, new CTacName(GetSymbol()->GetSymbolTable()->FindSymbol("DIM")), NULL));
       CTacTemp* multDIMSizeRes = cb->CreateTemp(CTypeManager::Get()->GetInt());
       cb->AddInstr(new CTacInstr(opMul, multDIMSizeRes, idxExp, callDIMRes));
-      CTacTemp* sumIdxExpRes = cb->CreateTemp(CTypeManager::Get()->GetInt());
-      //cout << "===(DEBUG)===Before GetIndex(" << idxCalcCnt << ") - pointer" << endl;
-      cb->AddInstr(new CTacInstr(opAdd, sumIdxExpRes, multDIMSizeRes, GetIndex(idxCalcCnt)->ToTac(cb)));
-      //cout << "===(DEBUG)===Before GetIndex(" << idxCalcCnt << ") - pointer" << endl;
+      CTacTemp* sumIdxExpRes = NULL;
+      if (idxCalcCnt >= GetNIndices())
+      {
+        sumIdxExpRes = cb->CreateTemp(CTypeManager::Get()->GetInt());
+        cb->AddInstr(new CTacInstr(opAdd, sumIdxExpRes, multDIMSizeRes, new CTacConst(0)));
+        //idxExp = sumIdxExpRes;
+        //break;
+      }
+      else
+      {
+        //cout << "===(DEBUG)===Before GetIndex(" << idxCalcCnt << ") - pointer" << endl;
+        CTacAddr* getIdxRes = GetIndex(idxCalcCnt)->ToTac(cb);
+        sumIdxExpRes = cb->CreateTemp(CTypeManager::Get()->GetInt());
+        cb->AddInstr(new CTacInstr(opAdd, sumIdxExpRes, multDIMSizeRes, getIdxRes));
+        //cout << "===(DEBUG)===After GetIndex(" << idxCalcCnt << ") - pointer" << endl;
+      }
       idxExp = sumIdxExpRes;
     }
     

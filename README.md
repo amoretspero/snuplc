@@ -48,4 +48,12 @@ Should implement <code>ToTac()</code> method for boolean type <code>CAstArrayDes
 **2016-05-25 03:03 KST**  
 Implemented all <code>ToTac()</code> methods.  
 Passing intensive array tests(<code>test/tac_custom/test07.mod</code>).  
-Failing intensive boolean tests(<code>test/tac_custom/test08.mod</code>).
+Failing intensive boolean tests(<code>test/tac_custom/test08.mod</code>).  
+  
+**2016-05-25 13:23 KST**  
+Fixed <code>ToTac()</code> method for <code>CAstSpecialOp</code>, <code>CAstArrayDesignator</code>, <code>CAstStatReturn</code>.  
+CTac temporary variable allocation is fixed for some methods.  This is done to match result output with reference.  
+Temporary variable type for <code>CAstSpecialOp</code> is fixed to represent base type of array when operand of special operation is array. Note that Array indexed fully is not array.
+For example, for <code>A : integer[5][5]</code>, <code>A[1][2]</code> is not array, whereas <code>A</code> and <code>A[1]</code> is array.  
+For array designators, when array is not fully indexed, now parser will add zero to result of DIM multiplied by base type size, and iterates until iteration count is same to number of arguments expected.  
+Passing intensive boolean tests(<code>test/tac_custom/test08.mod</code>).
