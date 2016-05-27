@@ -99,4 +99,11 @@ If left-most operand of term composing simpleexpr is NOT a constant, unary prefi
 For help, we defined two additional helper functions, one is <code>CParser::getBinaryLHS(CAstBinaryOp\* _lhs, bool _isNeg, bool _isPos)</code>, which will get the 
 unary prefix applied expression of given <code>_lhs</code>, the other one is <code>CParser::isLeftmostConstant(CAstBinaryOp\* _lhs)</code>, which will tell whether
 the left most operand of given binary operation is constant or not.  
-Comments are needed for recently edited parts of source code.
+Comments are needed for recently edited parts of source code.  
+  
+**2016-05-28 05:23 KST**  
+Fixed RELAXED scheme bug.  
+2 2 2 : Passing 3000/3000 random tests.  
+3 3 3 : Passing 5000/5000 random tests.  
+5 5 5 : Passing 2100/2100 random tests.  
+5 10 10 : Passing 150/150 random tests.
