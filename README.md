@@ -87,4 +87,16 @@ Dynamic test available.
 3 3 3 : Passing 2000/2000 tests.  
 5 5 5 : Passing 500/500 tests.  
 5 10 10 : Passing 207/207 tests.  
-More tests can be done with more time.
+More tests can be done with more time.  
+  
+**2016-05-28 04:29 KST**  
+Added unary operator generation for <code>modgen.py</code>. Unary operator test is available.  
+Scheme for integer constant relaxing is RELAXED scheme.  
+Binary operators of SnuPL/1 language is left associative. i.e., <code>1 * 2 * 3</code> should be calculated as <code>1 \* 2</code> first and <code>(prev result) \* 3</code>.  
+To take consider of this fact, <code>CParser::simpleexpr</code> has been modified.  
+When unary prefix is present and LHS of termOp is not constant, now unary prefix operator is applied to ONLY constant left-most operand.  
+If left-most operand of term composing simpleexpr is NOT a constant, unary prefix will be applied to the whole term.  
+For help, we defined two additional helper functions, one is <code>CParser::getBinaryLHS(CAstBinaryOp\* _lhs, bool _isNeg, bool _isPos)</code>, which will get the 
+unary prefix applied expression of given <code>_lhs</code>, the other one is <code>CParser::isLeftmostConstant(CAstBinaryOp\* _lhs)</code>, which will tell whether
+the left most operand of given binary operation is constant or not.  
+Comments are needed for recently edited parts of source code.

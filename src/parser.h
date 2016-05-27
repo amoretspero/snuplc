@@ -207,6 +207,10 @@ class CParser {
     /// @retVal false when there is no duplication.
     bool CheckParamDups (vector<vector<CSymParam*> >* paramVec, const string elemToFind);
     
+    CAstExpression* getBinaryLHS(CAstBinaryOp* _lhs, bool _isNeg, bool _isPos);
+    
+    bool isLeftmostConstant(CAstBinaryOp* _lhs);
+    
     
         
 

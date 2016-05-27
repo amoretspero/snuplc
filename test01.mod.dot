@@ -4,5 +4,5 @@ digraph IR {
   edge  [fontname="Times New Roman",fontsize=10];
 
   // scope 'test'
-  test_cb [label="test\r  0:     neg    t0 <- i\l  1:     add    t1 <- t0, 2\l  2:     assign a <- t1\l",shape=box]
+  test_cb [label="test\r  0:     mul    t0 <- 1234, 2345\l  1:     div    t1 <- t0, 3456\l  2:     neg    t2 <- t1\l  3:     assign a <- t2\l  4:     mul    t3 <- -1234, 2345\l  5:     assign a <- t3\l",shape=box]
 };

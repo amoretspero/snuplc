@@ -1206,6 +1206,131 @@ CAstExpression* CParser::expression(CAstScope* s)
   }
 }
 
+bool CParser::isLeftmostConstant(CAstBinaryOp* _lhs)
+{
+  CAstBinaryOp* subLHS = dynamic_cast<CAstBinaryOp*>(_lhs->GetLeft());
+  if (subLHS != NULL)
+  {
+    return isLeftmostConstant(subLHS);
+  }
+  else
+  {
+    if (dynamic_cast<CAstConstant*>(_lhs->GetLeft()) == NULL)
+    {
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+  }
+}
+
+CAstExpression* CParser::getBinaryLHS(CAstBinaryOp* _lhs, bool _isNeg, bool _isPos)
+{
+  CAstBinaryOp* subLHS = dynamic_cast<CAstBinaryOp*>(_lhs->GetLeft());
+  if (subLHS != NULL)
+  {
+    CAstExpression* subRHS = _lhs->GetRight();
+    CAstConstant* constSubRHS = dynamic_cast<CAstConstant*>(subRHS);
+    if (constSubRHS != NULL)
+    {
+      if (constSubRHS->GetValue() > 2147483647 || constSubRHS->GetValue() < -2147483648) // Check the integer range for RHS.
+      {
+        SetError(constSubRHS->GetToken(), "integer constant outside valid range.");
+      }
+      return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), getBinaryLHS(subLHS, _isNeg, _isPos), constSubRHS);
+    }
+    else
+    {
+      return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), getBinaryLHS(subLHS, _isNeg, _isPos), _lhs->GetRight());
+    }
+  }
+  else
+  {
+    CAstExpression* expSubLHS = _lhs->GetLeft();
+    CAstExpression* expSubRHS = _lhs->GetRight();
+    CAstConstant* constSubLHS = dynamic_cast<CAstConstant*>(expSubLHS);
+    CAstConstant* constSubRHS = dynamic_cast<CAstConstant*>(expSubRHS);
+    if (constSubLHS != NULL && constSubRHS != NULL)
+    {
+      if (constSubRHS->GetValue() > 2147483647 || constSubRHS->GetValue() < -2147483648) // Check the integer range for RHS.
+      {
+        SetError(constSubRHS->GetToken(), "integer constant outside valid range.");
+      }
+      if (_isNeg)
+      {
+        if ((0 - constSubLHS->GetValue()) > 2147483647 || (0 - constSubLHS->GetValue()) < -2147483648) // Check the integer range for LHS.
+        {
+          SetError(constSubLHS->GetToken(), "integer constant outside valid range.");
+        }
+        return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), new CAstConstant(constSubLHS->GetToken(), constSubLHS->GetType(), 0 - constSubLHS->GetValue()), constSubRHS);
+      }
+      else
+      {
+        if (constSubLHS->GetValue() > 2147483647 || constSubLHS->GetValue() < -2147483648) // Check the integer range for LHS.
+        {
+          SetError(constSubLHS->GetToken(), "integer constant outside valid range.");
+        }
+        return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), constSubLHS, constSubRHS);
+      }
+    }
+    else if (constSubLHS != NULL)
+    {
+      if (_isNeg)
+      {
+        if ((0 - constSubLHS->GetValue()) > 2147483647 || (0 - constSubLHS->GetValue()) < -2147483648) // Check the integer range for LHS.
+        {
+          SetError(constSubLHS->GetToken(), "integer constant outside valid range.");
+        }
+        return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), new CAstConstant(constSubLHS->GetToken(), constSubLHS->GetType(), 0 - constSubLHS->GetValue()), expSubRHS);
+      }
+      else
+      {
+        if (constSubLHS->GetValue() > 2147483647 || constSubLHS->GetValue() < -2147483648) // Check the integer range for LHS.
+        {
+          SetError(constSubLHS->GetToken(), "integer constant outside valid range.");
+        }
+        return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), constSubLHS, expSubRHS);
+      }
+    }
+    else if (constSubRHS != NULL)
+    {
+      if (constSubRHS->GetValue() > 2147483647 || constSubRHS->GetValue() < -2147483648) // Check the integer range for RHS.
+      {
+        SetError(constSubRHS->GetToken(), "integer constant outside valid range.");
+      }
+      if (_isNeg)
+      {
+        return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), new CAstUnaryOp(expSubLHS->GetToken(), opNeg, expSubLHS), constSubRHS);
+      }
+      else if (_isPos)
+      {
+        return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), new CAstUnaryOp(expSubLHS->GetToken(), opPos, expSubLHS), constSubRHS);
+      }
+      else
+      {
+        return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), expSubLHS, constSubRHS);
+      }
+    }
+    else
+    {
+      if (_isNeg)
+      {
+        return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), new CAstUnaryOp(expSubLHS->GetToken(), opNeg, expSubLHS), expSubRHS);
+      }
+      else if (_isPos)
+      {
+        return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), new CAstUnaryOp(expSubLHS->GetToken(), opPos, expSubLHS), expSubRHS);
+      }
+      else
+      {
+        return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), expSubLHS, expSubRHS);
+      }
+    }
+  }
+}
+
 CAstExpression* CParser::simpleexpr(CAstScope *s)
 {
   //
@@ -1266,11 +1391,45 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
           {
             SetError(constRHS->GetToken(), "integer constant outside valid range."); // Check the integer range for RHS.
           }
-          n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opPos, binaryTerm->GetLeft()), constRHS);
+          //n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opPos, binaryTerm->GetLeft()), constRHS);
+          //if (dynamic_cast<CAstBinaryOp*>(binaryTerm->GetLeft()) != NULL)
+          //{
+            if (isLeftmostConstant(binaryTerm))
+            {
+              n = getBinaryLHS(binaryTerm, false, true);
+            }
+            else
+            {
+              n = new CAstUnaryOp(binaryTerm->GetToken(), opPos, getBinaryLHS(binaryTerm, false, false));
+            }
+            //n = new CAstUnaryOp(binaryTerm->GetToken(), opPos, getBinaryLHS(binaryTerm, false, false));
+            //n = getBinaryLHS(binaryTerm, false, true);
+          //}
+          //else
+          //{
+            //n = getBinaryLHS(binaryTerm, false, true);
+          //}
         }
         else // Case when LHS and RHS are both not integer constant.
         {
-          n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opPos, binaryTerm->GetLeft()), binaryTerm->GetRight());
+          //n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opPos, binaryTerm->GetLeft()), binaryTerm->GetRight());
+          //if (dynamic_cast<CAstBinaryOp*>(binaryTerm->GetLeft()) != NULL)
+          //{
+            if (isLeftmostConstant(binaryTerm))
+            {
+              n = getBinaryLHS(binaryTerm, false, true);
+            }
+            else
+            {
+              n = new CAstUnaryOp(binaryTerm->GetToken(), opPos, getBinaryLHS(binaryTerm, false, false));
+            }
+            //n = new CAstUnaryOp(binaryTerm->GetToken(), opNeg, getBinaryLHS(binaryTerm, false, false));
+            //n = getBinaryLHS(binaryTerm, false, true);
+          //}
+          //else
+          //{
+            //n = getBinaryLHS(binaryTerm, false, true);
+          //}
         }
       }
       else // Case of other terms, i.e. neither of integer constant nor binary operator.
@@ -1333,11 +1492,45 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
           {
             SetError(constRHS->GetToken(), "integer constant outside valid range.");
           }
-          n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opNeg, binaryTerm->GetLeft()) , constRHS);
+          //if (dynamic_cast<CAstBinaryOp*>(binaryTerm->GetLeft()) != NULL)
+          //{
+            if (isLeftmostConstant(binaryTerm))
+            {
+              n = getBinaryLHS(binaryTerm, true, false);
+            }
+            else
+            {
+              n = new CAstUnaryOp(binaryTerm->GetToken(), opNeg, getBinaryLHS(binaryTerm, false, false));
+            }
+            //n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opNeg, binaryTerm->GetLeft()) , constRHS);
+            //n = new CAstUnaryOp(binaryTerm->GetToken(), opNeg, getBinaryLHS(binaryTerm, false, false));
+            //n = getBinaryLHS(binaryTerm, true, false);
+          //}
+          //else
+          //{
+            //n = getBinaryLHS(binaryTerm, true, false);
+          //}
         }
         else // Case when LHS and RHS are both not integer constant.
         {
-          n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opNeg, binaryTerm->GetLeft()) , binaryTerm->GetRight());
+          //if (dynamic_cast<CAstBinaryOp*>(binaryTerm->GetLeft()) != NULL)
+          //{
+            if (isLeftmostConstant(binaryTerm))
+            {
+              n = getBinaryLHS(binaryTerm, true, false);
+            }
+            else
+            {
+              n = new CAstUnaryOp(binaryTerm->GetToken(), opNeg, getBinaryLHS(binaryTerm, false, false));
+            }
+            //n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opNeg, binaryTerm->GetLeft()) , binaryTerm->GetRight());
+            //n = new CAstUnaryOp(binaryTerm->GetToken(), opNeg, getBinaryLHS(binaryTerm, false, false));
+            //n = getBinaryLHS(binaryTerm, true, false);
+          //}
+          //else
+          //{
+            //n = getBinaryLHS(binaryTerm, true, false);
+          //}
         }
       }
       else // Case of other terms, i.e. neither of integer constant nor binary operator.
