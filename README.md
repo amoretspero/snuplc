@@ -59,4 +59,8 @@ For array designators, when array is not fully indexed, now parser will add zero
 Passing intensive boolean tests(<code>test/tac_custom/test08.mod</code>).  
   
 **2016-05-25 18:23 KST**  
-Added comments to <code>ToTac()</code> methods. Need revision.
+Added comments to <code>ToTac()</code> methods. Need revision.  
+  
+**2016-05-27 20:38 KST**  
+Fixing bug for <code>CAstBinaryOp::ToTac</code> methods.  
+<code>opEqual</code> and <code>opNotEqual</code> have problems.  

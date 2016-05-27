@@ -1,0 +1,21 @@
+digraph IR {
+  graph [fontname="Times New Roman",fontsize=10];
+  node  [fontname="Courier New",fontsize=10];
+  edge  [fontname="Times New Roman",fontsize=10];
+
+  // scope 'test'
+  test_cb [label="test\r  0:     return \l  1:     return \l  2:     call   t0 <- dummyBOOLfunc\l  3:     assign v0 <- t0\l  4:     call   dummyProcedure\l  5:     if     97 >= 99 goto 5_if_true\l  6:     goto   6_if_false\l  7: 5_if_true:\l  8:     goto   4\l  9: 6_if_false:\l 10: 4:\l 11:     if     96 >= 55313 goto 12_if_true\l 12:     goto   13_if_false\l 13: 12_if_true:\l 14:     goto   11\l 15: 13_if_false:\l 16: 11:\l 17:     goto   8\l 18: 8:\l 19:     call   t1 <- dummyBOOLfunc\l 20: 17_while_cond:\l 21:     goto   16\l 22:     goto   16\l 23:     goto   17_while_cond\l 24: 16:\l 25:     call   t2 <- ReadInt\l 26:     call   t3 <- dummyBOOLfunc\l 27:     return \l 28:     return \l 29:     return \l",shape=box]
+  // scope 'dummyINTfunc'
+  dummyINTfunc_cb [label="dummyINTfunc\r",shape=box]
+  // scope 'dummyCHARfunc'
+  dummyCHARfunc_cb [label="dummyCHARfunc\r",shape=box]
+  // scope 'dummyBOOLfunc'
+  dummyBOOLfunc_cb [label="dummyBOOLfunc\r",shape=box]
+  // scope 'dummyProcedure'
+  dummyProcedure_cb [label="dummyProcedure\r",shape=box]
+  // scope 'f0'
+  f0_cb [label="f0\r  0:     return \l  1:     assign v1 <- 69940\l  2:     return \l  3:     return \l  4: 5_while_cond:\l  5:     goto   4\l  6:     return \l  7:     goto   5_while_cond\l  8: 4:\l  9: 9_while_cond:\l 10:     div    t0 <- 61855, 14376\l 11:     mul    t1 <- t0, 13705\l 12:     if     53150 >= t1 goto 10_while_body\l 13:     goto   8\l 14: 10_while_body:\l 15:     goto   9_while_cond\l 16: 8:\l 17: 13_while_cond:\l 18: 16_while_cond:\l 19:     goto   15\l 20:     goto   16_while_cond\l 21: 15:\l 22:     goto   13_while_cond\l 23: 19_while_cond:\l 24:     goto   18\l 25:     return \l 26:     goto   19_while_cond\l 27: 18:\l 28:     return \l 29:     assign v2 <- 97\l",shape=box]
+  // scope 'f1'
+
+};
+_cb [label="f1\r  0:     goto   2_if_false\l  1:     return 7025\l  2:     goto   0\l  3: 2_if_false:\l  4: 0:\l  5:     call   t0 <- ReadInt\l  6:     call   t1 <- ReadInt\l  7:     return t1\l  8:     assign v4 <- 13157\l  9:     if     1 = 1 goto 8_if_true\l 10:     goto   9_if_false\l 11: 8_if_true:\l 12:     goto   11\l 13: 11:\l 14:     goto   7\l 15: 9_if_false:\l 16: 7:\l 17: 15_while_cond:\l 18:     goto   14\l 19:     goto   15_while_cond\l 20: 14:\l 21: 19_while_cond:\l 22:     goto   18\l 23:     call   t2 <- dummyINTfunc\l 24:     if     82640 < 36557 goto 23_if_true\l 25:     goto   24_if_false\l 26: 23_if_true:\l 27:     goto   22\l 28: 24_if_false:\l 29: 22:\l 30:     call   t3 <- dummyINTfunc\l 31:     goto   19_while_cond\l 32: 18:\l 33:     if     14501 <= 39208 goto 28_if_true\l 34:     goto   29_if_false\l 35: 28_if_true:\l 36:     goto   31\l 37: 31:\l 38:     assign v1 <- 99\l 39:     goto   27\l 40: 29_if_false:\l 41: 27:\l 42:     call   t4 <- dummyCHARfunc\l 43:     sub    t5 <- 74531, 1915\l 44:     return t5\l",shape=box]

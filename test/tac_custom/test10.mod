@@ -12,6 +12,12 @@ begin
 	return p3[1][2]
 end foo;
 
+procedure bar (p1 : boolean[5]; p2 : boolean[5]);
+begin
+	p1 := p2;
+	return
+end bar;
+
 begin
 	b0 := foo(b0, boolArr0, boolArr1);
 	b1 := foo(boolArr0[1], boolArr1[1], boolArr2[1]);

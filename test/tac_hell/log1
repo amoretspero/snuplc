@@ -1,0 +1,355 @@
+[32m+ test_ir: src/ast.cpp:1340: virtual CTacAddr* CAstBinaryOp::ToTac(CCodeBlock*): Assertion `binaryOp != opLessEqual' failed.
+[0m[31m- [[ module: test
+[0m[31m-   [[ type manager
+[0m[31m-     base types:
+[0m[31m-       <NULL>
+[0m[31m-       <int>
+[0m[31m-       <char>
+[0m[31m-       <bool>
+[0m[31m-       <ptr(4) to <NULL>>
+[0m[31m-     pointer types:
+[0m[31m-       <ptr(4) to <NULL>>
+[0m[31m-       <ptr(4) to <array of <char>>>
+[0m[31m-       <ptr(4) to <array 52 of <array 69 of <array 57 of <array 82 of <array 66 of <int>>>>>>>
+[0m[31m-       <ptr(4) to <array 94 of <array 61 of <array 32 of <array 16 of <array 18 of <bool>>>>>>>
+[0m[31m-       <ptr(4) to <array 86 of <array 29 of <array 32 of <array 65 of <array 15 of <char>>>>>>>
+[0m[31m-     array types:
+[0m[31m-       <array of <char>>
+[0m[31m-       <array 66 of <int>>
+[0m[31m-       <array 82 of <array 66 of <int>>>
+[0m[31m-       <array 57 of <array 82 of <array 66 of <int>>>>
+[0m[31m-       <array 69 of <array 57 of <array 82 of <array 66 of <int>>>>>
+[0m[31m-       <array 52 of <array 69 of <array 57 of <array 82 of <array 66 of <int>>>>>>
+[0m[31m-       <array 18 of <bool>>
+[0m[31m-       <array 16 of <array 18 of <bool>>>
+[0m[31m-       <array 32 of <array 16 of <array 18 of <bool>>>>
+[0m[31m-       <array 61 of <array 32 of <array 16 of <array 18 of <bool>>>>>
+[0m[31m-       <array 94 of <array 61 of <array 32 of <array 16 of <array 18 of <bool>>>>>>
+[0m[31m-       <array 15 of <char>>
+[0m[31m-       <array 65 of <array 15 of <char>>>
+[0m[31m-       <array 32 of <array 65 of <array 15 of <char>>>>
+[0m[31m-       <array 29 of <array 32 of <array 65 of <array 15 of <char>>>>>
+[0m[31m-       <array 86 of <array 29 of <array 32 of <array 65 of <array 15 of <char>>>>>>
+[0m[31m-   ]]
+[0m[31m-   [[
+[0m[31m-     [ *DIM(<ptr(4) to <NULL>>,<int>) --> <int>     ]
+[0m[31m-     [ *DOFS(<ptr(4) to <NULL>>) --> <int>     ]
+[0m[31m-     [ *ReadInt() --> <int>     ]
+[0m[31m-     [ *WriteChar(<char>) --> <NULL>     ]
+[0m[31m-     [ *WriteInt(<int>) --> <NULL>     ]
+[0m[31m-     [ *WriteLn() --> <NULL>     ]
+[0m[31m-     [ *WriteStr(<ptr(4) to <array of <char>>>) --> <NULL>     ]
+[0m[31m-     [ *dummyBOOLfunc() --> <bool>     ]
+[0m[31m-     [ *dummyCHARfunc() --> <char>     ]
+[0m[31m-     [ *dummyINTfunc() --> <int>     ]
+[0m[31m-     [ *dummyProcedure() --> <NULL>     ]
+[0m[31m-     [ *f0(<bool>,<ptr(4) to <array 52 of <array 69 of <array 57 of <array 82 of <array 66 of <int>>>>>>>,<bool>) --> <bool>     ]
+[0m[31m-     [ *f1(<bool>,<ptr(4) to <array 94 of <array 61 of <array 32 of <array 16 of <array 18 of <bool>>>>>>>,<ptr(4) to <array 86 of <array 29 of <array 32 of <array 65 of <array 15 of <char>>>>>>>) --> <NULL>     ]
+[0m[31m-     [ $t0       <int>     ]
+[0m[31m-     [ $t1       <int>     ]
+[0m[31m-     [ $t10      <char>     ]
+[0m[31m-     [ $t2       <int>     ]
+[0m[31m-     [ $t3       <char>     ]
+[0m[31m-     [ $t4       <bool>     ]
+[0m[31m-     [ $t5       <int>     ]
+[0m[31m-     [ $t6       <ptr(4) to <array 52 of <array 69 of <array 57 of <array 82 of <array 66 of <int>>>>>>>     ]
+[0m[31m-     [ $t7       <bool>     ]
+[0m[31m-     [ $t8       <bool>     ]
+[0m[31m-     [ $t9       <bool>     ]
+[0m[31m-     [ @v0       <int>     ]
+[0m[31m-     [ @v1       <bool>     ]
+[0m[31m-     [ @v2       <array 52 of <array 69 of <array 57 of <array 82 of <array 66 of <int>>>>>>     ]
+[0m[31m-     [ @v3       <char>     ]
+[0m[31m-   ]]
+[0m[31m-   [[ test
+[0m[31m-       0:     add    t0 <- 76965, 64514
+[0m[31m-       1:     add    t1 <- t0, 66771
+[0m[31m-       2:     sub    t2 <- t1, 50644
+[0m[31m-       3:     assign v0 <- t2
+[0m[31m-       4:     call   t3 <- dummyCHARfunc
+[0m[31m-       5:     if     97 = 100 goto 3
+[0m[31m-       6:     goto   4
+[0m[31m-       7: 3:
+[0m[31m-       8:     assign t4 <- 1
+[0m[31m-       9:     goto   5
+[0m[31m-      10: 4:
+[0m[31m-      11:     assign t4 <- 0
+[0m[31m-      12: 5:
+[0m[31m-      13:     assign v1 <- t4
+[0m[31m-      14:     goto   9_if_false
+[0m[31m-      15:     goto   7
+[0m[31m-      16: 9_if_false:
+[0m[31m-      17: 7:
+[0m[31m-      18: 12_while_cond:
+[0m[31m-      19:     goto   11
+[0m[31m-      20:     call   dummyProcedure
+[0m[31m-      21:     goto   12_while_cond
+[0m[31m-      22: 11:
+[0m[31m-      23:     return 
+[0m[31m-      24:     call   t5 <- dummyINTfunc
+[0m[31m-      25:     param  2 <- 0
+[0m[31m-      26:     &()    t6 <- v2
+[0m[31m-      27:     param  1 <- t6
+[0m[31m-      28:     if     85694 <= 57365 goto 18
+[0m[31m-      29: 18:
+[0m[31m-      30:     assign t7 <- 1
+[0m[31m-      31:     goto   20
+[0m[31m-      32:     assign t7 <- 0
+[0m[31m-      33: 20:
+[0m[31m-      34:     param  0 <- t7
+[0m[31m-      35:     call   t8 <- f0
+[0m[31m-      36:     call   t9 <- dummyBOOLfunc
+[0m[31m-      37:     if     t9 = 1 goto 25_if_true
+[0m[31m-      38:     goto   26_if_false
+[0m[31m-      39: 25_if_true:
+[0m[31m-      40:     goto   24
+[0m[31m-      41: 26_if_false:
+[0m[31m-      42: 24:
+[0m[31m-      43:     call   t10 <- dummyCHARfunc
+[0m[31m-      44:     return 
+[0m[31m-      45:     if     69553 >= 61593 goto 30_if_true
+[0m[31m-      46:     goto   31_if_false
+[0m[31m-      47: 30_if_true:
+[0m[31m-      48:     assign v3 <- 100
+[0m[31m-      49:     goto   29
+[0m[31m-      50: 31_if_false:
+[0m[31m-      51: 29:
+[0m[31m-      52:     return 
+[0m[31m-   ]]
+[0m[31m- 
+[0m[31m-   [[ procedure: dummyINTfunc
+[0m[31m-     [[
+[0m[31m-     ]]
+[0m[31m-     [[ dummyINTfunc
+[0m[31m-     ]]
+[0m[31m-   ]]
+[0m[31m- 
+[0m[31m-   [[ procedure: dummyCHARfunc
+[0m[31m-     [[
+[0m[31m-     ]]
+[0m[31m-     [[ dummyCHARfunc
+[0m[31m-     ]]
+[0m[31m-   ]]
+[0m[31m- 
+[0m[31m-   [[ procedure: dummyBOOLfunc
+[0m[31m-     [[
+[0m[31m-     ]]
+[0m[31m-     [[ dummyBOOLfunc
+[0m[31m-     ]]
+[0m[31m-   ]]
+[0m[31m- 
+[0m[31m-   [[ procedure: dummyProcedure
+[0m[31m-     [[
+[0m[31m-     ]]
+[0m[31m-     [[ dummyProcedure
+[0m[31m-     ]]
+[0m[31m-   ]]
+[0m[31m- 
+[0m[31m-   [[ procedure: f0
+[0m[31m-     [[
+[0m[31m-       [ $t0       <int>       ]
+[0m[31m-       [ $t1       <int>       ]
+[0m[31m-       [ $t2       <int>       ]
+[0m[31m-       [ $t3       <char>       ]
+[0m[31m-       [ $t4       <bool>       ]
+[0m[31m-       [ $t5       <char>       ]
+[0m[31m-       [ $t6       <bool>       ]
+[0m[31m-       [ $t7       <int>       ]
+[0m[31m-       [ $t8       <bool>       ]
+[0m[31m-       [ %v2       <bool>       ]
+[0m[31m-       [ %v3       <ptr(4) to <array 52 of <array 69 of <array 57 of <array 82 of <array 66 of <int>>>>>>>       ]
+[0m[31m-       [ %v4       <bool>       ]
+[0m[31m-       [ $v5       <int>       ]
+[0m[31m-     ]]
+[0m[31m-     [[ f0
+[0m[31m-         0:     add    t0 <- 66837, 5524
+[0m[31m-         1:     add    t1 <- t0, 76027
+[0m[31m-         2:     assign v5 <- t1
+[0m[31m-         3:     call   t2 <- dummyINTfunc
+[0m[31m-         4: 3_while_cond:
+[0m[31m-         5:     if     100 <= 98 goto 4_while_body
+[0m[31m-         6:     goto   2
+[0m[31m-         7: 4_while_body:
+[0m[31m-         8:     if     99 > 98 goto 7_if_true
+[0m[31m-         9:     goto   8_if_false
+[0m[31m-        10: 7_if_true:
+[0m[31m-        11:     goto   6
+[0m[31m-        12: 8_if_false:
+[0m[31m-        13: 6:
+[0m[31m-        14:     goto   3_while_cond
+[0m[31m-        15: 2:
+[0m[31m-        16:     assign v2 <- 1
+[0m[31m-        17:     call   t3 <- dummyCHARfunc
+[0m[31m-        18:     if     97 < t3 goto 12
+[0m[31m-        19:     goto   13
+[0m[31m-        20: 12:
+[0m[31m-        21:     assign t4 <- 1
+[0m[31m-        22:     goto   14
+[0m[31m-        23: 13:
+[0m[31m-        24:     assign t4 <- 0
+[0m[31m-        25: 14:
+[0m[31m-        26:     assign v2 <- t4
+[0m[31m-        27:     call   t5 <- dummyCHARfunc
+[0m[31m-        28:     call   dummyProcedure
+[0m[31m-        29:     if     99 < 97 goto 22
+[0m[31m-        30:     goto   23
+[0m[31m-        31: 22:
+[0m[31m-        32:     assign t6 <- 1
+[0m[31m-        33:     goto   24
+[0m[31m-        34: 23:
+[0m[31m-        35:     assign t6 <- 0
+[0m[31m-        36: 24:
+[0m[31m-        37:     return t6
+[0m[31m-        38:     goto   18
+[0m[31m-        39: 18:
+[0m[31m-        40: 27_while_cond:
+[0m[31m-        41:     sub    t7 <- 12380, 2920
+[0m[31m-        42:     if     t7 # 72553 goto 28_while_body
+[0m[31m-        43:     goto   26
+[0m[31m-        44: 28_while_body:
+[0m[31m-        45:     goto   27_while_cond
+[0m[31m-        46: 26:
+[0m[31m-        47:     goto   31
+[0m[31m-        48: 31:
+[0m[31m-        49:     assign t8 <- 1
+[0m[31m-        50:     goto   33
+[0m[31m-        51:     assign t8 <- 0
+[0m[31m-        52: 33:
+[0m[31m-        53:     assign v2 <- t8
+[0m[31m-     ]]
+[0m[31m-   ]]
+[0m[31m- 
+[0m[31m-   [[ procedure: f1
+[0m[31m-     [[
+[0m[31m-       [ $t0       <char>       ]
+[0m[31m-       [ $t1       <char>       ]
+[0m[31m-       [ $t10      <int>       ]
+[0m[31m-       [ $t11      <int>       ]
+[0m[31m-       [ $t12      <int>       ]
+[0m[31m-       [ $t13      <int>       ]
+[0m[31m-       [ $t14      <int>       ]
+[0m[31m-       [ $t15      <int>       ]
+[0m[31m-       [ $t16      <int>       ]
+[0m[31m-       [ $t17      <int>       ]
+[0m[31m-       [ $t18      <int>       ]
+[0m[31m-       [ $t19      <int>       ]
+[0m[31m-       [ $t2       <char>       ]
+[0m[31m-       [ $t20      <bool>       ]
+[0m[31m-       [ $t21      <int>       ]
+[0m[31m-       [ $t3       <bool>       ]
+[0m[31m-       [ $t4       <int>       ]
+[0m[31m-       [ $t5       <int>       ]
+[0m[31m-       [ $t6       <int>       ]
+[0m[31m-       [ $t7       <int>       ]
+[0m[31m-       [ $t8       <int>       ]
+[0m[31m-       [ $t9       <int>       ]
+[0m[31m-       [ %v2       <bool>       ]
+[0m[31m-       [ %v3       <ptr(4) to <array 94 of <array 61 of <array 32 of <array 16 of <array 18 of <bool>>>>>>>       ]
+[0m[31m-       [ %v4       <ptr(4) to <array 86 of <array 29 of <array 32 of <array 65 of <array 15 of <char>>>>>>>       ]
+[0m[31m-       [ $v5       <int>       ]
+[0m[31m-       [ $v6       <char>       ]
+[0m[31m-     ]]
+[0m[31m-     [[ f1
+[0m[31m-         0:     return 
+[0m[31m-         1:     call   t0 <- dummyCHARfunc
+[0m[31m-         2:     return 
+[0m[31m-         3:     return 
+[0m[31m-         4:     if     100 # 99 goto 5_if_true
+[0m[31m-         5:     goto   6_if_false
+[0m[31m-         6: 5_if_true:
+[0m[31m-         7:     return 
+[0m[31m-         8:     return 
+[0m[31m-         9:     goto   10
+[0m[31m-        10: 10:
+[0m[31m-        11:     goto   4
+[0m[31m-        12: 6_if_false:
+[0m[31m-        13: 4:
+[0m[31m-        14:     if     98 = 97 goto 14_if_true
+[0m[31m-        15:     goto   15_if_false
+[0m[31m-        16: 14_if_true:
+[0m[31m-        17:     return 
+[0m[31m-        18:     call   t1 <- dummyCHARfunc
+[0m[31m-        19:     call   t2 <- dummyCHARfunc
+[0m[31m-        20:     return 
+[0m[31m-        21: 22_while_cond:
+[0m[31m-        22:     if     34915 = 80813 goto 23_while_body
+[0m[31m-        23:     goto   21
+[0m[31m-        24: 23_while_body:
+[0m[31m-        25:     goto   22_while_cond
+[0m[31m-        26: 21:
+[0m[31m-        27:     assign v5 <- 80036
+[0m[31m-        28:     if     99 > 98 goto 27
+[0m[31m-        29:     goto   28
+[0m[31m-        30: 27:
+[0m[31m-        31:     assign t3 <- 1
+[0m[31m-        32:     goto   29
+[0m[31m-        33: 28:
+[0m[31m-        34:     assign t3 <- 0
+[0m[31m-        35: 29:
+[0m[31m-        36:     assign v2 <- t3
+[0m[31m-        37:     goto   13
+[0m[31m-        38: 15_if_false:
+[0m[31m-        39: 13:
+[0m[31m-        40:     assign v5 <- 17974
+[0m[31m-        41:     goto   34_if_false
+[0m[31m-        42:     param  1 <- 2
+[0m[31m-        43:     param  0 <- v4
+[0m[31m-        44:     call   t4 <- DIM
+[0m[31m-        45:     mul    t5 <- 83506, t4
+[0m[31m-        46:     add    t6 <- t5, 29431
+[0m[31m-        47:     param  1 <- 3
+[0m[31m-        48:     param  0 <- v4
+[0m[31m-        49:     call   t7 <- DIM
+[0m[31m-        50:     mul    t8 <- t6, t7
+[0m[31m-        51:     add    t9 <- t8, 24889
+[0m[31m-        52:     param  1 <- 4
+[0m[31m-        53:     param  0 <- v4
+[0m[31m-        54:     call   t10 <- DIM
+[0m[31m-        55:     mul    t11 <- t9, t10
+[0m[31m-        56:     add    t12 <- t11, 3475
+[0m[31m-        57:     param  1 <- 5
+[0m[31m-        58:     param  0 <- v4
+[0m[31m-        59:     call   t13 <- DIM
+[0m[31m-        60:     mul    t14 <- t12, t13
+[0m[31m-        61:     add    t15 <- t14, 39085
+[0m[31m-        62:     mul    t16 <- t15, 1
+[0m[31m-        63:     param  0 <- v4
+[0m[31m-        64:     call   t17 <- DOFS
+[0m[31m-        65:     add    t18 <- t16, t17
+[0m[31m-        66:     add    t19 <- v4, t18
+[0m[31m-        67:     assign @t19 <- 100
+[0m[31m-        68: 37_while_cond:
+[0m[31m-        69:     goto   36
+[0m[31m-        70:     goto   37_while_cond
+[0m[31m-        71: 36:
+[0m[31m-        72:     goto   32
+[0m[31m-        73: 34_if_false:
+[0m[31m-        74: 32:
+[0m[31m-        75: 40_while_cond:
+[0m[31m-        76:     if     99 > 99 goto 41_while_body
+[0m[31m-        77:     goto   39
+[0m[31m-        78: 41_while_body:
+[0m[31m-        79:     return 
+[0m[31m-        80:     return 
+[0m[31m-        81:     if     11214 # 65324 goto 46
+[0m[31m-        82:     goto   47
+[0m[31m-        83: 46:
+[0m[31m-        84:     assign t20 <- 1
+[0m[31m-        85:     goto   48
+[0m[31m-        86: 47:
+[0m[31m-        87:     assign t20 <- 0
+[0m[31m-        88: 48:
+[0m[31m-        89:     assign v2 <- t20
+[0m[31m-        90:     goto   40_while_cond
+[0m[31m-        91: 39:
+[0m[31m-        92:     call   t21 <- ReadInt
+[0m[31m-     ]]
+[0m[31m-   ]]
+[0m[31m- ]]
+[0m[31m- 
+[0m[31m- run the following command to convert the .dot file into a PDF:
+[0m[31m-   dot -Tpdf -otemp.mod.pdf temp.mod.dot
+[0m[31m- 
+[0m[31m- 
+[0m[31m- Done.
+[0m

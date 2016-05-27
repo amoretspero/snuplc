@@ -1332,6 +1332,17 @@ CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb)
   
   CTacTemp* tempRes = cb->CreateTemp(GetType()); // Temporary variable for storing binary operation result.
   
+  EOperation binaryOp = GetOperation();
+  assert(binaryOp != opAnd);
+  assert(binaryOp != opOr);
+  assert(binaryOp != opBiggerEqual);
+  assert(binaryOp != opBiggerThan);
+  assert(binaryOp != opLessEqual);
+  assert(binaryOp != opLessThan);
+  assert(binaryOp != opEqual);
+  assert(binaryOp != opNotEqual);
+  
+  
   cb->AddInstr(new CTacInstr(GetOperation(), tempRes, lhsRes, rhsRes)); // Make TAC for this binary operation.
   
   return tempRes;
@@ -1382,8 +1393,7 @@ CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb,
     
     return NULL;
   }
-  else if (binaryOperation == opBiggerThan || binaryOperation == opBiggerEqual || binaryOperation == opLessThan || binaryOperation == opLessEqual ||
-           binaryOperation == opEqual || binaryOperation == opNotEqual) // Case of relOp.
+  else if (binaryOperation == opBiggerThan || binaryOperation == opBiggerEqual || binaryOperation == opLessThan || binaryOperation == opLessEqual ) // Case of relOp. Integer.
   {
     CTacLabel* temp = cb->CreateLabel(); // TODO: Do we really need this label?
     
@@ -1398,6 +1408,74 @@ CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb,
     cb->AddInstr(new CTacInstr(binaryOperation, ltrue, lhsTemp, rhsTemp)); // Add TAC corresponding to this operation.
     cb->AddInstr(new CTacInstr(opGoto, lfalse)); // When relOp is false, should go to false label.
     
+    return NULL;
+  }
+  else if (binaryOperation == opEqual || binaryOperation == opNotEqual) // Case of relOp. Boolean or Integer.
+  {
+    CTacLabel* temp = cb->CreateLabel();
+    
+    //CTacAddr* lhsTemp = GetLeft()->ToTac(cb); // Get the TAC of left side.
+    //CTacAddr* rhsTemp = GetRight()->ToTac(cb); // Get the TAC of right side.
+    CTacAddr* lhsTemp = NULL;
+    CTacAddr* rhsTemp = NULL;
+    
+    if (GetLeft()->GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetLeft()) == NULL)
+    {
+      lhsTemp = cb->CreateTemp(GetLeft()->GetType());
+      CTacLabel* lhsTrueLabel = cb->CreateLabel();
+      CTacLabel* lhsFalseLabel = cb->CreateLabel();
+      CTacLabel* lhsFinLabel = cb->CreateLabel();
+      
+      GetLeft()->ToTac(cb, lhsTrueLabel, lhsFalseLabel);
+      
+      cb->AddInstr(lhsTrueLabel);
+      cb->AddInstr(new CTacInstr(opAssign, lhsTemp, new CTacConst(1), NULL));
+      cb->AddInstr(new CTacInstr(opGoto, lhsFinLabel));
+      
+      cb->AddInstr(lhsFalseLabel);
+      cb->AddInstr(new CTacInstr(opAssign, lhsTemp, new CTacConst(0), NULL));
+      cb->AddInstr(new CTacInstr(opGoto, lhsFinLabel));
+      
+      cb->AddInstr(lhsFinLabel);
+    }
+    else
+    {
+      lhsTemp = GetLeft()->ToTac(cb);
+    }
+    
+    CTacLabel* rhsFinLabel = NULL;
+    if (GetRight()->GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetRight()) == NULL)
+    {
+      rhsTemp = cb->CreateTemp(GetRight()->GetType());
+      CTacLabel* rhsTrueLabel = cb->CreateLabel();
+      CTacLabel* rhsFalseLabel = cb->CreateLabel();
+      rhsFinLabel = cb->CreateLabel();
+      
+      GetRight()->ToTac(cb, rhsTrueLabel, rhsFalseLabel);
+      
+      cb->AddInstr(rhsTrueLabel);
+      cb->AddInstr(new CTacInstr(opAssign, rhsTemp, new CTacConst(1), NULL));
+      cb->AddInstr(new CTacInstr(opGoto, rhsFinLabel));
+      
+      cb->AddInstr(rhsFalseLabel);
+      cb->AddInstr(new CTacInstr(opAssign, rhsTemp, new CTacConst(0), NULL));
+      cb->AddInstr(new CTacInstr(opGoto, rhsFinLabel));
+      
+      cb->AddInstr(rhsFinLabel);
+    }
+    else
+    {
+      rhsTemp = GetRight()->ToTac(cb);
+    }
+    
+    //cb->AddInstr(temp);
+    
+    
+    //assert(lhsTemp != NULL && rhsTemp != NULL); // ToTac(CCodeBlock*) method should return CTacTemp* type value.
+    
+    cb->AddInstr(new CTacInstr(binaryOperation, ltrue, lhsTemp, rhsTemp)); // Add TAC corresponding to this operation.
+    cb->AddInstr(new CTacInstr(opGoto, lfalse)); // When relOp is false, should go to false label.
+
     return NULL;
   }
   else
@@ -1969,6 +2047,7 @@ void CAstDesignator::toDot(ostream &out, int indent) const
 
 CTacAddr* CAstDesignator::ToTac(CCodeBlock *cb)
 {
+  //cout << "===(DEBUG)===At CAstDesignator::ToTac, symbol name is : " << GetSymbol()->GetName() << endl;
   return new CTacName(GetSymbol()); // Return CTacName with symbol related to this designator.
 }
 

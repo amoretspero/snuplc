@@ -1,0 +1,21 @@
+digraph IR {
+  graph [fontname="Times New Roman",fontsize=10];
+  node  [fontname="Courier New",fontsize=10];
+  edge  [fontname="Times New Roman",fontsize=10];
+
+  // scope 'test'
+
+  // scope 'dummyINTfunc'
+  dummyINTfunc_cb [label="dummyINTfunc\r",shape=box]
+  // scope 'dummyCHARfunc'
+  dummyCHARfunc_cb [label="dummyCHARfunc\r",shape=box]
+  // scope 'dummyBOOLfunc'
+  dummyBOOLfunc_cb [label="dummyBOOLfunc\r",shape=box]
+  // scope 'dummyProcedure'
+  dummyProcedure_cb [label="dummyProcedure\r",shape=box]
+  // scope 'f0'
+
+  // scope 'f1'
+
+};
+_cb [label="f1\r  0:     return \l  1:     call   t0 <- dummyCHARfunc\l  2:     return \l  3:     return \l  4:     if     100 # 99 goto 5_if_true\l  5:     goto   6_if_false\l  6: 5_if_true:\l  7:     return \l  8:     return \l  9:     goto   10\l 10: 10:\l 11:     goto   4\l 12: 6_if_false:\l 13: 4:\l 14:     if     98 = 97 goto 14_if_true\l 15:     goto   15_if_false\l 16: 14_if_true:\l 17:     return \l 18:     call   t1 <- dummyCHARfunc\l 19:     call   t2 <- dummyCHARfunc\l 20:     return \l 21: 22_while_cond:\l 22:     if     34915 = 80813 goto 23_while_body\l 23:     goto   21\l 24: 23_while_body:\l 25:     goto   22_while_cond\l 26: 21:\l 27:     assign v5 <- 80036\l 28:     if     99 > 98 goto 27\l 29:     goto   28\l 30: 27:\l 31:     assign t3 <- 1\l 32:     goto   29\l 33: 28:\l 34:     assign t3 <- 0\l 35: 29:\l 36:     assign v2 <- t3\l 37:     goto   13\l 38: 15_if_false:\l 39: 13:\l 40:     assign v5 <- 17974\l 41:     goto   34_if_false\l 42:     param  1 <- 2\l 43:     param  0 <- v4\l 44:     call   t4 <- DIM\l 45:     mul    t5 <- 83506, t4\l 46:     add    t6 <- t5, 29431\l 47:     param  1 <- 3\l 48:     param  0 <- v4\l 49:     call   t7 <- DIM\l 50:     mul    t8 <- t6, t7\l 51:     add    t9 <- t8, 24889\l 52:     param  1 <- 4\l 53:     param  0 <- v4\l 54:     call   t10 <- DIM\l 55:     mul    t11 <- t9, t10\l 56:     add    t12 <- t11, 3475\l 57:     param  1 <- 5\l 58:     param  0 <- v4\l 59:     call   t13 <- DIM\l 60:     mul    t14 <- t12, t13\l 61:     add    t15 <- t14, 39085\l 62:     mul    t16 <- t15, 1\l 63:     param  0 <- v4\l 64:     call   t17 <- DOFS\l 65:     add    t18 <- t16, t17\l 66:     add    t19 <- v4, t18\l 67:     assign @t19 <- 100\l 68: 37_while_cond:\l 69:     goto   36\l 70:     goto   37_while_cond\l 71: 36:\l 72:     goto   32\l 73: 34_if_false:\l 74: 32:\l 75: 40_while_cond:\l 76:     if     99 > 99 goto 41_while_body\l 77:     goto   39\l 78: 41_while_body:\l 79:     return \l 80:     return \l 81:     if     11214 # 65324 goto 46\l 82:     goto   47\l 83: 46:\l 84:     assign t20 <- 1\l 85:     goto   48\l 86: 47:\l 87:     assign t20 <- 0\l 88: 48:\l 89:     assign v2 <- t20\l 90:     goto   40_while_cond\l 91: 39:\l 92:     call   t21 <- ReadInt\l",shape=box]
