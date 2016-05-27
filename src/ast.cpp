@@ -797,7 +797,10 @@ CTacAddr* CAstStatReturn::ToTac(CCodeBlock *cb, CTacLabel *next)
   }
   else // Function.
   {
-    if (GetType()->IsBoolean() && dynamic_cast<CAstConstant*>(GetExpression()) == NULL && dynamic_cast<CAstDesignator*>(GetExpression()) == NULL) // Boolean type return value.
+    if (GetType()->IsBoolean() && 
+        dynamic_cast<CAstConstant*>(GetExpression()) == NULL && 
+        dynamic_cast<CAstDesignator*>(GetExpression()) == NULL &&
+        dynamic_cast<CAstFunctionCall*>(GetExpression()) == NULL) // Boolean type return value.
     //if (GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetExpression()) == NULL) // Boolean type non-designator return value.
     {
       CTacLabel* returnTrueLabel = cb->CreateLabel(); // Label for return of true.
@@ -1419,7 +1422,7 @@ CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb,
     CTacAddr* lhsTemp = NULL;
     CTacAddr* rhsTemp = NULL;
     
-    if (GetLeft()->GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetLeft()) == NULL)
+    if (GetLeft()->GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetLeft()) == NULL && dynamic_cast<CAstConstant*>(GetLeft()) == NULL && dynamic_cast<CAstFunctionCall*>(GetLeft()) == NULL)
     {
       lhsTemp = cb->CreateTemp(GetLeft()->GetType());
       CTacLabel* lhsTrueLabel = cb->CreateLabel();
@@ -1444,7 +1447,7 @@ CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb,
     }
     
     CTacLabel* rhsFinLabel = NULL;
-    if (GetRight()->GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetRight()) == NULL)
+    if (GetRight()->GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetRight()) == NULL && dynamic_cast<CAstConstant*>(GetRight()) == NULL && dynamic_cast<CAstFunctionCall*>(GetRight()) == NULL)
     {
       rhsTemp = cb->CreateTemp(GetRight()->GetType());
       CTacLabel* rhsTrueLabel = cb->CreateLabel();
@@ -1945,7 +1948,10 @@ CTacAddr* CAstFunctionCall::ToTac(CCodeBlock *cb)
     }
     else // When argument is type of scalar.
     {
-      if (GetArg(paramCnt - 1 - cnt)->GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetArg(paramCnt - 1 - cnt)) == NULL && dynamic_cast<CAstConstant*>(GetArg(paramCnt - 1 - cnt)) == NULL)
+      if (GetArg(paramCnt - 1 - cnt)->GetType()->IsBoolean() && 
+          dynamic_cast<CAstDesignator*>(GetArg(paramCnt - 1 - cnt)) == NULL && 
+          dynamic_cast<CAstConstant*>(GetArg(paramCnt - 1 - cnt)) == NULL &&
+          dynamic_cast<CAstFunctionCall*>(GetArg(paramCnt - 1 - cnt)) == NULL)
       {
         CTacLabel* argTrueLabel = cb->CreateLabel();
         CTacLabel* argFalseLabel = cb->CreateLabel();
@@ -1994,7 +2000,52 @@ CTacAddr* CAstFunctionCall::ToTac(CCodeBlock *cb,
   int cnt = 0;
   for (cnt = 0; cnt < paramCnt; cnt++)
   {
-    cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), GetArg(paramCnt - 1 - cnt)->ToTac(cb), NULL)); // Add arguments.
+    //cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), GetArg(paramCnt - 1 - cnt)->ToTac(cb), NULL)); // Add arguments.
+    if (GetArg(paramCnt - 1 - cnt)->GetType()->IsArray()) // When argument is type of array.
+    {
+      CTacAddr* argRes = GetArg(paramCnt - 1 - cnt)->ToTac(cb); // Gets TAC of argument.
+      CTacTemp* pointerToArray = cb->CreateTemp(CTypeManager::Get()->GetPointer(GetArg(paramCnt - 1 - cnt)->GetType())); // Make temporary variable for argument.
+      cb->AddInstr(new CTacInstr(opAddress, pointerToArray, argRes, NULL)); // Add referencing TAC.
+      cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), pointerToArray, NULL)); // Add parameter to function call.
+    }
+    else if (GetArg(paramCnt - 1 - cnt)->GetType()->IsPointer()) // When argument is type of pointer.
+    {
+      //CTacTemp* pointerToArray = cb->CreateTemp(CTypeManager::Get()->GetPointer(GetArg(paramCnt - 1 - cnt)->GetType()));
+      CTacAddr* pointerToArray = GetArg(paramCnt - 1 - cnt)->ToTac(cb); // Gets TAC of argument.
+      //cb->AddInstr(new CTacInstr(opAddress, pointerToArray, GetArg(paramCnt - 1 - cnt)->ToTac(cb), NULL));
+      cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), pointerToArray, NULL)); // Add parameter to function call.
+    }
+    else // When argument is type of scalar.
+    {
+      if (GetArg(paramCnt - 1 - cnt)->GetType()->IsBoolean() && 
+          dynamic_cast<CAstDesignator*>(GetArg(paramCnt - 1 - cnt)) == NULL && 
+          dynamic_cast<CAstConstant*>(GetArg(paramCnt - 1 - cnt)) == NULL &&
+          dynamic_cast<CAstFunctionCall*>(GetArg(paramCnt - 1 - cnt)) == NULL)
+      {
+        CTacLabel* argTrueLabel = cb->CreateLabel();
+        CTacLabel* argFalseLabel = cb->CreateLabel();
+        CTacLabel* argAssignLabel = cb->CreateLabel();
+        
+        GetArg(paramCnt - 1 - cnt)->ToTac(cb, argTrueLabel, argFalseLabel);
+        
+        CTacTemp* argTemp = cb->CreateTemp(GetArg(paramCnt - 1 - cnt)->GetType());
+        
+        cb->AddInstr(argTrueLabel);
+        cb->AddInstr(new CTacInstr(opAssign, argTemp, new CTacConst(1), NULL));
+        cb->AddInstr(new CTacInstr(opGoto, argAssignLabel));
+        
+        cb->AddInstr(argFalseLabel);
+        cb->AddInstr(new CTacInstr(opAssign, argTemp, new CTacConst(0), NULL));
+        cb->AddInstr(new CTacInstr(opGoto, argAssignLabel));
+        
+        cb->AddInstr(argAssignLabel);
+        cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), argTemp, NULL));
+      }
+      else
+      {
+        cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), GetArg(paramCnt - 1 - cnt)->ToTac(cb), NULL)); // Add parameter to function call.
+      }
+    }
   }
   CTacTemp* tempRes = cb->CreateTemp(GetType()); // Temporary variable to contain function call result.
   cb->AddInstr(new CTacInstr(opCall, tempRes, new CTacName(GetSymbol()), NULL)); // Gets TAC of function call.

@@ -67,4 +67,11 @@ Fixing bug for <code>CAstBinaryOp::ToTac</code> methods.
   
 **2016-05-27 21:23 KST**  
 Fixing bug for <code>CAstBinaryOp::ToTac</code> methods and related ones.  
-Now <code>CAstFunctionCall</code> calls for <code>ToTac(CCodeBlock*, CTacLabel*, CTacLabel*)</code> method when argument has boolean type and not a constant nor designator.
+Now <code>CAstFunctionCall</code> calls for <code>ToTac(CCodeBlock*, CTacLabel*, CTacLabel*)</code> method when argument has boolean type and not a constant nor designator.  
+  
+**2016-05-27 23:05 KST**  
+Almost fixed bug for <code>CAstBinaryOp::ToTac</code> methods and related ones.  
+Now <code>CAstFunctionCall</code> and <code>CAstStatReturn</code> calls for <code>ToTac(CCodeBlock*, CTacLabel*, CTacLabel*)</code> method when
+expression of argument to function or return has type of boolean and not <code>CAstConstant</code>, not <code>CAstDesignator</code>, not <code>CAstFunctionCall</code>.  
+This makes those two methods call <code>ToTac(CCodeBlock*, CTacLabel*, CTacLabel*)</code> method when only expression cannot have single boolean (temporary) variable.  
+Expressions which can be represented with single boolean (temporary) variable is dealt with <code>ToTac(CCodeBlock*)</code> method.
