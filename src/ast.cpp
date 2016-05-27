@@ -1333,14 +1333,14 @@ CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb)
   CTacTemp* tempRes = cb->CreateTemp(GetType()); // Temporary variable for storing binary operation result.
   
   EOperation binaryOp = GetOperation();
-  assert(binaryOp != opAnd);
+  /*assert(binaryOp != opAnd);
   assert(binaryOp != opOr);
   assert(binaryOp != opBiggerEqual);
   assert(binaryOp != opBiggerThan);
   assert(binaryOp != opLessEqual);
   assert(binaryOp != opLessThan);
   assert(binaryOp != opEqual);
-  assert(binaryOp != opNotEqual);
+  assert(binaryOp != opNotEqual);*/
   
   
   cb->AddInstr(new CTacInstr(GetOperation(), tempRes, lhsRes, rhsRes)); // Make TAC for this binary operation.
@@ -1945,7 +1945,31 @@ CTacAddr* CAstFunctionCall::ToTac(CCodeBlock *cb)
     }
     else // When argument is type of scalar.
     {
-      cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), GetArg(paramCnt - 1 - cnt)->ToTac(cb), NULL)); // Add parameter to function call.
+      if (GetArg(paramCnt - 1 - cnt)->GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetArg(paramCnt - 1 - cnt)) == NULL && dynamic_cast<CAstConstant*>(GetArg(paramCnt - 1 - cnt)) == NULL)
+      {
+        CTacLabel* argTrueLabel = cb->CreateLabel();
+        CTacLabel* argFalseLabel = cb->CreateLabel();
+        CTacLabel* argAssignLabel = cb->CreateLabel();
+        
+        GetArg(paramCnt - 1 - cnt)->ToTac(cb, argTrueLabel, argFalseLabel);
+        
+        CTacTemp* argTemp = cb->CreateTemp(GetArg(paramCnt - 1 - cnt)->GetType());
+        
+        cb->AddInstr(argTrueLabel);
+        cb->AddInstr(new CTacInstr(opAssign, argTemp, new CTacConst(1), NULL));
+        cb->AddInstr(new CTacInstr(opGoto, argAssignLabel));
+        
+        cb->AddInstr(argFalseLabel);
+        cb->AddInstr(new CTacInstr(opAssign, argTemp, new CTacConst(0), NULL));
+        cb->AddInstr(new CTacInstr(opGoto, argAssignLabel));
+        
+        cb->AddInstr(argAssignLabel);
+        cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), argTemp, NULL));
+      }
+      else
+      {
+        cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), GetArg(paramCnt - 1 - cnt)->ToTac(cb), NULL)); // Add parameter to function call.
+      }
     }
   }
   if (GetType()->IsNull()) // When return type is NULL, i.e. procedure.

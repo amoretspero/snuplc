@@ -64,3 +64,7 @@ Added comments to <code>ToTac()</code> methods. Need revision.
 **2016-05-27 20:38 KST**  
 Fixing bug for <code>CAstBinaryOp::ToTac</code> methods.  
 <code>opEqual</code> and <code>opNotEqual</code> have problems.  
+  
+**2016-05-27 21:23 KST**  
+Fixing bug for <code>CAstBinaryOp::ToTac</code> methods and related ones.  
+Now <code>CAstFunctionCall</code> calls for <code>ToTac(CCodeBlock*, CTacLabel*, CTacLabel*)</code> method when argument has boolean type and not a constant nor designator.
