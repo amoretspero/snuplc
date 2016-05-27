@@ -67,7 +67,7 @@ Fixing bug for <code>CAstBinaryOp::ToTac</code> methods.
   
 **2016-05-27 21:23 KST**  
 Fixing bug for <code>CAstBinaryOp::ToTac</code> methods and related ones.  
-Now <code>CAstFunctionCall</code> calls for <code>ToTac(CCodeBlock*, CTacLabel*, CTacLabel*)</code> method when argument has boolean type and not a constant nor designator.  
+Now <code>CAstFunctionCall</code> calls for <code>ToTac(CCodeBlock\*, CTacLabel\*, CTacLabel\*)</code> method when argument has boolean type and not a constant nor designator.  
   
 **2016-05-27 23:05 KST**  
 Almost fixed bug for <code>CAstBinaryOp::ToTac</code> methods and related ones.  
@@ -77,5 +77,14 @@ This makes those two methods call <code>ToTac(CCodeBlock*, CTacLabel*, CTacLabel
 Expressions which can be represented with single boolean (temporary) variable is dealt with <code>ToTac(CCodeBlock*)</code> method.  
   
 **2016-05-28 00:16 KST**  
-Changed temporary symbol creation order for <code>opEqual</code> and <code>opNotEqual</code> case of <code>CAstBinaryOp::ToTac(CCodeBlock*, CTacLabel*, CTacLabel*)</code>.  
-For most of the cases, temporary symbol creation should take place right before use of it.
+Changed temporary symbol creation order for <code>opEqual</code> and <code>opNotEqual</code> case of <code>CAstBinaryOp::ToTac(CCodeBlock\*, CTacLabe\*, CTacLabel*)</code>.  
+For most of the cases, temporary symbol creation should take place right before use of it.  
+  
+**2016-05-28 01:08 KST**  
+Fixed bug for <code>CAstBinaryOp::ToTac</code> methods and related ones.  
+Dynamic test available.  
+2 2 2 : Passing 2000/2000 tests.  
+3 3 3 : Passing 2000/2000 tests.  
+5 5 5 : Passing 500/500 tests.  
+5 10 10 : Passing 207/207 tests.  
+More tests can be done with more time.
