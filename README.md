@@ -74,4 +74,8 @@ Almost fixed bug for <code>CAstBinaryOp::ToTac</code> methods and related ones.
 Now <code>CAstFunctionCall</code> and <code>CAstStatReturn</code> calls for <code>ToTac(CCodeBlock*, CTacLabel*, CTacLabel*)</code> method when
 expression of argument to function or return has type of boolean and not <code>CAstConstant</code>, not <code>CAstDesignator</code>, not <code>CAstFunctionCall</code>.  
 This makes those two methods call <code>ToTac(CCodeBlock*, CTacLabel*, CTacLabel*)</code> method when only expression cannot have single boolean (temporary) variable.  
-Expressions which can be represented with single boolean (temporary) variable is dealt with <code>ToTac(CCodeBlock*)</code> method.
+Expressions which can be represented with single boolean (temporary) variable is dealt with <code>ToTac(CCodeBlock*)</code> method.  
+  
+**2016-05-28 00:16 KST**  
+Changed temporary symbol creation order for <code>opEqual</code> and <code>opNotEqual</code> case of <code>CAstBinaryOp::ToTac(CCodeBlock*, CTacLabel*, CTacLabel*)</code>.  
+For most of the cases, temporary symbol creation should take place right before use of it.

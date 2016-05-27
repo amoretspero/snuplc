@@ -1,0 +1,13 @@
+[31m-        26:     assign t1 <- 1
+[0m[32m+        26:     assign t2 <- 1
+[0m[31m-        29:     assign t1 <- 0
+[0m[32m+        29:     assign t2 <- 0
+[0m[31m-        31:     if     t1 # 1 goto 25
+[0m[32m+        31:     if     t2 # 1 goto 25
+[0m[31m-        34:     assign t2 <- 1
+[0m[32m+        34:     assign t1 <- 1
+[0m[31m-        37:     assign t2 <- 0
+[0m[32m+        37:     assign t1 <- 0
+[0m[31m-        39:     if     t2 = 0 goto 21
+[0m[32m+        39:     if     t1 = 0 goto 21
+[0m

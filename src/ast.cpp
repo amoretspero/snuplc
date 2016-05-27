@@ -1424,12 +1424,13 @@ CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb,
     
     if (GetLeft()->GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetLeft()) == NULL && dynamic_cast<CAstConstant*>(GetLeft()) == NULL && dynamic_cast<CAstFunctionCall*>(GetLeft()) == NULL)
     {
-      lhsTemp = cb->CreateTemp(GetLeft()->GetType());
       CTacLabel* lhsTrueLabel = cb->CreateLabel();
       CTacLabel* lhsFalseLabel = cb->CreateLabel();
       CTacLabel* lhsFinLabel = cb->CreateLabel();
       
       GetLeft()->ToTac(cb, lhsTrueLabel, lhsFalseLabel);
+      
+      lhsTemp = cb->CreateTemp(GetLeft()->GetType());
       
       cb->AddInstr(lhsTrueLabel);
       cb->AddInstr(new CTacInstr(opAssign, lhsTemp, new CTacConst(1), NULL));
@@ -1449,12 +1450,13 @@ CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb,
     CTacLabel* rhsFinLabel = NULL;
     if (GetRight()->GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetRight()) == NULL && dynamic_cast<CAstConstant*>(GetRight()) == NULL && dynamic_cast<CAstFunctionCall*>(GetRight()) == NULL)
     {
-      rhsTemp = cb->CreateTemp(GetRight()->GetType());
       CTacLabel* rhsTrueLabel = cb->CreateLabel();
       CTacLabel* rhsFalseLabel = cb->CreateLabel();
       rhsFinLabel = cb->CreateLabel();
       
       GetRight()->ToTac(cb, rhsTrueLabel, rhsFalseLabel);
+      
+      rhsTemp = cb->CreateTemp(GetRight()->GetType());
       
       cb->AddInstr(rhsTrueLabel);
       cb->AddInstr(new CTacInstr(opAssign, rhsTemp, new CTacConst(1), NULL));
