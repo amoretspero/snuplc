@@ -1208,18 +1208,18 @@ CAstExpression* CParser::expression(CAstScope* s)
 
 bool CParser::isLeftmostConstant(CAstBinaryOp* _lhs)
 {
-  CAstBinaryOp* subLHS = dynamic_cast<CAstBinaryOp*>(_lhs->GetLeft());
-  if (subLHS != NULL)
+  CAstBinaryOp* subLHS = dynamic_cast<CAstBinaryOp*>(_lhs->GetLeft()); // Check if LHS of given binary operation is binary operation.
+  if (subLHS != NULL) // If it is binary operation, recursively find leftmost operand.
   {
     return isLeftmostConstant(subLHS);
   }
-  else
+  else // LHS is not binary operation.
   {
-    if (dynamic_cast<CAstConstant*>(_lhs->GetLeft()) == NULL)
+    if (dynamic_cast<CAstConstant*>(_lhs->GetLeft()) == NULL) // Check if it is constant.
     {
-      return false;
+      return false; // If not, return false.
     }
-    else
+    else // If it is, return true.
     {
       return true;
     }
@@ -1228,37 +1228,37 @@ bool CParser::isLeftmostConstant(CAstBinaryOp* _lhs)
 
 CAstExpression* CParser::getBinaryLHS(CAstBinaryOp* _lhs, bool _isNeg, bool _isPos)
 {
-  CAstBinaryOp* subLHS = dynamic_cast<CAstBinaryOp*>(_lhs->GetLeft());
-  if (subLHS != NULL)
+  CAstBinaryOp* subLHS = dynamic_cast<CAstBinaryOp*>(_lhs->GetLeft()); // Check if LHS of given binary operation is binary operation.
+  if (subLHS != NULL) // Case when LHS of given binary operation is binary operation.
   {
-    CAstExpression* subRHS = _lhs->GetRight();
-    CAstConstant* constSubRHS = dynamic_cast<CAstConstant*>(subRHS);
-    if (constSubRHS != NULL)
+    CAstExpression* subRHS = _lhs->GetRight(); // Get RHS of given binary operation.
+    CAstConstant* constSubRHS = dynamic_cast<CAstConstant*>(subRHS); // Check if RHS is constant.
+    if (constSubRHS != NULL) // Case when RHS is constant.
     {
       if (constSubRHS->GetValue() > 2147483647 || constSubRHS->GetValue() < -2147483648) // Check the integer range for RHS.
       {
         SetError(constSubRHS->GetToken(), "integer constant outside valid range.");
       }
-      return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), getBinaryLHS(subLHS, _isNeg, _isPos), constSubRHS);
+      return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), getBinaryLHS(subLHS, _isNeg, _isPos), constSubRHS); // For LHS, recursively call this function.
     }
-    else
+    else // Case when RHS is not constant.
     {
       return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), getBinaryLHS(subLHS, _isNeg, _isPos), _lhs->GetRight());
     }
   }
-  else
+  else // Case when LHS of given binary operation is not binary operation.
   {
-    CAstExpression* expSubLHS = _lhs->GetLeft();
-    CAstExpression* expSubRHS = _lhs->GetRight();
-    CAstConstant* constSubLHS = dynamic_cast<CAstConstant*>(expSubLHS);
-    CAstConstant* constSubRHS = dynamic_cast<CAstConstant*>(expSubRHS);
-    if (constSubLHS != NULL && constSubRHS != NULL)
+    CAstExpression* expSubLHS = _lhs->GetLeft(); // Get LHS.
+    CAstExpression* expSubRHS = _lhs->GetRight(); // Get RHS.
+    CAstConstant* constSubLHS = dynamic_cast<CAstConstant*>(expSubLHS); // Check if LHS is constant.
+    CAstConstant* constSubRHS = dynamic_cast<CAstConstant*>(expSubRHS); // Check if RHS is constant.
+    if (constSubLHS != NULL && constSubRHS != NULL) // Case when LHS and RHS is both constant.
     {
       if (constSubRHS->GetValue() > 2147483647 || constSubRHS->GetValue() < -2147483648) // Check the integer range for RHS.
       {
         SetError(constSubRHS->GetToken(), "integer constant outside valid range.");
       }
-      if (_isNeg)
+      if (_isNeg) // If negative unary operation is needed, check integer constant range for LHS and construct binary operation with opNeg applied to LHS.
       {
         if ((0 - constSubLHS->GetValue()) > 2147483647 || (0 - constSubLHS->GetValue()) < -2147483648) // Check the integer range for LHS.
         {
@@ -1266,7 +1266,7 @@ CAstExpression* CParser::getBinaryLHS(CAstBinaryOp* _lhs, bool _isNeg, bool _isP
         }
         return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), new CAstConstant(constSubLHS->GetToken(), constSubLHS->GetType(), 0 - constSubLHS->GetValue()), constSubRHS);
       }
-      else
+      else // If negative unary operation is not needed, check integer constant range for LHS and construct binary operation without opNeg.
       {
         if (constSubLHS->GetValue() > 2147483647 || constSubLHS->GetValue() < -2147483648) // Check the integer range for LHS.
         {
@@ -1275,9 +1275,9 @@ CAstExpression* CParser::getBinaryLHS(CAstBinaryOp* _lhs, bool _isNeg, bool _isP
         return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), constSubLHS, constSubRHS);
       }
     }
-    else if (constSubLHS != NULL)
+    else if (constSubLHS != NULL) // Case when LHS is constant.
     {
-      if (_isNeg)
+      if (_isNeg) // If negative unary operation is needed, check integer constant range for LHS and construct binary operation with opNeg applied to LHS.
       {
         if ((0 - constSubLHS->GetValue()) > 2147483647 || (0 - constSubLHS->GetValue()) < -2147483648) // Check the integer range for LHS.
         {
@@ -1285,7 +1285,7 @@ CAstExpression* CParser::getBinaryLHS(CAstBinaryOp* _lhs, bool _isNeg, bool _isP
         }
         return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), new CAstConstant(constSubLHS->GetToken(), constSubLHS->GetType(), 0 - constSubLHS->GetValue()), expSubRHS);
       }
-      else
+      else // If negative unary operation is not needed, check integer constant range for LHS and construct binary operation without opNeg.
       {
         if (constSubLHS->GetValue() > 2147483647 || constSubLHS->GetValue() < -2147483648) // Check the integer range for LHS.
         {
@@ -1294,36 +1294,36 @@ CAstExpression* CParser::getBinaryLHS(CAstBinaryOp* _lhs, bool _isNeg, bool _isP
         return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), constSubLHS, expSubRHS);
       }
     }
-    else if (constSubRHS != NULL)
+    else if (constSubRHS != NULL) // Case when RHS is constant.
     {
       if (constSubRHS->GetValue() > 2147483647 || constSubRHS->GetValue() < -2147483648) // Check the integer range for RHS.
       {
         SetError(constSubRHS->GetToken(), "integer constant outside valid range.");
       }
-      if (_isNeg)
+      if (_isNeg) // If negative unary operation is needed, construct binary operation with opNeg applied to LHS.
       {
         return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), new CAstUnaryOp(expSubLHS->GetToken(), opNeg, expSubLHS), constSubRHS);
       }
-      else if (_isPos)
+      else if (_isPos) // If positive unary operation is needed, construct binary operation with opPos applied to LHS.
       {
         return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), new CAstUnaryOp(expSubLHS->GetToken(), opPos, expSubLHS), constSubRHS);
       }
-      else
+      else // If no unary operation is needed, construct binary operation without unary operation.
       {
         return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), expSubLHS, constSubRHS);
       }
     }
-    else
+    else // Case when LHS and RHS are not constant.
     {
-      if (_isNeg)
+      if (_isNeg) // If negative unary operation is needed, construct binary operation with opNeg applied to LHS.
       {
         return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), new CAstUnaryOp(expSubLHS->GetToken(), opNeg, expSubLHS), expSubRHS);
       }
-      else if (_isPos)
+      else if (_isPos) // If positive unary operation is needed, construct binary operation with opPos applied to LHS.
       {
         return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), new CAstUnaryOp(expSubLHS->GetToken(), opPos, expSubLHS), expSubRHS);
       }
-      else
+      else // If no unary operation is needed, construct binary operation without unary operation.
       {
         return new CAstBinaryOp(_lhs->GetToken(), _lhs->GetOperation(), expSubLHS, expSubRHS);
       }
@@ -1391,45 +1391,25 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
           {
             SetError(constRHS->GetToken(), "integer constant outside valid range."); // Check the integer range for RHS.
           }
-          //n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opPos, binaryTerm->GetLeft()), constRHS);
-          //if (dynamic_cast<CAstBinaryOp*>(binaryTerm->GetLeft()) != NULL)
-          //{
-            if (isLeftmostConstant(binaryTerm))
-            {
-              n = getBinaryLHS(binaryTerm, false, true);
-            }
-            else
-            {
-              n = new CAstUnaryOp(binaryTerm->GetToken(), opPos, getBinaryLHS(binaryTerm, false, false));
-            }
-            //n = new CAstUnaryOp(binaryTerm->GetToken(), opPos, getBinaryLHS(binaryTerm, false, false));
-            //n = getBinaryLHS(binaryTerm, false, true);
-          //}
-          //else
-          //{
-            //n = getBinaryLHS(binaryTerm, false, true);
-          //}
+          if (isLeftmostConstant(binaryTerm)) // When leftmost operand is constant, apply opPos to that operand.
+          {
+            n = getBinaryLHS(binaryTerm, false, true);
+          }
+          else // When leftmost operand is not constant, apply opPos to whole term.
+          {
+            n = new CAstUnaryOp(binaryTerm->GetToken(), opPos, getBinaryLHS(binaryTerm, false, false));
+          }
         }
         else // Case when LHS and RHS are both not integer constant.
         {
-          //n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opPos, binaryTerm->GetLeft()), binaryTerm->GetRight());
-          //if (dynamic_cast<CAstBinaryOp*>(binaryTerm->GetLeft()) != NULL)
-          //{
-            if (isLeftmostConstant(binaryTerm))
-            {
-              n = getBinaryLHS(binaryTerm, false, true);
-            }
-            else
-            {
-              n = new CAstUnaryOp(binaryTerm->GetToken(), opPos, getBinaryLHS(binaryTerm, false, false));
-            }
-            //n = new CAstUnaryOp(binaryTerm->GetToken(), opNeg, getBinaryLHS(binaryTerm, false, false));
-            //n = getBinaryLHS(binaryTerm, false, true);
-          //}
-          //else
-          //{
-            //n = getBinaryLHS(binaryTerm, false, true);
-          //}
+          if (isLeftmostConstant(binaryTerm)) // When leftmost operand is constant, apply opPos to that operand.
+          {
+            n = getBinaryLHS(binaryTerm, false, true);
+          }
+          else // When leftmost operand is not constant, apply opPos to whole term.
+          {
+            n = new CAstUnaryOp(binaryTerm->GetToken(), opPos, getBinaryLHS(binaryTerm, false, false));
+          }
         }
       }
       else // Case of other terms, i.e. neither of integer constant nor binary operator.
@@ -1492,45 +1472,25 @@ CAstExpression* CParser::simpleexpr(CAstScope *s)
           {
             SetError(constRHS->GetToken(), "integer constant outside valid range.");
           }
-          //if (dynamic_cast<CAstBinaryOp*>(binaryTerm->GetLeft()) != NULL)
-          //{
-            if (isLeftmostConstant(binaryTerm))
-            {
-              n = getBinaryLHS(binaryTerm, true, false);
-            }
-            else
-            {
-              n = new CAstUnaryOp(binaryTerm->GetToken(), opNeg, getBinaryLHS(binaryTerm, false, false));
-            }
-            //n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opNeg, binaryTerm->GetLeft()) , constRHS);
-            //n = new CAstUnaryOp(binaryTerm->GetToken(), opNeg, getBinaryLHS(binaryTerm, false, false));
-            //n = getBinaryLHS(binaryTerm, true, false);
-          //}
-          //else
-          //{
-            //n = getBinaryLHS(binaryTerm, true, false);
-          //}
+          if (isLeftmostConstant(binaryTerm)) // When leftmost operand is constant, apply opNeg to that operand.
+          {
+            n = getBinaryLHS(binaryTerm, true, false);
+          }
+          else // When leftmost operand is not constant, apply opNeg to whole term.
+          {
+            n = new CAstUnaryOp(binaryTerm->GetToken(), opNeg, getBinaryLHS(binaryTerm, false, false));
+          }
         }
         else // Case when LHS and RHS are both not integer constant.
         {
-          //if (dynamic_cast<CAstBinaryOp*>(binaryTerm->GetLeft()) != NULL)
-          //{
-            if (isLeftmostConstant(binaryTerm))
-            {
-              n = getBinaryLHS(binaryTerm, true, false);
-            }
-            else
-            {
-              n = new CAstUnaryOp(binaryTerm->GetToken(), opNeg, getBinaryLHS(binaryTerm, false, false));
-            }
-            //n = new CAstBinaryOp(binaryTerm->GetToken(), binaryTerm->GetOperation(), new CAstUnaryOp(binaryTerm->GetLeft()->GetToken(), opNeg, binaryTerm->GetLeft()) , binaryTerm->GetRight());
-            //n = new CAstUnaryOp(binaryTerm->GetToken(), opNeg, getBinaryLHS(binaryTerm, false, false));
-            //n = getBinaryLHS(binaryTerm, true, false);
-          //}
-          //else
-          //{
-            //n = getBinaryLHS(binaryTerm, true, false);
-          //}
+          if (isLeftmostConstant(binaryTerm)) // When leftmost operand is constant, apply opNeg to that operand.
+          {
+            n = getBinaryLHS(binaryTerm, true, false);
+          }
+          else // When leftmost operand is not constant, apply opNeg to whole term.
+          {
+            n = new CAstUnaryOp(binaryTerm->GetToken(), opNeg, getBinaryLHS(binaryTerm, false, false));
+          }
         }
       }
       else // Case of other terms, i.e. neither of integer constant nor binary operator.

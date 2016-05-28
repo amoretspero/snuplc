@@ -207,8 +207,17 @@ class CParser {
     /// @retVal false when there is no duplication.
     bool CheckParamDups (vector<vector<CSymParam*> >* paramVec, const string elemToFind);
     
+    /// @brief Get the expression with negative or positive operator applied.
+    /// @param _lhs Binary operator expression to apply unary operator.
+    /// @param _isNeg Indicates whether unary operator to apply is negative.
+    /// @param _isPos Indicates whether unary operator to apply is positive._abort
+    /// @retVal Expression with unary operator applied.
     CAstExpression* getBinaryLHS(CAstBinaryOp* _lhs, bool _isNeg, bool _isPos);
     
+    /// @brief Check if leftmost operand of given binary operator is constant or not.
+    /// @param _lhs Binary operator expression to check.
+    /// @retVal true when leftmost operand is constant.
+    /// @retVal false when leftmost operand is not constant.
     bool isLeftmostConstant(CAstBinaryOp* _lhs);
     
     

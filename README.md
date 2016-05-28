@@ -71,10 +71,10 @@ Now <code>CAstFunctionCall</code> calls for <code>ToTac(CCodeBlock\*, CTacLabel\
   
 **2016-05-27 23:05 KST**  
 Almost fixed bug for <code>CAstBinaryOp::ToTac</code> methods and related ones.  
-Now <code>CAstFunctionCall</code> and <code>CAstStatReturn</code> calls for <code>ToTac(CCodeBlock*, CTacLabel*, CTacLabel*)</code> method when
+Now <code>CAstFunctionCall</code> and <code>CAstStatReturn</code> calls for <code>ToTac(CCodeBlock\*, CTacLabel\*, CTacLabel\*)</code> method when
 expression of argument to function or return has type of boolean and not <code>CAstConstant</code>, not <code>CAstDesignator</code>, not <code>CAstFunctionCall</code>.  
-This makes those two methods call <code>ToTac(CCodeBlock*, CTacLabel*, CTacLabel*)</code> method when only expression cannot have single boolean (temporary) variable.  
-Expressions which can be represented with single boolean (temporary) variable is dealt with <code>ToTac(CCodeBlock*)</code> method.  
+This makes those two methods call <code>ToTac(CCodeBlock\*, CTacLabel\*, CTacLabel\*)</code> method when only expression cannot have single boolean (temporary) variable.  
+Expressions which can be represented with single boolean (temporary) variable is dealt with <code>ToTac(CCodeBlock\*)</code> method.  
   
 **2016-05-28 00:16 KST**  
 Changed temporary symbol creation order for <code>opEqual</code> and <code>opNotEqual</code> case of <code>CAstBinaryOp::ToTac(CCodeBlock\*, CTacLabe\*, CTacLabel*)</code>.  
@@ -92,7 +92,7 @@ More tests can be done with more time.
 **2016-05-28 04:29 KST**  
 Added unary operator generation for <code>modgen.py</code>. Unary operator test is available.  
 Scheme for integer constant relaxing is RELAXED scheme.  
-Binary operators of SnuPL/1 language is left associative. i.e., <code>1 * 2 * 3</code> should be calculated as <code>1 \* 2</code> first and <code>(prev result) \* 3</code>.  
+Binary operators of SnuPL/1 language is left associative. i.e., <code>1 \* 2 \* 3</code> should be calculated as <code>1 \* 2</code> first and <code>(prev result) \* 3</code>.  
 To take consider of this fact, <code>CParser::simpleexpr</code> has been modified.  
 When unary prefix is present and LHS of termOp is not constant, now unary prefix operator is applied to ONLY constant left-most operand.  
 If left-most operand of term composing simpleexpr is NOT a constant, unary prefix will be applied to the whole term.  
@@ -106,4 +106,9 @@ Fixed RELAXED scheme bug.
 2 2 2 : Passing 3000/3000 random tests.  
 3 3 3 : Passing 5000/5000 random tests.  
 5 5 5 : Passing 2100/2100 random tests.  
-5 10 10 : Passing 150/150 random tests.
+5 10 10 : Passing 150/150 random tests.  
+  
+**2016-05-28 22:30 KST**  
+Added comments for <code>ast.cpp</code>, <code>ast.h</code>, <code>parser.cpp</code>, <code>parser.h</code>.  
+Submitted phase 4.  
+LAST COMMIT of INTERMEDIATE CODE GENERATION PHASE.

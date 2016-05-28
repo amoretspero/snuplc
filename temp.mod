@@ -1,9 +1,8 @@
 module test;
-var v1 : integer[99][57][33][23][21];
-v3 : integer[80][71][52][29][14];
-v0 : integer;
-v2 : boolean[93][4][71][51][61];
-v4 : char;
+var v0 : integer;
+v2 : char;
+v3 : boolean[69][84][74][31][19];
+v1 : boolean;
 function dummyINTfunc() : integer ;
 begin
 
@@ -24,377 +23,387 @@ begin
 
 end dummyProcedure;
 
-function f0(v0 : integer[99][57][33][23][21] ; v1 : boolean[93][4][71][51][61] ; v2 : boolean ; v3 : integer[80][71][52][29][14]) : char ;
-var v4 : integer;
-v5 : char;
+function f0(v3 : boolean[69][84][74][31][19]) : boolean ;
+var v5 : integer;
+v4 : char;
+v6 : boolean;
 begin
-v2 := ('a') >= dummyCHARfunc();
-WriteInt(+ 3508 + 5405 - 79850 - 67526 - ReadInt() / 96432 / 92901 / 86572);
-dummyBOOLfunc();
-while ('b' < 'd')
-do
-  if (- 36710 # - 11486)
-  then  
-  end;
-  return (dummyCHARfunc())
-end;
+return dummyBOOLfunc() && false && true || false && true && true && true;
 ReadInt();
-if (true)
-then
-  dummyCHARfunc();
-  v4 := + 71381;
-  return 'b';
-  return (('c'))
+ReadInt();
+v4 := (dummyCHARfunc());
+if ((- 20706 = + 83272) && dummyBOOLfunc())
+then  
 end;
-while ('d' < ('b'))
+if (+ 14140 # + 57291 - 50937 + 29752)
+then
+  v5 := 38812 - 25993 + 55498 + 51469
+end;
+dummyProcedure();
+return dummyCHARfunc() <= dummyCHARfunc();
+while (false || true)
 do
-  if (true || false)
-  then  
-  end;
-  v5 := 'b'
-end;
-if (false && true)
-then
-  if (57774 >= + 48249)
-  then
-    if ('d' < 'c')
-    then  
-    end;
-    v4 := 85333;
-    v5 := 'd'
-  end;
-  dummyProcedure();
-  v1[30210][89475][- 48836][+ 55726][+ 18479] := 'c' # 'd';
-  while ('d' <= 'a')
+  v3[41648][2515][- 82710][43729][90341] := + 84708 <= - 53716;
+  while (true || true)
   do
     
   end;
-  if ('a' >= 'a')
-  then  
-  end
-end;
-if (false || true || false)
-then
-  return 'b';
-  WriteChar('b');
+  v5 := + 1049;
   while (false)
   do
     
-  end;
-  v5 := ('c')
-end;
-while ('a' >= (dummyCHARfunc()))
-do
-  v4 := 83433;
-  dummyBOOLfunc();
-  while (16802 > 23600)
-  do
-    
-  end;
-  while ('a' # 'd')
-  do
-    
-  end;
-  while ('a' > 'b')
-  do
-    
   end
-end
+end;
+v3[27979 / 34123 / 27952 / 80936 / 95317][- 892 * 52732 * 35307][+ 22562][99293][79017] := - 63979 > - 57990
 end f0;
 
-function f1(v0 : char) : boolean ;
-var v5 : integer;
-v2 : integer[99][57][33][23][21];
-v3 : boolean[93][4][71][51][61];
-v1 : boolean;
-v4 : integer[80][71][52][29][14];
+function f1(v3 : boolean ; v4 : boolean[6][80][49][39][74] ; v5 : integer[13][29][14][46][98]) : integer ;
+var v7 : integer;
+v8 : char;
+v6 : boolean[69][84][74][31][19];
 begin
-while (true)
+while (f0(v6))
 do
-  if (('a' <= 'b'))
-  then
-    v1 := false
-  end;
-  while (false = false)
-  do
-    
-  end
+  
 end;
-v0 := (f0(v2, v3, true, v4));
-while (false || false || true || false || true)
+dummyCHARfunc();
+v3 := true && false && false || false || false || false || false || true;
+return - 68266 * 23986 / 2594 + 23101 - 85205 + 11790;
+v7 := 78109 - (68131) - 21321 - 42589 - 7827 - 67425 - 54947;
+return ReadInt() / 29378 / 17680 - 76681;
+return + dummyINTfunc() - 69286 - 47779 + 80509;
+while (dummyCHARfunc() # dummyCHARfunc())
 do
-  while ('d' <= 'c')
-  do
-    
-  end;
-  while (true)
-  do
-    
-  end;
-  while ('c' > 'a')
-  do
-    
-  end
+  
 end;
-f0(v2, v3, true, v4);
-v3[- (+ 21434) - 74732][60601][+ 14051][49130][+ 96937] := true || true || true || true = true;
-return (('a') > ('d')) = true || true || true || true || true;
-while ('d' = dummyCHARfunc())
+while (61825 # 40898 * 88594 * 87442 * 64630 + 38877 + 51746 + dummyINTfunc())
 do
-  return 54178 < - 50576;
-  v5 := 92259;
-  WriteStr("hello\n");
-  dummyProcedure();
-  v5 := 78693;
-  if (false)
-  then  
-  end;
-  if (false)
-  then  
-  end;
-  WriteChar('a');
-  v3[17532][96623][81526][53831][80646] := false;
-  v2[- 65870][+ 53166][88886][46459][+ 5900] := 44136
+  dummyINTfunc();
+  v8 := 'c'
 end;
-if (false)
-then
-  WriteInt(+ 39805);
-  return dummyBOOLfunc();
-  while ('d' = 'c')
-  do
-    
-  end
-end;
-v3[38866 / 23173 * 59016 / 89458 / 63552 * 68443 / 56085][96532 + 54396 + 62036 - 71270][- dummyINTfunc()][+ 77348][- 93917] := false;
-return false # true && true && false && false || false || true || true || true && false && true || false || false
+v6[+ 8097][36284 - 72835 - 40009 + 33588][- 71418][- 86901][+ 52431] := dummyCHARfunc() < 'b'
 end f1;
 
-function f2(v0 : boolean ; v1 : integer ; v2 : char[25][18][23][67][18] ; v3 : boolean) : boolean ;
-var v6 : integer[80][71][52][29][14];
-v5 : boolean[93][4][71][51][61];
-v4 : integer[99][57][33][23][21];
+procedure f2(v3 : boolean ; v4 : char ; v5 : boolean) ;
+var v7 : integer;
+v6 : boolean[69][84][74][31][19];
 begin
-if (true || false)
+while (86477 / 84629 <= 71355)
+do
+  f0(v6);
+  v7 := 16421;
+  dummyINTfunc();
+  while ('a' < 'd')
+  do
+    
+  end
+end;
+if ('d' # 'c')
 then
-  if (10384 = + 52905)
+  while (41842 = + 37347)
+  do
+    if (true)
+    then
+      WriteInt(24656 + 88809)
+    end
+  end;
+  while ('d' >= 'd')
+  do
+    
+  end;
+  v4 := 'c';
+  v6[9783][+ 3744][25516][- 9925][56071] := true
+end;
+v6[43514][53618][+ 70853][46414][+ 48742] := (dummyBOOLfunc()) && true && false && false && false && true && true || false;
+return;
+return;
+if ('b' >= 'b')
+then
+  v6[86296][26422][+ 30396][9876][- 7198] := false # false;
+  v7 := - 9215;
+  v7 := - 3843
+end;
+return;
+if (+ 46789 < 67196)
+then
+  f0(v6);
+  while (91983 < 51825)
+  do
+    
+  end;
+  if ('c' > 'd')
   then  
   end;
-  if ('b' > 'd')
-  then
-    return 'd' = 'b';
-    if ('d' > 'b')
+  return;
+  dummyBOOLfunc();
+  v7 := - 14426
+end;
+WriteStr("hello\n");
+while (11898 / 87279 < (+ 90861))
+do
+  while ('d' <= 'b')
+  do
+    return;
+    ReadInt();
+    if (true)
     then  
-    end;
-    return true;
-    f0(v4, v5, true, v6);
-    v6[89255][68431][750][86556][94671] := 97652;
-    return 78 >= 20900;
-    dummyBOOLfunc();
-    return false = true;
-    while (70631 >= 6595)
-    do
-      
-    end;
-    return false
-  end
-end;
-dummyINTfunc();
-while ((('c')) <= 'a')
-do
-  while (70801 <= - 98179)
-  do
-    return 'c' # 'b';
-    f0(v4, v5, false, v6)
-  end
-end;
-if ((true || true || false))
-then
-  return false;
-  v1 := - 93990;
-  return 67852 >= 87799
-end;
-dummyBOOLfunc();
-while ('c' >= (('a')))
-do
-  f1('c');
-  if (+ 2189 = 98506)
-  then  
-  end
-end;
-return f0(v4, v5, + 84435 > 41906, v6) <= (('c'));
-WriteChar((dummyCHARfunc()));
-v1 := (70481 - 85029 - 82916) + 81078;
-if (71824 >= 79631)
-then
-  if (+ 80912 > - 99355)
-  then  
-  end;
-  v5[99359][18356][81958][58079][- 79038] := true;
-  f1('a');
-  if (+ 10420 = 29080)
-  then  
-  end;
-  while (- 79354 < + 93956)
-  do
-    
-  end;
-  return 'c' = 'c';
-  while (true)
-  do
-    
+    end
   end
 end
 end f2;
 
-function f3(v0 : char) : integer ;
-var v6 : integer;
-v2 : integer[99][57][33][23][21];
-v3 : boolean[93][4][71][51][61];
-v1 : boolean;
-v4 : integer[80][71][52][29][14];
-v5 : char[25][18][23][67][18];
+procedure f3(v3 : integer[82][20][7][37][4]) ;
+var v7 : integer;
+v8 : boolean[6][80][49][39][74];
+v5 : char;
+v4 : boolean;
+v9 : integer[13][29][14][46][98];
+v6 : boolean[69][84][74][31][19];
 begin
-v1 := true = false && true && true && true;
-if (+ 26836 > 77326 * 27029 / 28102 + 79056 + 19072)
+if ('c' > 'c')
 then
-  v1 := true # true;
+  if (79571 > 43757)
+  then  
+  end;
+  while (- 96810 # + 60286)
+  do
+    
+  end;
   dummyBOOLfunc()
 end;
-while (39579 + 70565 + (- 67684) - 51809 + 69981 > 56538)
-do
-  
-end;
-while ((dummyCHARfunc()) <= 'c')
-do
-  
-end;
-dummyProcedure();
-return dummyINTfunc() * (- 92953) - 62111;
-f2(f0(v2, v3, false, v4) <= dummyCHARfunc(), 16866, v5, false = false);
-dummyINTfunc();
-if (false || false = false)
+v4 := false;
+if (f0(v6))
 then
-  v6 := 25030;
-  if (false)
-  then  
-  end;
-  dummyBOOLfunc();
-  return 87137;
-  if (false = true)
-  then  
-  end
-end;
-while (false && false && false && true && (49564 > - 20652))
-do
-  v5[+ 5401][22635][99246][+ 21114][80417] := 'c'
-end
-end f3;
-
-function f4(v0 : boolean[42][63][45][60][82] ; v1 : integer ; v2 : boolean[27][41][6][12][46] ; v3 : char[30][30][12][88][36]) : boolean ;
-var v7 : integer[99][57][33][23][21];
-v5 : char;
-v4 : char[25][18][23][67][18];
-v6 : boolean;
-v9 : integer[80][71][52][29][14];
-v8 : boolean[93][4][71][51][61];
-begin
-while (f2(f2(+ 66080 # - 47169, 57003, v4, 'b' <= 'b'), 90057, v4, 93900 > 65479) # false)
-do
-  if (+ 9573 <= 70767)
-  then  
-  end;
-  WriteStr("hello\n")
-end;
-if ((dummyCHARfunc()) > 'a')
-then
-  return true
-end;
-v3[+ 76689][+ 68442][(- 62513)][23464][90956] := dummyCHARfunc();
-return true || f1(('b')) && false || false;
-return ('b') >= dummyCHARfunc();
-v6 := true || false && false && false;
-while (25595 < + 30905 + 43461 + 23788 - 66549 + 4771)
-do
-  while (false || true = true)
+  while (true # false)
   do
     
-  end
-end;
-while ('c' # 'a')
-do
-  return false # true;
-  while (false && (false) && false)
-  do
-    
-  end
-end;
-v2[78844][+ 89960 + 48306 - 88858][69234][28993][+ 38825] := f3(f0(v7, v8, true, v9)) # 68567;
-if ('d' >= 'b')
-then
-  return + 38476 <= + 84122;
-  v6 := false;
-  WriteInt(17028);
-  return true;
-  if (true)
+  end;
+  v5 := 'a';
+  if ('a' >= 'b')
   then  
   end;
-  if (+ 4107 < 46724)
-  then  
-  end;
-  return false # false;
-  f3(f0(v7, v8, + 21278 = - 10625, v9))
-end
-end f4;
-
-begin
-while (true)
-do
-  return;
   dummyBOOLfunc()
 end;
 return;
-while (false # true || true || false || false || true)
+while (true)
 do
-  return
-end;
-v0 := 76898 + 96843 + 38878 + 30516 - 67910 - 66242 + 78945;
-while (- 18945 = (45232))
-do
-  dummyBOOLfunc();
-  ReadInt();
+  v7 := 36462;
+  v3[38748][17829][+ 49003][77261][+ 48029] := 47109 + 69496 + 72802 - 96563;
   while (false)
   do
     
   end;
-  return;
   while (false)
   do
     
-  end
+  end;
+  return
 end;
 if (false)
 then
-  v0 := 92142 + 99166;
-  WriteLn()
+  return;
+  while ('c' < 'd')
+  do
+    
+  end;
+  while (true)
+  do
+    ReadInt();
+    return;
+    return
+  end;
+  while (false)
+  do
+    
+  end
 end;
-if (f0(v1, v2, 'b' >= 'a', v3) = 'c')
+while (dummyBOOLfunc() || dummyBOOLfunc())
+do
+  v7 := 83208
+end;
+return;
+if (true && false)
 then
+  return;
   while (false)
   do
     
   end;
+  if ('a' # 'a')
+  then  
+  end;
+  v5 := 'b';
+  WriteInt(55923);
+  f1(false = false, v8, v9)
+end;
+while (('d' >= 'c') && false && true && true && false && false && true && true)
+do
+  v5 := 'b'
+end
+end f3;
+
+procedure f4(v3 : boolean ; v4 : integer) ;
+var v6 : char;
+v5 : boolean[69][84][74][31][19];
+v7 : integer[82][20][7][37][4];
+begin
+f2(dummyCHARfunc() < ('b'), dummyCHARfunc(), true # false || true || false || false);
+v4 := + (93162) + 34967;
+v4 := + 53807;
+while (- 70325 # ReadInt() * 97368 + 7207 / 23322 / 57344)
+do
+  
+end;
+while ((dummyCHARfunc()) # 'a')
+do
+  f0(v5)
+end;
+return;
+WriteLn();
+if (42663 < 15236 - 31982)
+then
   return;
-  if (+ 5014 <= 92368 * 2940 / 34065)
+  v6 := 'b';
+  v3 := true;
+  f3(v7)
+end;
+v6 := dummyCHARfunc();
+v6 := dummyCHARfunc()
+end f4;
+
+begin
+return;
+dummyCHARfunc();
+if ('b' <= 'c')
+then
+  ReadInt();
+  return
+end;
+return;
+while (dummyBOOLfunc() && false && true && false)
+do
+  while (false)
+  do
+    
+  end;
+  while (true)
+  do
+    
+  end;
+  v0 := - 45035
+end;
+if (+ 70635 >= 94222)
+then
+  return;
+  v1 := false || true;
+  while (true)
+  do
+    
+  end;
+  if (48421 = - 1079)
+  then
+    v0 := 25659;
+    return
+  end
+end;
+while (40125 > 93224 * 46398 / 74330)
+do
+  v2 := ('c');
+  while (false)
+  do
+    
+  end;
+  dummyCHARfunc();
+  if (true)
   then  
   end
 end;
-while (('d' < 'b') && false || false)
+while (dummyCHARfunc() # dummyCHARfunc())
 do
-  v4 := 'd'
+  return;
+  while (false)
+  do
+    
+  end
 end;
-return;
-return;
-return;
-return
+WriteInt(+ 75591 - (78872) / 43405);
+while (true = dummyBOOLfunc() || true || false && true && false && true && false && true && false && true && true && false && false && false)
+do
+  
+end;
+while (- 48948 >= + dummyINTfunc())
+do
+  if (true)
+  then  
+  end;
+  dummyBOOLfunc()
+end;
+while (false || true || true || (- 35678 = + 11933))
+do
+  return;
+  return;
+  if (false)
+  then  
+  end
+end;
+while (false || false # false)
+do
+  while (false)
+  do
+    
+  end;
+  v0 := 57247;
+  return;
+  v1 := 33499 <= 97088;
+  return
+end;
+f4(74427 / 40705 / 4900 * 63890 / 42387 / 99062 / 53189 + dummyINTfunc() >= + 87922, - 58326);
+if (true)
+then
+  while (true)
+  do
+    dummyProcedure();
+    dummyBOOLfunc();
+    v0 := 42734
+  end;
+  v2 := 'b';
+  while ('d' = 'a')
+  do
+    
+  end;
+  f0(v3);
+  if (true)
+  then  
+  end
+end;
+WriteInt((+ 9854));
+if ('a' <= 'a')
+then
+  v2 := 'b';
+  f0(v3);
+  return;
+  v0 := - 37343;
+  dummyBOOLfunc()
+end;
+while (true && true && true && false && false || false)
+do
+  v1 := 'd' # 'a';
+  v0 := - 94131;
+  while (false)
+  do
+    
+  end
+end;
+dummyCHARfunc();
+while (((dummyCHARfunc())) < 'a')
+do
+  if ('a' > 'a')
+  then  
+  end;
+  if (+ 55905 <= 97118)
+  then  
+  end;
+  return
+end
 end test.
 

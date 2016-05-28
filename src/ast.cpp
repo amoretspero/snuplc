@@ -503,14 +503,14 @@ CTacAddr* CAstStatAssign::ToTac(CCodeBlock *cb, CTacLabel *next)
   // Case 1-1: RHS is boolean input boolean output binary operation. - Done
   // Case 1-2: RHS is non-boolean input boolean output binary operation. - Done
   // Case 2: RHS is non-boolean binary operation. - Done
-  // Case 3: RHS is boolean unary operation. - Don
+  // Case 3: RHS is boolean unary operation. - Done
   // Case 4: RHS is non-boolean unary operation. - Done
-  // Case 5: RHS is special operation.
-  // Case 6: RHS is Designator
-  // Case 6-1: RHS is Constant
-  // Case 6-2: RHS is Array Designator.
-  // Case 7: RHS is Pointer to array.
-  // Case 8: RHS is function call.
+  // Case 5: RHS is special operation. - Done
+  // Case 6: RHS is Designator - Done
+  // Case 6-1: RHS is Constant - Done
+  // Case 6-2: RHS is Array Designator. - Done
+  // Case 7: RHS is Pointer to array. - Done
+  // Case 8: RHS is function call. - Done
   CAstBinaryOp* binaryOpRHS = dynamic_cast<CAstBinaryOp*>(GetRHS()); // To check if RHS is binary operation.
   CAstUnaryOp* unaryOpRHS = dynamic_cast<CAstUnaryOp*>(GetRHS()); // To check if RHS is unary operation.
   CAstSpecialOp* specialOpRHS = dynamic_cast<CAstSpecialOp*>(GetRHS()); // To check if RHS is special operation.
@@ -801,7 +801,6 @@ CTacAddr* CAstStatReturn::ToTac(CCodeBlock *cb, CTacLabel *next)
         dynamic_cast<CAstConstant*>(GetExpression()) == NULL && 
         dynamic_cast<CAstDesignator*>(GetExpression()) == NULL &&
         dynamic_cast<CAstFunctionCall*>(GetExpression()) == NULL) // Boolean type return value.
-    //if (GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetExpression()) == NULL) // Boolean type non-designator return value.
     {
       CTacLabel* returnTrueLabel = cb->CreateLabel(); // Label for return of true.
       CTacLabel* returnFalseLabel = cb->CreateLabel(); // Label for return of false.
@@ -1422,55 +1421,61 @@ CTacAddr* CAstBinaryOp::ToTac(CCodeBlock *cb,
     CTacAddr* lhsTemp = NULL;
     CTacAddr* rhsTemp = NULL;
     
-    if (GetLeft()->GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetLeft()) == NULL && dynamic_cast<CAstConstant*>(GetLeft()) == NULL && dynamic_cast<CAstFunctionCall*>(GetLeft()) == NULL)
+    if (GetLeft()->GetType()->IsBoolean() && 
+        dynamic_cast<CAstDesignator*>(GetLeft()) == NULL && 
+        dynamic_cast<CAstConstant*>(GetLeft()) == NULL && 
+        dynamic_cast<CAstFunctionCall*>(GetLeft()) == NULL) // When LHS is boolean type and not designator nor constant nor function call. Should make true/false cases.
     {
-      CTacLabel* lhsTrueLabel = cb->CreateLabel();
-      CTacLabel* lhsFalseLabel = cb->CreateLabel();
-      CTacLabel* lhsFinLabel = cb->CreateLabel();
+      CTacLabel* lhsTrueLabel = cb->CreateLabel(); // Label for true case.
+      CTacLabel* lhsFalseLabel = cb->CreateLabel(); // Label for false case.
+      CTacLabel* lhsFinLabel = cb->CreateLabel(); // Label for assinging value.
       
-      GetLeft()->ToTac(cb, lhsTrueLabel, lhsFalseLabel);
+      GetLeft()->ToTac(cb, lhsTrueLabel, lhsFalseLabel); // Gets TAC of LHS.
       
-      lhsTemp = cb->CreateTemp(GetLeft()->GetType());
+      lhsTemp = cb->CreateTemp(GetLeft()->GetType()); // Temporary symbol for assigning value of LHS.
       
-      cb->AddInstr(lhsTrueLabel);
-      cb->AddInstr(new CTacInstr(opAssign, lhsTemp, new CTacConst(1), NULL));
-      cb->AddInstr(new CTacInstr(opGoto, lhsFinLabel));
+      cb->AddInstr(lhsTrueLabel); // When LHS evaluates to true.
+      cb->AddInstr(new CTacInstr(opAssign, lhsTemp, new CTacConst(1), NULL)); // Assign 1(true) to temporary symbol.
+      cb->AddInstr(new CTacInstr(opGoto, lhsFinLabel)); // Go to end of LHS case.
       
-      cb->AddInstr(lhsFalseLabel);
-      cb->AddInstr(new CTacInstr(opAssign, lhsTemp, new CTacConst(0), NULL));
-      cb->AddInstr(new CTacInstr(opGoto, lhsFinLabel));
+      cb->AddInstr(lhsFalseLabel); // When LHS evaluates to false.
+      cb->AddInstr(new CTacInstr(opAssign, lhsTemp, new CTacConst(0), NULL)); // Assign 0(false) to temporary symbol.
+      cb->AddInstr(new CTacInstr(opGoto, lhsFinLabel)); // Go to end of LHS case.
       
-      cb->AddInstr(lhsFinLabel);
+      cb->AddInstr(lhsFinLabel); // End of LHS case.
     }
     else
     {
-      lhsTemp = GetLeft()->ToTac(cb);
+      lhsTemp = GetLeft()->ToTac(cb); // Gets TAC of LHS.
     }
     
     CTacLabel* rhsFinLabel = NULL;
-    if (GetRight()->GetType()->IsBoolean() && dynamic_cast<CAstDesignator*>(GetRight()) == NULL && dynamic_cast<CAstConstant*>(GetRight()) == NULL && dynamic_cast<CAstFunctionCall*>(GetRight()) == NULL)
+    if (GetRight()->GetType()->IsBoolean() && 
+        dynamic_cast<CAstDesignator*>(GetRight()) == NULL && 
+        dynamic_cast<CAstConstant*>(GetRight()) == NULL && 
+        dynamic_cast<CAstFunctionCall*>(GetRight()) == NULL) // When RHS is boolean type and not designator nor constant nor function call. Should make true/false cases.
     {
-      CTacLabel* rhsTrueLabel = cb->CreateLabel();
-      CTacLabel* rhsFalseLabel = cb->CreateLabel();
-      rhsFinLabel = cb->CreateLabel();
+      CTacLabel* rhsTrueLabel = cb->CreateLabel(); // Label for true case.
+      CTacLabel* rhsFalseLabel = cb->CreateLabel(); // Label for false case.
+      rhsFinLabel = cb->CreateLabel(); // Label for assinging value.
       
-      GetRight()->ToTac(cb, rhsTrueLabel, rhsFalseLabel);
+      GetRight()->ToTac(cb, rhsTrueLabel, rhsFalseLabel); // Gets TAC of RHS.
       
-      rhsTemp = cb->CreateTemp(GetRight()->GetType());
+      rhsTemp = cb->CreateTemp(GetRight()->GetType()); // Temporary symbol for assigning value of RHS.
       
-      cb->AddInstr(rhsTrueLabel);
-      cb->AddInstr(new CTacInstr(opAssign, rhsTemp, new CTacConst(1), NULL));
-      cb->AddInstr(new CTacInstr(opGoto, rhsFinLabel));
+      cb->AddInstr(rhsTrueLabel); // When RHS evaluates to true.
+      cb->AddInstr(new CTacInstr(opAssign, rhsTemp, new CTacConst(1), NULL)); // Assign 1(true) to temporary symbol.
+      cb->AddInstr(new CTacInstr(opGoto, rhsFinLabel)); // Go to end of RHS case.
       
-      cb->AddInstr(rhsFalseLabel);
-      cb->AddInstr(new CTacInstr(opAssign, rhsTemp, new CTacConst(0), NULL));
-      cb->AddInstr(new CTacInstr(opGoto, rhsFinLabel));
+      cb->AddInstr(rhsFalseLabel); // When RHS evaluates to false.
+      cb->AddInstr(new CTacInstr(opAssign, rhsTemp, new CTacConst(0), NULL)); // Assign 0(false) to temporary symbol.
+      cb->AddInstr(new CTacInstr(opGoto, rhsFinLabel)); // Go to end of RHS case.
       
-      cb->AddInstr(rhsFinLabel);
+      cb->AddInstr(rhsFinLabel); // End of RHS case.
     }
-    else
+    else 
     {
-      rhsTemp = GetRight()->ToTac(cb);
+      rhsTemp = GetRight()->ToTac(cb); // Gets TAC of RHS.
     }
     
     //cb->AddInstr(temp);
@@ -1953,26 +1958,26 @@ CTacAddr* CAstFunctionCall::ToTac(CCodeBlock *cb)
       if (GetArg(paramCnt - 1 - cnt)->GetType()->IsBoolean() && 
           dynamic_cast<CAstDesignator*>(GetArg(paramCnt - 1 - cnt)) == NULL && 
           dynamic_cast<CAstConstant*>(GetArg(paramCnt - 1 - cnt)) == NULL &&
-          dynamic_cast<CAstFunctionCall*>(GetArg(paramCnt - 1 - cnt)) == NULL)
+          dynamic_cast<CAstFunctionCall*>(GetArg(paramCnt - 1 - cnt)) == NULL) // When argument is boolean and not designator, nor constant nor function call. Should make true/false case.
       {
-        CTacLabel* argTrueLabel = cb->CreateLabel();
-        CTacLabel* argFalseLabel = cb->CreateLabel();
-        CTacLabel* argAssignLabel = cb->CreateLabel();
+        CTacLabel* argTrueLabel = cb->CreateLabel(); // Label for true case.
+        CTacLabel* argFalseLabel = cb->CreateLabel(); // Label for false case.
+        CTacLabel* argAssignLabel = cb->CreateLabel(); // Label for assigning value.
         
-        GetArg(paramCnt - 1 - cnt)->ToTac(cb, argTrueLabel, argFalseLabel);
+        GetArg(paramCnt - 1 - cnt)->ToTac(cb, argTrueLabel, argFalseLabel); // Get TAC of argument.
         
-        CTacTemp* argTemp = cb->CreateTemp(GetArg(paramCnt - 1 - cnt)->GetType());
+        CTacTemp* argTemp = cb->CreateTemp(GetArg(paramCnt - 1 - cnt)->GetType()); // Temporary symbol for assinging value of argument.
         
-        cb->AddInstr(argTrueLabel);
-        cb->AddInstr(new CTacInstr(opAssign, argTemp, new CTacConst(1), NULL));
-        cb->AddInstr(new CTacInstr(opGoto, argAssignLabel));
+        cb->AddInstr(argTrueLabel); // When argument evaluates to true.
+        cb->AddInstr(new CTacInstr(opAssign, argTemp, new CTacConst(1), NULL)); // Assign 1(true) to temporary symbol.
+        cb->AddInstr(new CTacInstr(opGoto, argAssignLabel)); // Go to end of assigning of value to parameter.
         
-        cb->AddInstr(argFalseLabel);
-        cb->AddInstr(new CTacInstr(opAssign, argTemp, new CTacConst(0), NULL));
-        cb->AddInstr(new CTacInstr(opGoto, argAssignLabel));
+        cb->AddInstr(argFalseLabel); // When argument evaluates to false.
+        cb->AddInstr(new CTacInstr(opAssign, argTemp, new CTacConst(0), NULL)); // Assign 0(false) to temporary symbol.
+        cb->AddInstr(new CTacInstr(opGoto, argAssignLabel)); // Go to end of assigning of value to parameter.
         
-        cb->AddInstr(argAssignLabel);
-        cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), argTemp, NULL));
+        cb->AddInstr(argAssignLabel); // Assign to parameter.
+        cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), argTemp, NULL)); // Add parameter.
       }
       else
       {
@@ -2022,26 +2027,26 @@ CTacAddr* CAstFunctionCall::ToTac(CCodeBlock *cb,
       if (GetArg(paramCnt - 1 - cnt)->GetType()->IsBoolean() && 
           dynamic_cast<CAstDesignator*>(GetArg(paramCnt - 1 - cnt)) == NULL && 
           dynamic_cast<CAstConstant*>(GetArg(paramCnt - 1 - cnt)) == NULL &&
-          dynamic_cast<CAstFunctionCall*>(GetArg(paramCnt - 1 - cnt)) == NULL)
+          dynamic_cast<CAstFunctionCall*>(GetArg(paramCnt - 1 - cnt)) == NULL) // When argument is boolean and not designator, nor constant nor function call. Should make true/false case.
       {
-        CTacLabel* argTrueLabel = cb->CreateLabel();
-        CTacLabel* argFalseLabel = cb->CreateLabel();
-        CTacLabel* argAssignLabel = cb->CreateLabel();
+        CTacLabel* argTrueLabel = cb->CreateLabel(); // Label for true case.
+        CTacLabel* argFalseLabel = cb->CreateLabel(); // Label for false case.
+        CTacLabel* argAssignLabel = cb->CreateLabel(); // Label for assigning value.
         
-        GetArg(paramCnt - 1 - cnt)->ToTac(cb, argTrueLabel, argFalseLabel);
+        GetArg(paramCnt - 1 - cnt)->ToTac(cb, argTrueLabel, argFalseLabel); // Get TAC of argument.
         
-        CTacTemp* argTemp = cb->CreateTemp(GetArg(paramCnt - 1 - cnt)->GetType());
+        CTacTemp* argTemp = cb->CreateTemp(GetArg(paramCnt - 1 - cnt)->GetType()); // Temporary symbol for assinging value of argument.
         
-        cb->AddInstr(argTrueLabel);
-        cb->AddInstr(new CTacInstr(opAssign, argTemp, new CTacConst(1), NULL));
-        cb->AddInstr(new CTacInstr(opGoto, argAssignLabel));
+        cb->AddInstr(argTrueLabel); // When argument evaluates to true.
+        cb->AddInstr(new CTacInstr(opAssign, argTemp, new CTacConst(1), NULL)); // Assign 1(true) to temporary symbol.
+        cb->AddInstr(new CTacInstr(opGoto, argAssignLabel)); // Go to end of assigning of value to parameter.
         
-        cb->AddInstr(argFalseLabel);
-        cb->AddInstr(new CTacInstr(opAssign, argTemp, new CTacConst(0), NULL));
-        cb->AddInstr(new CTacInstr(opGoto, argAssignLabel));
+        cb->AddInstr(argFalseLabel); // When argument evaluates to false.
+        cb->AddInstr(new CTacInstr(opAssign, argTemp, new CTacConst(0), NULL)); // Assign 0(false) to temporary symbol.
+        cb->AddInstr(new CTacInstr(opGoto, argAssignLabel)); // Go to end of assigning of value to parameter.
         
-        cb->AddInstr(argAssignLabel);
-        cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), argTemp, NULL));
+        cb->AddInstr(argAssignLabel); // Assign to parameter.
+        cb->AddInstr(new CTacInstr(opParam, new CTacConst(paramCnt - 1 - cnt), argTemp, NULL)); // Add parameter.
       }
       else
       {
