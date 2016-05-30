@@ -17,3 +17,8 @@ Code Generation
 ### Detailed status
 **2016-05-30 12:01 KST**  
 Initialized Phase 5.  
+  
+**2016-05-30 12:06 KST**  
+Compilation success.  
+Added <code>int size = 4;</code> line at <code>backend.cpp</code>. May need fix at later.  
+For <code>CTacReference</code>, its prototype has been changed to take two arguments, so added original array's symbol for second argument.

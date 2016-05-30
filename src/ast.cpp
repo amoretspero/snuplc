@@ -2379,7 +2379,7 @@ CTacAddr* CAstArrayDesignator::ToTac(CCodeBlock *cb)
     CTacTemp* addArrayAddressRes = cb->CreateTemp(CTypeManager::Get()->GetInt()); // Temporary variable for result of array address addition.
     cb->AddInstr(new CTacInstr(opAdd, addArrayAddressRes, arrayAddress, addDOFSRes)); // Add array address.
     
-    return new CTacReference(addArrayAddressRes->GetSymbol()); // Return reference of desired array.
+    return new CTacReference(addArrayAddressRes->GetSymbol(), _symbol); // Return reference of desired array.
   }
   else if (pointerChk != NULL) // When case of pointer.
   {
@@ -2430,7 +2430,7 @@ CTacAddr* CAstArrayDesignator::ToTac(CCodeBlock *cb)
     CTacTemp* addArrayAddressRes = cb->CreateTemp(CTypeManager::Get()->GetInt()); // Temporary variable for result of array address addition.
     cb->AddInstr(new CTacInstr(opAdd, addArrayAddressRes, new CTacName(GetSymbol()), addDOFSRes)); // Add array address.
     
-    return new CTacReference(addArrayAddressRes->GetSymbol()); // Return reference of desired array.
+    return new CTacReference(addArrayAddressRes->GetSymbol(), _symbol); // Return reference of desired array.
   }
   else // Invalid case.
   {

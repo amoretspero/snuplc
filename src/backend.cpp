@@ -481,6 +481,6 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
   // align size
   //
   // dump stack frame to assembly file
-
+  int size = 4;
   return size;
 }
