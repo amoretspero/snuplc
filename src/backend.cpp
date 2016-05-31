@@ -254,7 +254,7 @@ void CBackendx86::EmitScope(CScope *scope)
     content << "$" << stackOffsetResult/4 << ", " << "%ecx";
     //_out << _ind << "movl    " << "$" << stackOffsetResult/4 << ", " << "%ecx" << endl; // Calculate how many word(32-bit) should be initialized.
     EmitInstruction("movl", content.str()); // Calculate how many word(32-bit) should be initialized.
-    EmitInstruction("movl", "%esp, %edi"); // Set relative offset for stosl instruction.
+    EmitInstruction("mov", "%esp, %edi"); // Set relative offset for stosl instruction.
     EmitInstruction("rep", "stosl"); // Repeat stosl for %ecx times.
     // For more information of rep and stosl instruction, visit below two links.
     // rep instruction : https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-64/index.html
@@ -266,13 +266,7 @@ void CBackendx86::EmitScope(CScope *scope)
   // Function Body
   _out << _ind << "# function body" << endl;
    
-  const list<CTacInstr*> instrList = this->GetScope()->GetCodeBlock()->GetInstr(); // Gets list of instructions.
-  list<CTacInstr*>::const_iterator instrIter = instrList.begin();
-  while (instrIter != instrList.end()) // Iterates through instructions and emit them.
-  {
-    EmitInstruction(*instrIter);
-    instrIter++;
-  }
+  EmitCodeBlock(scope->GetCodeBlock()); // Emit instructions in code block of given scope.
   
   _out << endl;
   
@@ -448,36 +442,65 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
     // unary operators
     // dst = op src1
     // TODO
-    case opAdd: 
-      if (dynamic_cast<CTacConst*>(i->GetSrc(1)))
-      {
-        cout << "===(DEBUG)===At CBackendx86::EmitInstruction(CTacInstr *i), 1st src is CTacConst* " << endl;
-        if (dynamic_cast<CTacConst*>(i->GetSrc(2)))
-        {
-          cout << "===(DEBUG)===At CBackendx86::EmitInstruction(CTacInstr *i), 2nd src is CTacConst* " << endl;
-          content << "$";
-          content << dynamic_cast<CTacConst*>(i->GetSrc(1))->GetValue();
-          content << ", ";
-          content << "%eax";
-          EmitInstruction("movl", content.str(), cmt.str());
-          content.str("");
-          content << "$";
-          content << dynamic_cast<CTacConst*>(i->GetSrc(1))->GetValue();
-          content << ", ";
-          content << "%ebx";
-          EmitInstruction("movl", content.str());
-          content.clear();
-        }
-        else
-        {
-          cout << "===(DEBUG)===At CBackendx86::EmitInstruction(CTacInstr *i), 2nd src is not CTacConst* " << endl;
-        }
-      }
+    case opAdd:
+    case opSub: 
+      //
+      // For addition/subtraction of dst <- src1 +(-) src2, we follow the rule:
+      // 1) Load operand src1 to eax.
+      // 2) Load operand src2 to ebx.
+      // 3) Add/Subtract value of ebx to eax. (Instruction : addl/subl %ebx, %eax)
+      // 4) Store value of eax to dst.
+      //
+      
+      Load(i->GetSrc(1), "%eax", cmt.str());
+      
+      Load(i->GetSrc(2), "%ebx", "");
+      
+      content << "%ebx";
+      content << ", ";
+      content << "%eax";
+      if (op == opAdd) { EmitInstruction("addl", content.str()); } else { EmitInstruction("subl", content.str()); }
+      content.str("");
+      
+      Store(i->GetDest(), 'a', "");
+      break;
+    
+    case opMul:
+    case opDiv:
+      //
+      // For multiplication/division of dst <- src1 *(/) src2, we follow the rule:
+      // 1) Load operand src1 to eax.
+      // 2) Load operand src2 to ebx.
+      // 3) If opDiv, sign-extend [EAX] to [EDX:EAX]. (Instruction : cdq)
+      // 4) Multiply/Divide value of eax by ebx. (Instruction : imull/idivl %ebx)
+      // 5) Store value of eax to dst.
+      //
+      
+      Load (i->GetSrc(1), "%eax", cmt.str());
+      
+      Load (i->GetSrc(2), "%ebx", "");
+      
+      if (op == opDiv) { EmitInstruction("cdq", ""); }
+      
+      if (op == opMul) { EmitInstruction("imull", "%ebx"); } else { EmitInstruction("idivl", "%ebx"); }
+      
+      Store(i->GetDest(), 'a', "");
       break;
 
     // memory operations
     // dst = src1
     // TODO
+    case opAssign:
+      //
+      // For assignment of dst <- src1, we follow the rule:
+      // 1) Get operand src1 to eax.
+      // 2) Move value of eax to dst.
+      //
+      
+      Load(i->GetSrc(1), "%eax", cmt.str());
+
+      Store(i->GetDest(), 'a', "");
+      break;
 
     // pointer operations
     // dst = &src1
@@ -566,22 +589,47 @@ string CBackendx86::Operand(const CTac *op)
 {
   string operand;
 
+  stringstream content;
   // TODO
   // return a string representing op
   // hint: take special care of references (op of type CTacReference)
   
   const CTacConst* constCast = dynamic_cast<const CTacConst*>(op);
   const CTacTemp* tempCast = dynamic_cast<const CTacTemp*>(op);
+  const CTacName* nameCast = dynamic_cast<const CTacName*>(op);
   
   if (constCast != NULL)
   {
-    operand += "$";
-    operand += constCast->GetValue();
+    content << "$";
+    content << constCast->GetValue();
+    operand = content.str();
   }
-  
-  if (tempCast != NULL)
+  else if (tempCast != NULL)
   {
-    
+    op->print(cout);
+    const CSymbol* sym = tempCast->GetSymbol(); // TODO
+    content << sym->GetOffset();
+    content << "(";
+    content << sym->GetBaseRegister();
+    content << ")";
+    operand = content.str();
+  }
+  else if (nameCast != NULL)
+  {
+    const CSymbol* sym = nameCast->GetSymbol();
+    if (sym->GetSymbolType() == stGlobal)
+    {
+      content << sym->GetName();
+      operand = content.str();
+    }
+    else
+    {
+      content << sym->GetOffset();
+      content << "(";
+      content << sym->GetBaseRegister();
+      content << ")";
+      operand = content.str();
+    }
   }
 
   return operand;

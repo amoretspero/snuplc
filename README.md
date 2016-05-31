@@ -47,4 +47,11 @@ Basic alignment has been made.
   
 **2016-05-31 20:05 KST**  
 Fixed alignment problem with <code>setw</code> function and <code>std::right</code>.  
-Now start to implement <code>CBackendx86::Operand</code> and <code>CBackendx86::EmitInstruction</code>.
+Now start to implement <code>CBackendx86::Operand</code> and <code>CBackendx86::EmitInstruction</code>.  
+  
+**2016-06-01 01:07 KST**  
+Support <code>opSub</code>, <code>opMul</code>, <code>opDiv</code> for emitting instructions.  
+Implemented <code>CBackendx86::Operand</code> function for case of <code>CTacConst</code>, <code>CTacName</code>, <code>CTacTemp</code>.  
+Now source code uses more predefined functions, such as <code>CBackendx86::Load</code>, <code>CBackendx86::Store</code> and so on.  
+Fixed problem of <code>CTacTemp</code> without offset and base register. Cause was inappropriate calling of <code>CBackendx86::EmitCodeBlock</code>.  
+At <code>CBackendx86::EmitScope</code>, <code>CBackendx86::EmitCodeBlock</code> should be called with current scope, which is given as parameter.

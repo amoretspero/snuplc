@@ -1,6 +1,6 @@
 module hello;
 
-var i : integer;
+var i, j : integer;
 		b : boolean;
 		c : char;
 
@@ -10,9 +10,11 @@ var a : integer;
 		c1 : char;
 		b1 : boolean;
 begin
-	a := 2 + 2
+	a := z + 2;
+	z := a * 2;
+	a := z / 3
 end foo;
 
 begin
-	i := (1 + 1) * (2 + 2)
+	i := j + 1
 end hello.
