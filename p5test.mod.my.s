@@ -20,74 +20,86 @@
 
     # scope foo
 foo:
-    #    -16(%ebp)   4   [ $a        <int> %ebp-16 ]
-    #      8(%ebp)   1   [ %b        <bool> %ebp+8 ]
-    #    -17(%ebp)   1   [ $b1       <bool> %ebp-17 ]
-    #     20(%ebp)   1   [ %b5       <bool> %ebp+20 ]
-    #     12(%ebp)   1   [ %b6       <bool> %ebp+12 ]
-    #    -18(%ebp)   1   [ $c1       <char> %ebp-18 ]
-    #     24(%ebp)   1   [ %c3       <char> %ebp+24 ]
-    #     16(%ebp)   4   [ %i1       <int> %ebp+16 ]
-    #     28(%ebp)   4   [ %i2       <int> %ebp+28 ]
-    #    -24(%ebp)   4   [ $t0       <int> %ebp-24 ]
-    #    -30(%ebp)   4   [ $z        <int> %ebp-30 ]
+    # stack offsets:
+    #    -16(%ebp)   4  [ $a        <int> %ebp-16 ]
+    #      8(%ebp)   1  [ %b        <bool> %ebp+8 ]
+    #    -17(%ebp)   1  [ $b1       <bool> %ebp-17 ]
+    #     20(%ebp)   1  [ %b5       <bool> %ebp+20 ]
+    #     12(%ebp)   1  [ %b6       <bool> %ebp+12 ]
+    #    -18(%ebp)   1  [ $c1       <char> %ebp-18 ]
+    #     24(%ebp)   1  [ %c3       <char> %ebp+24 ]
+    #     16(%ebp)   4  [ %i1       <int> %ebp+16 ]
+    #     28(%ebp)   4  [ %i2       <int> %ebp+28 ]
+    #    -24(%ebp)   4  [ $t0       <int> %ebp-24 ]
+    #    -28(%ebp)   4  [ $z        <int> %ebp-28 ]
 
     # prologue
-    pushl   %ebp
-    movl    %esp, %ebp
+    pushl   %ebp                   
+    movl    %esp, %ebp             
     pushl   %ebx                    # save callee saved registers
     pushl   %esi                   
     pushl   %edi                   
-    subl    $42, %esp               # make room for locals
+    subl    $16, %esp               # make room for locals
 
-    cld                             # memset local stack area to 0
-    xorl    %eax, %eax             
-    movl    $10, %ecx
-    movl    %esp, %edi             
-    rep     stosl                  
+    xorl    %eax, %eax              # memset local stack area to 0
+    movl    %eax, 12(%esp)         
+    movl    %eax, 8(%esp)          
+    movl    %eax, 4(%esp)          
+    movl    %eax, 0(%esp)          
 
     # function body
     movl    $1, %eax                #   0:     add    t0 <- 1, 1
     movl    $1, %ebx               
-    # ???   not implemented         #   1:     assign i <- t0
+    movl    $2, %eax                #   1:     add    t1 <- 2, 2
+    movl    $2, %ebx               
+    # ???   not implemented         #   2:     mul    t2 <- t0, t1
+    # ???   not implemented         #   3:     assign i <- t2
 
-l_foo_end:
+l_foo_exit:
     # epilogue
-    addl    $42, %esp               # remove locals
-    popl    %ebx
-    popl    %esi
-    popl    %edi
-    popl    %ebp
-    ret
+    addl    $16, %esp               # remove locals
+    popl    %edi                   
+    popl    %esi                   
+    popl    %ebx                   
+    popl    %ebp                   
+    ret                            
 
     # scope hello
 main:
-    #-16    (%ebp)4      [ $t0       <int> %ebp-16 ]
+    # stack offsets:
+    #    -16(%ebp)   4  [ $t0       <int> %ebp-16 ]
+    #    -20(%ebp)   4  [ $t1       <int> %ebp-20 ]
+    #    -24(%ebp)   4  [ $t2       <int> %ebp-24 ]
 
     # prologue
-    pushl   %ebp
-    movl    %esp, %ebp
+    pushl   %ebp                   
+    movl    %esp, %ebp             
     pushl   %ebx                    # save callee saved registers
     pushl   %esi                   
     pushl   %edi                   
-    subl    $4, %esp                # make room for locals
+    subl    $12, %esp               # make room for locals
 
     xorl    %eax, %eax              # memset local stack area to 0
-    movl    %eax, 0(%esp)
+    movl    %eax, 8(%esp)          
+    movl    %eax, 4(%esp)          
+    movl    %eax, 0(%esp)          
 
     # function body
     movl    $1, %eax                #   0:     add    t0 <- 1, 1
     movl    $1, %ebx               
-    # ???   not implemented         #   1:     assign i <- t0
+    movl    $2, %eax                #   1:     add    t1 <- 2, 2
+    movl    $2, %ebx               
+    # ???   not implemented         #   2:     mul    t2 <- t0, t1
+    # ???   not implemented         #   3:     assign i <- t2
 
-l_main_end:
+l_hello_exit:
     # epilogue
-    addl    $4, %esp                # remove locals
-    popl    %ebx
-    popl    %esi
-    popl    %edi
-    popl    %ebp
-    ret
+    addl    $12, %esp               # remove locals
+    popl    %edi                   
+    popl    %esi                   
+    popl    %ebx                   
+    popl    %ebp                   
+    ret                            
 
     # end of text section
     #-----------------------------------------

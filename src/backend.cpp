@@ -221,9 +221,9 @@ void CBackendx86::EmitScope(CScope *scope)
   
   _out << _ind << "# prologue" << endl;
   
-  _out << _ind << "pushl   " << "%ebp" << endl; // Push %ebp to stack.
+  EmitInstruction("pushl", "%ebp"); // Push %ebp to stack.
   
-  _out << _ind << "movl    " << "%esp" << ", " << "%ebp" << endl; // Set %esp to %ebp.
+  EmitInstruction("movl", "%esp, %ebp"); // Set %esp to %ebp.
   
   EmitInstruction("pushl", "%ebx", "save callee saved registers"); // Save callee saved register %ebx.
   EmitInstruction("pushl", "%esi"); // Save callee saved register %esi.
@@ -239,7 +239,10 @@ void CBackendx86::EmitScope(CScope *scope)
     int stackOffsetWordCnt = stackOffsetResult/4; // Get how many word(32-bit) should be initialized.
     while (stackOffsetWordCnt > 0) // Initialize stack for local variables.
     {
-      _out << _ind << "movl    " << "%eax" << ", " << (stackOffsetWordCnt-1)*4 << "(%esp)" << endl;
+      content.str("");
+      content << "%eax" << ", " << (stackOffsetWordCnt-1)*4 << "(%esp)";
+      //_out << _ind << "movl    " << "%eax" << ", " << (stackOffsetWordCnt-1)*4 << "(%esp)" << endl;
+      EmitInstruction("movl", content.str());
       stackOffsetWordCnt--;
     }
   }
@@ -247,7 +250,10 @@ void CBackendx86::EmitScope(CScope *scope)
   {
     EmitInstruction("cld", "", "memset local stack area to 0"); // Clear direction flags.
     EmitInstruction("xorl", "%eax, %eax"); // Make %eax as zero.
-    _out << _ind << "movl    " << "$" << stackOffsetResult/4 << ", " << "%ecx" << endl; // Calculate how many word(32-bit) should be initialized.
+    content.str("");
+    content << "$" << stackOffsetResult/4 << ", " << "%ecx";
+    //_out << _ind << "movl    " << "$" << stackOffsetResult/4 << ", " << "%ecx" << endl; // Calculate how many word(32-bit) should be initialized.
+    EmitInstruction("movl", content.str()); // Calculate how many word(32-bit) should be initialized.
     EmitInstruction("movl", "%esp, %edi"); // Set relative offset for stosl instruction.
     EmitInstruction("rep", "stosl"); // Repeat stosl for %ecx times.
     // For more information of rep and stosl instruction, visit below two links.
@@ -271,7 +277,14 @@ void CBackendx86::EmitScope(CScope *scope)
   _out << endl;
   
   // Function Epilogue
-  _out << "l_" << label << "_end" << ":" << endl; // Function epilogue label.
+  if (scope->GetParent() != NULL)
+  {
+    _out << "l_" << label << "_exit" << ":" << endl; // Function epilogue label.
+  }
+  else
+  {
+    _out << "l_" << _m->GetName() << "_exit" << ":" << endl;
+  }
   
   _out << _ind << "# epilogue" << endl;
   
@@ -279,13 +292,13 @@ void CBackendx86::EmitScope(CScope *scope)
   content << "$" << stackOffsetResult << ", " << "%esp";
   EmitInstruction("addl", content.str(), "remove locals"); // Remove locals on stack.
   
-  _out << _ind << "popl    " << "%ebx" << endl; // Restore callee saved register %ebx.
-  _out << _ind << "popl    " << "%esi" << endl; // Restore callee saved register %esi.
-  _out << _ind << "popl    " << "%edi" << endl; // Restore callee saved register %edi.
+  EmitInstruction("popl", "%edi"); // Restore callee saved register %ebx.
+  EmitInstruction("popl", "%esi"); // Restore callee saved register %esi.
+  EmitInstruction("popl", "%ebx"); // Restore callee saved register %edi.
   
-  _out << _ind << "popl    " << "%ebp" << endl; // Restore base register %ebp.
+  EmitInstruction("popl", "%ebp"); // Restore base register %ebp.
   
-  _out << _ind << "ret" << endl; // Return from this function.
+  EmitInstruction("ret"); // Return from this function.
 
   _out << endl;
 }
@@ -556,6 +569,20 @@ string CBackendx86::Operand(const CTac *op)
   // TODO
   // return a string representing op
   // hint: take special care of references (op of type CTacReference)
+  
+  const CTacConst* constCast = dynamic_cast<const CTacConst*>(op);
+  const CTacTemp* tempCast = dynamic_cast<const CTacTemp*>(op);
+  
+  if (constCast != NULL)
+  {
+    operand += "$";
+    operand += constCast->GetValue();
+  }
+  
+  if (tempCast != NULL)
+  {
+    
+  }
 
   return operand;
 }
@@ -653,7 +680,7 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
         if (occupiedStack%4 != 0)
         {
           int alignRemainder = occupiedStack%4;
-          occupiedStack += occupiedStack + (4 - alignRemainder);
+          occupiedStack += (4 - alignRemainder);
           currentLocalOffset -= (4 - alignRemainder);
         }
         
@@ -725,22 +752,27 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
   
   // Dump stack frame to assembly file.
   
+  _out << _ind << "# stack offsets:" << endl;
   for (localSymCnt = 0; localSymCnt < slist.size(); localSymCnt++)
   {
     CSymbol* lsym = slist[localSymCnt];
     if (lsym->GetSymbolType() == stLocal || lsym->GetSymbolType() == stParam)
     {
+      cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), _ind is : <" << _ind << ">." << endl;
+      cout << _ind << "#" << setw(7) << lsym->GetOffset() << "(" << lsym->GetBaseRegister() << ")" << setw(4) << lsym->GetDataType()->GetDataSize() << setw(2) << lsym << endl;
       _out << _ind 
-          << "#" << setw(7) 
-          << lsym->GetOffset() 
-          << "(" 
-          << lsym->GetBaseRegister() 
-          << ")" 
-          << setw(4) 
-          << lsym->GetDataType()->GetDataSize()
-          << setw(3)
-          << lsym
-          << endl;
+           << "#" 
+           << std::right
+           << setw(7)
+           << lsym->GetOffset() 
+           << "(" 
+           << lsym->GetBaseRegister() 
+           << ")" 
+           << setw(4) 
+           << lsym->GetDataType()->GetDataSize()
+           << setw(2)
+           << lsym
+           << endl;
     }
   }
   

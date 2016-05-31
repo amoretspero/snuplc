@@ -14,5 +14,5 @@ begin
 end foo;
 
 begin
-	i := 1 + 1
+	i := (1 + 1) * (2 + 2)
 end hello.

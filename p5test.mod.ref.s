@@ -68,6 +68,8 @@ l_foo_exit:
 main:
     # stack offsets:
     #    -16(%ebp)   4  [ $t0       <int> %ebp-16 ]
+    #    -20(%ebp)   4  [ $t1       <int> %ebp-20 ]
+    #    -24(%ebp)   4  [ $t2       <int> %ebp-24 ]
 
     # prologue
     pushl   %ebp                   
@@ -75,9 +77,11 @@ main:
     pushl   %ebx                    # save callee saved registers
     pushl   %esi                   
     pushl   %edi                   
-    subl    $4, %esp                # make room for locals
+    subl    $12, %esp               # make room for locals
 
     xorl    %eax, %eax              # memset local stack area to 0
+    movl    %eax, 8(%esp)          
+    movl    %eax, 4(%esp)          
     movl    %eax, 0(%esp)          
 
     # function body
@@ -85,12 +89,20 @@ main:
     movl    $1, %ebx               
     addl    %ebx, %eax             
     movl    %eax, -16(%ebp)        
-    movl    -16(%ebp), %eax         #   1:     assign i <- t0
+    movl    $2, %eax                #   1:     add    t1 <- 2, 2
+    movl    $2, %ebx               
+    addl    %ebx, %eax             
+    movl    %eax, -20(%ebp)        
+    movl    -16(%ebp), %eax         #   2:     mul    t2 <- t0, t1
+    movl    -20(%ebp), %ebx        
+    imull   %ebx                   
+    movl    %eax, -24(%ebp)        
+    movl    -24(%ebp), %eax         #   3:     assign i <- t2
     movl    %eax, i                
 
 l_hello_exit:
     # epilogue
-    addl    $4, %esp                # remove locals
+    addl    $12, %esp               # remove locals
     popl    %edi                   
     popl    %esi                   
     popl    %ebx                   

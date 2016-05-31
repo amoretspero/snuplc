@@ -43,4 +43,8 @@ For more information about <code>rep</code> and <code>stosl</code> instruction, 
 **2016-05-31 20:56 KST**  
 Fixed bug with parameter index in <code>parser.cpp</code>.  
 Implemented <code>CBackendx86::ComputeStackOffset</code> for boolean, char typed parameters and local variables.  
-Basic alignment has been made.
+Basic alignment has been made.  
+  
+**2016-05-31 20:05 KST**  
+Fixed alignment problem with <code>setw</code> function and <code>std::right</code>.  
+Now start to implement <code>CBackendx86::Operand</code> and <code>CBackendx86::EmitInstruction</code>.
