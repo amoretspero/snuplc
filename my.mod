@@ -7,6 +7,7 @@ var i : integer;
 function foo (b, v : integer) : integer;
 var a : integer;
 		z : integer;
+		z1 : integer;
 begin
 	a := 2 + 2
 end foo;

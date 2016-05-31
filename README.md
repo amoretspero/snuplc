@@ -29,4 +29,13 @@ Added function prologue and epilogue.
   
 **2016-05-31 16:40 KST**  
 Implemented basic <code>EmitInstruction</code> for opAdd.  
-Implementing <code>CBackendx86::ComputeStackOffset</code>.
+Implementing <code>CBackendx86::ComputeStackOffset</code>.  
+  
+**2016-05-31 18:03 KST**  
+Implemented <code>CBackendx86::ComputeStackOffset</code> for integer typed parameters and local variables.  
+Added stack initialization at generation of function prologue.  
+For stack size smaller than 20 bytes(five 32-bit words), initialize with <code>movl %eax, (offset)(%esp)</code> instruction.  
+For stack size equal to or larger than 20 bytes(five 32-bit words), initialize with <code>rep</code> and <code>stosl</code> instruction.   
+For more information about <code>rep</code> and <code>stosl</code> instruction, please visit below links.  
+[rep - Oracle documentation](https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-64/index.html)  
+[stosl - Oracle documentaion](https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-60/index.html)  

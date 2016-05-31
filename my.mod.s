@@ -20,75 +20,69 @@
 
     # scope foo
 foo:
-    # stack offsets:
-    #    -16(%ebp)   4  [ $a        <int> %ebp-16 ]
-    #      8(%ebp)   4  [ %b        <int> %ebp+8 ]
-    #    -20(%ebp)   4  [ $t0       <int> %ebp-20 ]
-    #     12(%ebp)   4  [ %v        <int> %ebp+12 ]
-    #    -24(%ebp)   4  [ $z        <int> %ebp-24 ]
+    #    -16(%ebp)   4   [ $a        <int> %ebp-16 ]
+    #      8(%ebp)   4   [ %b        <int> %ebp+8 ]
+    #    -20(%ebp)   4   [ $t0       <int> %ebp-20 ]
+    #     12(%ebp)   4   [ %v        <int> %ebp+12 ]
+    #    -24(%ebp)   4   [ $z        <int> %ebp-24 ]
+    #    -28(%ebp)   4   [ $z1       <int> %ebp-28 ]
 
     # prologue
-    pushl   %ebp                   
-    movl    %esp, %ebp             
+    pushl   %ebp
+    movl    %esp, %ebp
     pushl   %ebx                    # save callee saved registers
     pushl   %esi                   
     pushl   %edi                   
-    subl    $12, %esp               # make room for locals
+    subl    $16, %esp               # make room for locals
 
     xorl    %eax, %eax              # memset local stack area to 0
-    movl    %eax, 8(%esp)          
-    movl    %eax, 4(%esp)          
-    movl    %eax, 0(%esp)          
+    movl    %eax, 12(%esp)
+    movl    %eax, 8(%esp)
+    movl    %eax, 4(%esp)
+    movl    %eax, 0(%esp)
 
     # function body
-    movl    $2, %eax                #   0:     add    t0 <- 2, 2
-    movl    $2, %ebx               
-    addl    %ebx, %eax             
-    movl    %eax, -20(%ebp)        
-    movl    -20(%ebp), %eax         #   1:     assign a <- t0
-    movl    %eax, -16(%ebp)        
+    movl    $1, %eax                #   0:     add    t0 <- 1, 1
+    movl    $1, %ebx               
+    # ???   not implemented         #   1:     assign i <- t0
 
-l_foo_exit:
+l_foo_end:
     # epilogue
-    addl    $12, %esp               # remove locals
-    popl    %edi                   
-    popl    %esi                   
-    popl    %ebx                   
-    popl    %ebp                   
-    ret                            
+    addl    $16, %esp
+    popl    %ebx
+    popl    %esi
+    popl    %edi
+    popl    %ebp
+    ret
 
     # scope hello
 main:
-    # stack offsets:
-    #    -16(%ebp)   4  [ $t0       <int> %ebp-16 ]
+    #-16    (%ebp)4      [ $t0       <int> %ebp-16 ]
 
     # prologue
-    pushl   %ebp                   
-    movl    %esp, %ebp             
+    pushl   %ebp
+    movl    %esp, %ebp
     pushl   %ebx                    # save callee saved registers
     pushl   %esi                   
     pushl   %edi                   
     subl    $4, %esp                # make room for locals
 
     xorl    %eax, %eax              # memset local stack area to 0
-    movl    %eax, 0(%esp)          
+    movl    %eax, 0(%esp)
 
     # function body
     movl    $1, %eax                #   0:     add    t0 <- 1, 1
     movl    $1, %ebx               
-    addl    %ebx, %eax             
-    movl    %eax, -16(%ebp)        
-    movl    -16(%ebp), %eax         #   1:     assign i <- t0
-    movl    %eax, i                
+    # ???   not implemented         #   1:     assign i <- t0
 
-l_hello_exit:
+l_main_end:
     # epilogue
-    addl    $4, %esp                # remove locals
-    popl    %edi                   
-    popl    %esi                   
-    popl    %ebx                   
-    popl    %ebp                   
-    ret                            
+    addl    $4, %esp
+    popl    %ebx
+    popl    %esi
+    popl    %edi
+    popl    %ebp
+    ret
 
     # end of text section
     #-----------------------------------------

@@ -211,20 +211,54 @@ void CBackendx86::EmitScope(CScope *scope)
   // emit function epilogue
   
   // Compute stack offsets.
-  if (scope->GetParent() != NULL)
-  {
+  int stackOffsetResult = 0;
+  //if (scope->GetParent() != NULL)
+  //{
     cout << "===(DEBUG)===At CBackendx86::EmitScope(CScope *scope), when GetParent() is not NULL, scope name is : " << scope->GetName() << endl;
-    ComputeStackOffsets(scope->GetSymbolTable(), -12, -12);
-  }
+    stackOffsetResult = ComputeStackOffsets(scope->GetSymbolTable(), 8, -12);
+  //}
+  _out << endl;
   
   // Function Prologue
+  stringstream content; // stringstream object for content of argument for EmitInstruction.
+  
   _out << _ind << "# prologue" << endl;
-  _out << _ind << "pushl   " << "%ebp" << endl;
-  _out << _ind << "movl    " << "%esp" << ", " << "%ebp" << endl;
-  _out << _ind << "pushl   " << "%ebx" << endl;
-  _out << _ind << "pushl   " << "%esi" << endl;
-  _out << _ind << "pushl   " << "%edi" << endl;
-  _out << _ind << "subl    " << "$???" << ", " << "%esp" << endl; // TODO
+  
+  _out << _ind << "pushl   " << "%ebp" << endl; // Push %ebp to stack.
+  
+  _out << _ind << "movl    " << "%esp" << ", " << "%ebp" << endl; // Set %esp to %ebp.
+  
+  EmitInstruction("pushl", "%ebx", "save callee saved registers"); // Save callee saved register %ebx.
+  EmitInstruction("pushl", "%esi"); // Save callee saved register %esi.
+  EmitInstruction("pushl", "%edi"); // Save callee saved register %edi.
+  content << "$" << stackOffsetResult << ", " << "%esp";
+  EmitInstruction("subl", content.str(), "make room for locals"); // Make stack for local variables.
+  
+  _out << endl;
+  
+  if (stackOffsetResult < 20) // When stack offset is rather small. Manually set them. This may take at most 5 lines of assembly code.
+  {
+    EmitInstruction("xorl", "%eax, %eax", "memset local stack area to 0"); // Make %eax as zero.
+    int stackOffsetWordCnt = stackOffsetResult/4; // Get how many word(32-bit) should be initialized.
+    while (stackOffsetWordCnt > 0) // Initialize stack for local variables.
+    {
+      _out << _ind << "movl    " << "%eax" << ", " << (stackOffsetWordCnt-1)*4 << "(%esp)" << endl;
+      stackOffsetWordCnt--;
+    }
+  }
+  else // When stack offset is rather big. Use cld, rep, stosl to initialize stack for local variables.
+  {
+    EmitInstruction("cld", "", "memset local stack area to 0"); // Clear direction flags.
+    EmitInstruction("xorl", "%eax, %eax"); // Make %eax as zero.
+    _out << _ind << "movl    " << "$" << stackOffsetResult/4 << ", " << "%ecx" << endl; // Calculate how many word(32-bit) should be initialized.
+    EmitInstruction("movl", "%esp, %edi"); // Set relative offset for stosl instruction.
+    EmitInstruction("rep", "stosl"); // Repeat stosl for %ecx times.
+    // For more information of rep and stosl instruction, visit below two links.
+    // rep instruction : https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-64/index.html
+    // stosl instruction : https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-60/index.html
+  }
+  
+  _out << endl;
   
   // Function Body
   _out << _ind << "# function body" << endl;
@@ -237,13 +271,17 @@ void CBackendx86::EmitScope(CScope *scope)
     instrIter++;
   }
   
+  _out << endl;
+  
   // Function Epilogue
+  _out << "l_" << label << "_end" << ":" << endl;
   _out << _ind << "# epilogue" << endl;
-  _out << _ind << "addl    " << "$???" << ", " << "%esp" << endl;
+  _out << _ind << "addl    " << "$" << stackOffsetResult << ", " << "%esp" << endl;
   _out << _ind << "popl    " << "%ebx" << endl;
   _out << _ind << "popl    " << "%esi" << endl;
   _out << _ind << "popl    " << "%edi" << endl;
   _out << _ind << "popl    " << "%ebp" << endl;
+  _out << _ind << "ret" << endl;
 
   _out << endl;
 }
@@ -578,8 +616,9 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
   
   size_t localSymCnt = 0;
   
-  int defaultStackOffset = -12;
-  int currentStackOffset = -12;
+  int currentParamOffset = param_ofs;
+  int currentLocalOffset = local_ofs;
+  size_t occupiedStack = 0;
 
   // TODO
   // foreach local symbol l in slist do
@@ -601,16 +640,38 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
     
     cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), lsym is : " << lsym->GetName() << ", symbol type is : " << lsym->GetSymbolType() << endl;
     
-    // Case when symbol is integer type.
-    if (lsym->GetDataType()->IsInt())
+    if (lsym->GetSymbolType() == stLocal)
     {
-      currentStackOffset -= 4;
-      lsym->SetOffset(currentStackOffset);
-      lsym->SetBaseRegister("%ebp");
+      // Case when symbol is integer type.
+      if (lsym->GetDataType()->IsInt())
+      {
+        currentLocalOffset -= 4;
+        occupiedStack += 4;
+        lsym->SetOffset(currentLocalOffset);
+        lsym->SetBaseRegister("%ebp");
+      }
     }
   }
   
   // For parameters.
+  
+  for (localSymCnt = 0; localSymCnt < slist.size(); localSymCnt++)
+  {
+    CSymbol* lsym = slist[localSymCnt];
+    
+    cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), lsym is : " << lsym->GetName() << ", symbol type is : " << lsym->GetSymbolType() << endl;
+    
+    if (lsym->GetSymbolType() == stParam)
+    {
+      // Case when symbol is integer type.
+      if (lsym->GetDataType()->IsInt())
+      {
+        lsym->SetOffset(currentParamOffset);
+        lsym->SetBaseRegister("%ebp");
+        currentParamOffset += 4;
+      }
+    }
+  }
   
   // Align size.
   
@@ -619,20 +680,23 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
   for (localSymCnt = 0; localSymCnt < slist.size(); localSymCnt++)
   {
     CSymbol* lsym = slist[localSymCnt];
-    _out << _ind 
-         << "#" << setw(7) 
-         << lsym->GetOffset() 
-         << "(" 
-         << lsym->GetBaseRegister() 
-         << ")" 
-         << setw(4) 
-         << lsym->GetDataType()->GetDataSize()
-         << setw(3)
-         << lsym
-         << endl;
+    if (lsym->GetSymbolType() == stLocal || lsym->GetSymbolType() == stParam)
+    {
+      _out << _ind 
+          << "#" << setw(7) 
+          << lsym->GetOffset() 
+          << "(" 
+          << lsym->GetBaseRegister() 
+          << ")" 
+          << setw(4) 
+          << lsym->GetDataType()->GetDataSize()
+          << setw(3)
+          << lsym
+          << endl;
+    }
   }
   
   
   int size = 4;
-  return size;
+  return occupiedStack;
 }
