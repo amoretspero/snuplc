@@ -39,3 +39,8 @@ For stack size equal to or larger than 20 bytes(five 32-bit words), initialize w
 For more information about <code>rep</code> and <code>stosl</code> instruction, please visit below links.  
 [rep - Oracle documentation](https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-64/index.html)  
 [stosl - Oracle documentaion](https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-60/index.html)  
+  
+**2016-05-31 20:56 KST**  
+Fixed bug with parameter index in <code>parser.cpp</code>.  
+Implemented <code>CBackendx86::ComputeStackOffset</code> for boolean, char typed parameters and local variables.  
+Basic alignment has been made.

@@ -711,7 +711,14 @@ CType* CParser::GetParams (CScanner* _scanner, CTypeManager* _tm, vector<vector<
   if (_scanner->Peek().GetType() == tSemicolon) // When there are more variables.
   {
     Consume(tSemicolon);
-    return GetParams(_scanner, _tm, paramVec, (paramVec->at(paramVec->size() - 1)).size() + lastIdx - 1); // Recursive call.
+    int nextIdx = 0; // Calculated next index to insert with parameter.
+    vector<vector<CSymParam*> >::iterator paramVecIter = paramVec->begin();
+    while (paramVecIter != paramVec->end()) // Iterates thourgh parameter vector and calculate next index.
+    {
+      nextIdx += (*paramVecIter).size();
+      paramVecIter++;
+    }
+    return GetParams(_scanner, _tm, paramVec, nextIdx); // Recursive call.
   }
   else
   {

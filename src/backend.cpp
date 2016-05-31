@@ -212,11 +212,8 @@ void CBackendx86::EmitScope(CScope *scope)
   
   // Compute stack offsets.
   int stackOffsetResult = 0;
-  //if (scope->GetParent() != NULL)
-  //{
-    cout << "===(DEBUG)===At CBackendx86::EmitScope(CScope *scope), when GetParent() is not NULL, scope name is : " << scope->GetName() << endl;
-    stackOffsetResult = ComputeStackOffsets(scope->GetSymbolTable(), 8, -12);
-  //}
+  cout << "===(DEBUG)===At CBackendx86::EmitScope(CScope *scope), when GetParent() is not NULL, scope name is : " << scope->GetName() << endl;
+  stackOffsetResult = ComputeStackOffsets(scope->GetSymbolTable(), 8, -12); // Compute stack offset.
   _out << endl;
   
   // Function Prologue
@@ -263,9 +260,9 @@ void CBackendx86::EmitScope(CScope *scope)
   // Function Body
   _out << _ind << "# function body" << endl;
    
-  const list<CTacInstr*> instrList = this->GetScope()->GetCodeBlock()->GetInstr();
+  const list<CTacInstr*> instrList = this->GetScope()->GetCodeBlock()->GetInstr(); // Gets list of instructions.
   list<CTacInstr*>::const_iterator instrIter = instrList.begin();
-  while (instrIter != instrList.end())
+  while (instrIter != instrList.end()) // Iterates through instructions and emit them.
   {
     EmitInstruction(*instrIter);
     instrIter++;
@@ -274,14 +271,21 @@ void CBackendx86::EmitScope(CScope *scope)
   _out << endl;
   
   // Function Epilogue
-  _out << "l_" << label << "_end" << ":" << endl;
+  _out << "l_" << label << "_end" << ":" << endl; // Function epilogue label.
+  
   _out << _ind << "# epilogue" << endl;
-  _out << _ind << "addl    " << "$" << stackOffsetResult << ", " << "%esp" << endl;
-  _out << _ind << "popl    " << "%ebx" << endl;
-  _out << _ind << "popl    " << "%esi" << endl;
-  _out << _ind << "popl    " << "%edi" << endl;
-  _out << _ind << "popl    " << "%ebp" << endl;
-  _out << _ind << "ret" << endl;
+  
+  content.str(""); // Initialize content stringstream object.
+  content << "$" << stackOffsetResult << ", " << "%esp";
+  EmitInstruction("addl", content.str(), "remove locals"); // Remove locals on stack.
+  
+  _out << _ind << "popl    " << "%ebx" << endl; // Restore callee saved register %ebx.
+  _out << _ind << "popl    " << "%esi" << endl; // Restore callee saved register %esi.
+  _out << _ind << "popl    " << "%edi" << endl; // Restore callee saved register %edi.
+  
+  _out << _ind << "popl    " << "%ebp" << endl; // Restore base register %ebp.
+  
+  _out << _ind << "ret" << endl; // Return from this function.
 
   _out << endl;
 }
@@ -645,8 +649,30 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
       // Case when symbol is integer type.
       if (lsym->GetDataType()->IsInt())
       {
+        // Check for alignment
+        if (occupiedStack%4 != 0)
+        {
+          int alignRemainder = occupiedStack%4;
+          occupiedStack += occupiedStack + (4 - alignRemainder);
+          currentLocalOffset -= (4 - alignRemainder);
+        }
+        
         currentLocalOffset -= 4;
         occupiedStack += 4;
+        lsym->SetOffset(currentLocalOffset);
+        lsym->SetBaseRegister("%ebp");
+      }
+      else if (lsym->GetDataType()->IsBoolean())
+      {
+        currentLocalOffset -= 1;
+        occupiedStack += 1;
+        lsym->SetOffset(currentLocalOffset);
+        lsym->SetBaseRegister("%ebp");
+      }
+      else if (lsym->GetDataType()->IsChar())
+      {
+        currentLocalOffset -= 1;
+        occupiedStack += 1;
         lsym->SetOffset(currentLocalOffset);
         lsym->SetBaseRegister("%ebp");
       }
@@ -654,21 +680,43 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
   }
   
   // For parameters.
-  
   for (localSymCnt = 0; localSymCnt < slist.size(); localSymCnt++)
   {
     CSymbol* lsym = slist[localSymCnt];
     
     cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), lsym is : " << lsym->GetName() << ", symbol type is : " << lsym->GetSymbolType() << endl;
     
+    // TODO: Need to get parameter order to set correct offset.
+    
     if (lsym->GetSymbolType() == stParam)
     {
       // Case when symbol is integer type.
       if (lsym->GetDataType()->IsInt())
       {
-        lsym->SetOffset(currentParamOffset);
+        //lsym->SetOffset(currentParamOffset);
+        //lsym->SetBaseRegister("%ebp");
+        //currentParamOffset += 4;
+        cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), index of lsym is : " << dynamic_cast<CSymParam*>(lsym)->GetIndex() << endl;
+        lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1));
         lsym->SetBaseRegister("%ebp");
-        currentParamOffset += 4;
+      }
+      else if (lsym->GetDataType()->IsBoolean())
+      {
+        //lsym->SetOffset(currentParamOffset);
+        //lsym->SetBaseRegister("%ebp");
+        //currentParamOffset += 4;
+        cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), index of lsym is : " << dynamic_cast<CSymParam*>(lsym)->GetIndex() << endl;
+        lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1));
+        lsym->SetBaseRegister("%ebp");
+      }
+      else if (lsym->GetDataType()->IsChar())
+      {
+        //lsym->SetOffset(currentParamOffset);
+        //lsym->SetBaseRegister("%ebp");
+        //currentParamOffset += 4;
+        cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), index of lsym is : " << dynamic_cast<CSymParam*>(lsym)->GetIndex() << endl;
+        lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1));
+        lsym->SetBaseRegister("%ebp");
       }
     }
   }
