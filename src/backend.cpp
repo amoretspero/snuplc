@@ -137,6 +137,18 @@ void CBackendx86::EmitCode(void)
   // forall s in subscopes do
   //   EmitScope(s)
   // EmitScope(program)
+  
+  SetScope(_m);  
+  
+  const vector<CScope*> subscopes = GetScope()->GetSubscopes();
+  vector<CScope*>::const_iterator subscopesIter = subscopes.begin();
+  while (subscopesIter != subscopes.end())
+  {
+    EmitScope(*subscopesIter);
+    subscopesIter++;
+  }
+  
+  EmitScope(GetScope());
 
   _out << _ind << "# end of text section" << endl
        << _ind << "#-----------------------------------------" << endl
@@ -197,6 +209,34 @@ void CBackendx86::EmitScope(CScope *scope)
   //   EmitInstruction(i)
   //
   // emit function epilogue
+  
+  // Function Prologue
+  _out << _ind << "# prologue" << endl;
+  _out << _ind << "pushl   " << "%ebp" << endl;
+  _out << _ind << "movl    " << "%esp" << ", " << "%ebp" << endl;
+  _out << _ind << "pushl   " << "%ebx" << endl;
+  _out << _ind << "pushl   " << "%esi" << endl;
+  _out << _ind << "pushl   " << "%edi" << endl;
+  _out << _ind << "subl    " << "$???" << ", " << "%esp" << endl; // TODO
+  
+  // Function Body
+  _out << _ind << "# function body" << endl;
+   
+  const list<CTacInstr*> instrList = this->GetScope()->GetCodeBlock()->GetInstr();
+  list<CTacInstr*>::const_iterator instrIter = instrList.begin();
+  while (instrIter != instrList.end())
+  {
+    EmitInstruction(*instrIter);
+    instrIter++;
+  }
+  
+  // Function Epilogue
+  _out << _ind << "# epilogue" << endl;
+  _out << _ind << "addl    " << "$???" << ", " << "%esp" << endl;
+  _out << _ind << "popl    " << "%ebx" << endl;
+  _out << _ind << "popl    " << "%esi" << endl;
+  _out << _ind << "popl    " << "%edi" << endl;
+  _out << _ind << "popl    " << "%ebp" << endl;
 
   _out << endl;
 }
@@ -312,6 +352,14 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
     // unary operators
     // dst = op src1
     // TODO
+    case opAdd: 
+      if (dynamic_cast<CTacConst*>(i->GetSrc(1)))
+      {
+        if (dynamic_cast<CTacConst*>(i->GetSrc(2)))
+        {
+          _out << _ind << "movl    " << "%eax, " << Imm(dynamic_cast<CTacConst*>(i->GetSrc(1))->GetValue()) << cmt << endl;
+        }
+      }
 
     // memory operations
     // dst = src1
