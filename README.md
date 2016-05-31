@@ -25,4 +25,8 @@ For <code>CTacReference</code>, its prototype has been changed to take two argum
   
 **2016-05-31 14:52 KST**  
 Changed reference compiler with bugfixed one.  
-Added function prologue and epilogue.
+Added function prologue and epilogue.  
+  
+**2016-05-31 16:40 KST**  
+Implemented basic <code>EmitInstruction</code> for opAdd.  
+Implementing <code>CBackendx86::ComputeStackOffset</code>.

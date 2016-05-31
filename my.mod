@@ -4,12 +4,13 @@ var i : integer;
 		b : boolean;
 		c : char;
 
-function foo () : integer;
-var arr0 : integer[5][5];
-		arr1 : integer[5];
+function foo (b, v : integer) : integer;
+var a : integer;
+		z : integer;
 begin
+	a := 2 + 2
 end foo;
 
 begin
-	i := 1 * 2 + 3 * 4
+	i := 1 + 1
 end hello.

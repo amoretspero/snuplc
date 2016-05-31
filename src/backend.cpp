@@ -210,6 +210,13 @@ void CBackendx86::EmitScope(CScope *scope)
   //
   // emit function epilogue
   
+  // Compute stack offsets.
+  if (scope->GetParent() != NULL)
+  {
+    cout << "===(DEBUG)===At CBackendx86::EmitScope(CScope *scope), when GetParent() is not NULL, scope name is : " << scope->GetName() << endl;
+    ComputeStackOffsets(scope->GetSymbolTable(), -12, -12);
+  }
+  
   // Function Prologue
   _out << _ind << "# prologue" << endl;
   _out << _ind << "pushl   " << "%ebp" << endl;
@@ -323,6 +330,39 @@ void CBackendx86::EmitLocalData(CScope *scope)
   assert(scope != NULL);
 
   // TODO TODO!
+  CSymtab* st = scope->GetSymbolTable();
+  assert(st != NULL);
+  
+  vector<CSymbol*> slist = st->GetSymbols();
+  
+  cout << "===(DEBUG)=== At CBackendx86::EmitLocalData(CScope *scope), scope name is : " << scope->GetName() << ", size of slist is : " << slist.size() << endl;
+  
+  bool header = false;
+  
+  _out << dec;
+  
+  size_t localSymCnt = 0;
+  
+  for (localSymCnt = 0; localSymCnt < slist.size(); localSymCnt++)
+  {
+    CSymbol* s = slist[localSymCnt];
+    
+    const CType* symbolDataType = s->GetDataType();
+    
+    if (!header)
+    {
+      _out << _ind << "# stack offsets: " << endl;
+      header = true;
+    }
+    
+    if (s->GetSymbolType() == stLocal)
+    {
+      _out << _ind << "#" << setw(7) << s->GetOffset() << "(" << s->GetBaseRegister() << ")" << " " << symbolDataType->GetDataSize() << " ";
+      s->print(_out);
+      _out << endl;
+    }
+  }
+  
 }
 
 void CBackendx86::EmitCodeBlock(CCodeBlock *cb)
@@ -340,6 +380,7 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
   assert(i != NULL);
 
   ostringstream cmt;
+  ostringstream content;
   string mnm;
   cmt << i;
 
@@ -355,11 +396,29 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
     case opAdd: 
       if (dynamic_cast<CTacConst*>(i->GetSrc(1)))
       {
+        cout << "===(DEBUG)===At CBackendx86::EmitInstruction(CTacInstr *i), 1st src is CTacConst* " << endl;
         if (dynamic_cast<CTacConst*>(i->GetSrc(2)))
         {
-          _out << _ind << "movl    " << "%eax, " << Imm(dynamic_cast<CTacConst*>(i->GetSrc(1))->GetValue()) << cmt << endl;
+          cout << "===(DEBUG)===At CBackendx86::EmitInstruction(CTacInstr *i), 2nd src is CTacConst* " << endl;
+          content << "$";
+          content << dynamic_cast<CTacConst*>(i->GetSrc(1))->GetValue();
+          content << ", ";
+          content << "%eax";
+          EmitInstruction("movl", content.str(), cmt.str());
+          content.str("");
+          content << "$";
+          content << dynamic_cast<CTacConst*>(i->GetSrc(1))->GetValue();
+          content << ", ";
+          content << "%ebx";
+          EmitInstruction("movl", content.str());
+          content.clear();
+        }
+        else
+        {
+          cout << "===(DEBUG)===At CBackendx86::EmitInstruction(CTacInstr *i), 2nd src is not CTacConst* " << endl;
         }
       }
+      break;
 
     // memory operations
     // dst = src1
@@ -516,6 +575,11 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
 {
   assert(symtab != NULL);
   vector<CSymbol*> slist = symtab->GetSymbols();
+  
+  size_t localSymCnt = 0;
+  
+  int defaultStackOffset = -12;
+  int currentStackOffset = -12;
 
   // TODO
   // foreach local symbol l in slist do
@@ -529,6 +593,46 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
   // align size
   //
   // dump stack frame to assembly file
+  
+  // For local symbols.
+  for (; localSymCnt < slist.size(); localSymCnt++)
+  {
+    CSymbol* lsym = slist[localSymCnt];
+    
+    cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), lsym is : " << lsym->GetName() << ", symbol type is : " << lsym->GetSymbolType() << endl;
+    
+    // Case when symbol is integer type.
+    if (lsym->GetDataType()->IsInt())
+    {
+      currentStackOffset -= 4;
+      lsym->SetOffset(currentStackOffset);
+      lsym->SetBaseRegister("%ebp");
+    }
+  }
+  
+  // For parameters.
+  
+  // Align size.
+  
+  // Dump stack frame to assembly file.
+  
+  for (localSymCnt = 0; localSymCnt < slist.size(); localSymCnt++)
+  {
+    CSymbol* lsym = slist[localSymCnt];
+    _out << _ind 
+         << "#" << setw(7) 
+         << lsym->GetOffset() 
+         << "(" 
+         << lsym->GetBaseRegister() 
+         << ")" 
+         << setw(4) 
+         << lsym->GetDataType()->GetDataSize()
+         << setw(3)
+         << lsym
+         << endl;
+  }
+  
+  
   int size = 4;
   return size;
 }
