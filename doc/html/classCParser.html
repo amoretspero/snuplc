@@ -138,6 +138,12 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a7416b72e9279db1d3b569465cdb22d6e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a7416b72e9279db1d3b569465cdb22d6e">CheckParamDups</a> (vector&lt; vector&lt; <a class="el" href="classCSymParam.html">CSymParam</a> * &gt; &gt; *paramVec, const string elemToFind)</td></tr>
 <tr class="memdesc:a7416b72e9279db1d3b569465cdb22d6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check parameter duplication for given name string.  <a href="#a7416b72e9279db1d3b569465cdb22d6e">More...</a><br/></td></tr>
 <tr class="separator:a7416b72e9279db1d3b569465cdb22d6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8b84611747b3856d2d59ba94073dfb6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAstExpression.html">CAstExpression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#af8b84611747b3856d2d59ba94073dfb6">getBinaryLHS</a> (<a class="el" href="classCAstBinaryOp.html">CAstBinaryOp</a> *_lhs, bool _isNeg, bool _isPos)</td></tr>
+<tr class="memdesc:af8b84611747b3856d2d59ba94073dfb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the expression with negative or positive operator applied.  <a href="#af8b84611747b3856d2d59ba94073dfb6">More...</a><br/></td></tr>
+<tr class="separator:af8b84611747b3856d2d59ba94073dfb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ebde2ae35f257dee85d80a3735263c2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCParser.html#a7ebde2ae35f257dee85d80a3735263c2">isLeftmostConstant</a> (<a class="el" href="classCAstBinaryOp.html">CAstBinaryOp</a> *_lhs)</td></tr>
+<tr class="memdesc:a7ebde2ae35f257dee85d80a3735263c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if leftmost operand of given binary operator is constant or not.  <a href="#a7ebde2ae35f257dee85d80a3735263c2">More...</a><br/></td></tr>
+<tr class="separator:a7ebde2ae35f257dee85d80a3735263c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -280,7 +286,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00949">949</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00956">956</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -331,7 +337,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01083">1083</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01090">1090</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -468,7 +474,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01154">1154</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01161">1161</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -508,7 +514,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01525">1525</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01685">1685</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -566,7 +572,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00743">743</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00750">750</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -607,6 +613,58 @@ License</h1>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af8b84611747b3856d2d59ba94073dfb6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCAstExpression.html">CAstExpression</a> * CParser::getBinaryLHS </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCAstBinaryOp.html">CAstBinaryOp</a> *&#160;</td>
+          <td class="paramname"><em>_lhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_isNeg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_isPos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the expression with negative or positive operator applied. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_lhs</td><td>Binary operator expression to apply unary operator. </td></tr>
+    <tr><td class="paramname">_isNeg</td><td>Indicates whether unary operator to apply is negative. </td></tr>
+    <tr><td class="paramname">_isPos</td><td>Indicates whether unary operator to apply is positive._abort  Expression with unary operator applied. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01236">1236</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -828,7 +886,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00722">722</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00729">729</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -903,7 +961,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01009">1009</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01016">1016</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -932,6 +990,40 @@ License</h1>
 <p>initialize symbol table <em>s</em> with predefined procedures and global variables </p>
 
 <p>Definition at line <a class="el" href="parser_8cpp_source.html#l00260">260</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7ebde2ae35f257dee85d80a3735263c2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CParser::isLeftmostConstant </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCAstBinaryOp.html">CAstBinaryOp</a> *&#160;</td>
+          <td class="paramname"><em>_lhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if leftmost operand of given binary operator is constant or not. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_lhs</td><td>Binary operator expression to check.  true when leftmost operand is constant.  false when leftmost operand is not constant. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01216">1216</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1055,7 +1147,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01062">1062</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01069">1069</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1140,7 +1232,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01209">1209</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01341">1341</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1180,7 +1272,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00843">843</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00850">850</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1238,7 +1330,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00928">928</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00935">935</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1278,7 +1370,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01484">1484</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01644">1644</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1329,7 +1421,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00772">772</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l00779">779</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1369,7 +1461,7 @@ License</h1>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01040">1040</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="parser_8cpp_source.html#l01047">1047</a> of file <a class="el" href="parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -1394,7 +1486,7 @@ License</h1>
 
 <p>error flag </p>
 
-<p>Definition at line <a class="el" href="parser_8h_source.html#l00223">223</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p>Definition at line <a class="el" href="parser_8h_source.html#l00236">236</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -1418,7 +1510,7 @@ License</h1>
 
 <p>error token </p>
 
-<p>Definition at line <a class="el" href="parser_8h_source.html#l00221">221</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p>Definition at line <a class="el" href="parser_8h_source.html#l00234">234</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -1442,7 +1534,7 @@ License</h1>
 
 <p>error message </p>
 
-<p>Definition at line <a class="el" href="parser_8h_source.html#l00222">222</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p>Definition at line <a class="el" href="parser_8h_source.html#l00235">235</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -1466,7 +1558,7 @@ License</h1>
 
 <p>root node of the program </p>
 
-<p>Definition at line <a class="el" href="parser_8h_source.html#l00217">217</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p>Definition at line <a class="el" href="parser_8h_source.html#l00230">230</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -1490,7 +1582,7 @@ License</h1>
 
 <p><a class="el" href="classCScanner.html" title="scanner ">CScanner</a> instance. </p>
 
-<p>Definition at line <a class="el" href="parser_8h_source.html#l00216">216</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p>Definition at line <a class="el" href="parser_8h_source.html#l00229">229</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -1514,7 +1606,7 @@ License</h1>
 
 <p>current token </p>
 
-<p>Definition at line <a class="el" href="parser_8h_source.html#l00218">218</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p>Definition at line <a class="el" href="parser_8h_source.html#l00231">231</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -1525,7 +1617,7 @@ License</h1>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 18 2016 06:49:45 for SnuPL Compiler by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 1 2016 12:43:51 for SnuPL Compiler by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

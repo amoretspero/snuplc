@@ -54,4 +54,10 @@ Support <code>opSub</code>, <code>opMul</code>, <code>opDiv</code> for emitting 
 Implemented <code>CBackendx86::Operand</code> function for case of <code>CTacConst</code>, <code>CTacName</code>, <code>CTacTemp</code>.  
 Now source code uses more predefined functions, such as <code>CBackendx86::Load</code>, <code>CBackendx86::Store</code> and so on.  
 Fixed problem of <code>CTacTemp</code> without offset and base register. Cause was inappropriate calling of <code>CBackendx86::EmitCodeBlock</code>.  
-At <code>CBackendx86::EmitScope</code>, <code>CBackendx86::EmitCodeBlock</code> should be called with current scope, which is given as parameter.
+At <code>CBackendx86::EmitScope</code>, <code>CBackendx86::EmitCodeBlock</code> should be called with current scope, which is given as parameter.  
+  
+**2016-06-01 16:03 KST**  
+Fixed bug for stack initialization. When stack offset used is zero, need not to initialize.  
+Implemented <code>CBackendx86::EmitInstruction</code> function for case of <code>opAddress</code>, <code>opGoto</code>, <code>relOp</code>, <code>opParam</code>, <code>opCall</code>.  
+Added array and pointer type support at <code>CBackendx86::ComputeStackOffset</code> for local and parameter.  
+Implemented <code>CBackendx86::OperandSize</code> function. Simple method is used, so verification is needed for complex cases.

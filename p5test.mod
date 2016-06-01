@@ -3,18 +3,32 @@ module hello;
 var i, j : integer;
 		b : boolean;
 		c : char;
+		arr0 : integer[5];
 
-function foo (b, b6 : boolean; i1 : integer; b5 : boolean; c3 : char; i2 : integer) : integer;
+function foo (i1 : integer) : integer;
 var a : integer;
 		z : integer;
 		c1 : char;
 		b1 : boolean;
 begin
-	a := z + 2;
-	z := a * 2;
-	a := z / 3
+	b := true && false;
+	b := true || false;
+	if ('a' = 'z') then
+		i1 := 1
+	else
+		i1 := 2
+	end
 end foo;
 
+procedure bar (i2 : integer; ia : integer[5]);
+var arr : integer[5];
 begin
-	i := j + 1
+end bar;
+
+begin
+	i := j + 1;
+	foo(i);
+	foo(1);
+	bar(j, arr0);
+	bar(2, arr0)
 end hello.

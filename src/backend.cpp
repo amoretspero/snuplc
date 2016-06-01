@@ -144,7 +144,9 @@ void CBackendx86::EmitCode(void)
   vector<CScope*>::const_iterator subscopesIter = subscopes.begin();
   while (subscopesIter != subscopes.end())
   {
+    SetScope(*subscopesIter);
     EmitScope(*subscopesIter);
+    SetScope(_m);
     subscopesIter++;
   }
   
@@ -233,7 +235,7 @@ void CBackendx86::EmitScope(CScope *scope)
   
   _out << endl;
   
-  if (stackOffsetResult < 20) // When stack offset is rather small. Manually set them. This may take at most 5 lines of assembly code.
+  if (stackOffsetResult < 20 && stackOffsetResult > 0) // When stack offset is rather small. Manually set them. This may take at most 5 lines of assembly code.
   {
     EmitInstruction("xorl", "%eax, %eax", "memset local stack area to 0"); // Make %eax as zero.
     int stackOffsetWordCnt = stackOffsetResult/4; // Get how many word(32-bit) should be initialized.
@@ -245,8 +247,9 @@ void CBackendx86::EmitScope(CScope *scope)
       EmitInstruction("movl", content.str());
       stackOffsetWordCnt--;
     }
+    _out << endl;
   }
-  else // When stack offset is rather big. Use cld, rep, stosl to initialize stack for local variables.
+  else if (stackOffsetResult >= 20) // When stack offset is rather big. Use cld, rep, stosl to initialize stack for local variables.
   {
     EmitInstruction("cld", "", "memset local stack area to 0"); // Clear direction flags.
     EmitInstruction("xorl", "%eax, %eax"); // Make %eax as zero.
@@ -256,12 +259,11 @@ void CBackendx86::EmitScope(CScope *scope)
     EmitInstruction("movl", content.str()); // Calculate how many word(32-bit) should be initialized.
     EmitInstruction("mov", "%esp, %edi"); // Set relative offset for stosl instruction.
     EmitInstruction("rep", "stosl"); // Repeat stosl for %ecx times.
+    _out << endl;
     // For more information of rep and stosl instruction, visit below two links.
     // rep instruction : https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-64/index.html
     // stosl instruction : https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-60/index.html
   }
-  
-  _out << endl;
   
   // Function Body
   _out << _ind << "# function body" << endl;
@@ -486,6 +488,7 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
       
       Store(i->GetDest(), 'a', "");
       break;
+    
 
     // memory operations
     // dst = src1
@@ -506,6 +509,21 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
     // dst = &src1
     // TODO
     // dst = *src1
+    case opAddress:
+      //
+      // For reference operation of dst = &src1, we follow the rule:
+      // 1) Get address of src1 to eax. (Instruction : leal src1, %eax)
+      // 2) Store the value of eax to dst. (Instruction : movl %eax, dst)
+      //
+      content << Operand(i->GetSrc(1));
+      content << ", ";
+      content << "%eax";
+      EmitInstruction("leal", content.str(), cmt.str());
+      content.str("");
+      
+      Store(i->GetDest(), 'a');
+      break;
+    
     case opDeref:
       // opDeref not generated for now
       EmitInstruction("# opDeref", "not implemented", cmt.str());
@@ -515,13 +533,78 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
     // unconditional branching
     // goto dst
     // TODO
+    case opGoto:
+      //
+      // For goto of goto dst, we follow the rule:
+      // 1) Unconditionally branch to l_(scopeName)_(dst).
+      //
+      EmitInstruction("jmp", Label(dynamic_cast<CTacLabel*>(i->GetDest())), cmt.str());
+      break;
 
     // conditional branching
     // if src1 relOp src2 then goto dst
     // TODO
+    case opEqual:
+    case opNotEqual:
+    case opBiggerEqual:
+    case opBiggerThan:
+    case opLessEqual:
+    case opLessThan:
+      //
+      // For conditional branching of if src1 relOp src2 then goto dst, we follow the rule:
+      // 1) Load src1 to eax.
+      // 2) Load src2 to ebx.
+      // 3) Compare ebx to eax. (Instruction : cmp %ebx, %eax)
+      // 4) j(relOp) dst
+      //
+      
+      Load(i->GetSrc(1), "%eax", cmt.str());
+      
+      Load(i->GetSrc(2), "%ebx");
+      
+      EmitInstruction("cmpl", "%ebx, %eax");
+      
+      if (op == opEqual) { EmitInstruction("je", Label(dynamic_cast<CTacLabel*>(i->GetDest()))); }
+      else if (op == opNotEqual) { EmitInstruction("jne", Label(dynamic_cast<CTacLabel*>(i->GetDest()))); }
+      else if (op == opBiggerEqual) { EmitInstruction("jge", Label(dynamic_cast<CTacLabel*>(i->GetDest()))); }
+      else if (op == opBiggerThan) { EmitInstruction("jg", Label(dynamic_cast<CTacLabel*>(i->GetDest()))); }
+      else if (op == opLessEqual) { EmitInstruction("jle", Label(dynamic_cast<CTacLabel*>(i->GetDest()))); }
+      else if (op == opLessThan) { EmitInstruction("jl", Label(dynamic_cast<CTacLabel*>(i->GetDest()))); }
+      else { EmitInstruction("###", "Inavlid instruction."); }
+      break;
 
     // function call-related operations
     // TODO
+    case opParam:
+      //
+      // For adding parameter(s) of param (idx) <- src1, we follow the rule:
+      // 1) Load src1 to eax.
+      // 2) push eax to stack.
+      //
+      
+      Load(i->GetSrc(1), "%eax", cmt.str());
+      
+      EmitInstruction("pushl", "%eax");
+      break;
+    
+    case opCall:
+      //
+      // For calling function/procedure of call (dst) <- src1, we follow the rule:
+      // 1) Call (src1). Result will be stored at eax.
+      // 2) Add 4 to esp. This will get esp to original position.
+      // 3) If function, Store the value of eax to dst.
+      //
+      
+      EmitInstruction("call", dynamic_cast<CTacName*>(i->GetSrc(1))->GetSymbol()->GetName(), cmt.str());
+      
+      EmitInstruction("addl", "$4, %esp");
+      
+      if (i->GetDest() != NULL)
+      {
+        Store(i->GetDest(), 'a');
+      }
+      break;
+      
 
     // special
     case opLabel:
@@ -683,6 +766,12 @@ int CBackendx86::OperandSize(CTac *t) const
   // Hint: you need to take special care of references (incl. references to pointers!)
   //       and arrays. Compare your output to that of the reference implementation
   //       if you are not sure.
+  
+  CTacName* nameCast = dynamic_cast<CTacName*>(t);
+  if (nameCast != NULL)
+  {
+    return nameCast->GetSymbol()->GetDataType()->GetDataSize();
+  }
 
   return size;
 }
@@ -751,6 +840,35 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
         lsym->SetOffset(currentLocalOffset);
         lsym->SetBaseRegister("%ebp");
       }
+      else if (lsym->GetDataType()->IsArray())
+      {
+        // Check for alignment
+        if (occupiedStack%4 != 0)
+        {
+          int alignRemainder = occupiedStack%4;
+          occupiedStack += (4 - alignRemainder);
+          currentLocalOffset -= (4 - alignRemainder);
+        }
+        int dataSize = lsym->GetDataType()->GetSize();
+        currentLocalOffset -= dataSize;
+        occupiedStack += dataSize;
+        lsym->SetOffset(currentLocalOffset);
+        lsym->SetBaseRegister("%ebp");
+      }
+      else if (lsym->GetDataType()->IsPointer())
+      {
+        // Check for alignment
+        if (occupiedStack%4 != 0)
+        {
+          int alignRemainder = occupiedStack%4;
+          occupiedStack += (4 - alignRemainder);
+          currentLocalOffset -= (4 - alignRemainder);
+        }
+        currentLocalOffset -= 4;
+        occupiedStack += 4;
+        lsym->SetOffset(currentLocalOffset);
+        lsym->SetBaseRegister("%ebp");
+      }
     }
   }
   
@@ -793,6 +911,12 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
         lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1));
         lsym->SetBaseRegister("%ebp");
       }
+      else if (lsym->GetDataType()->IsPointer())
+      {
+        cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), index of lsym is : " << dynamic_cast<CSymParam*>(lsym)->GetIndex() << endl;
+        lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1));
+        lsym->SetBaseRegister("%ebp");
+      }
     }
   }
   
@@ -807,7 +931,6 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
     if (lsym->GetSymbolType() == stLocal || lsym->GetSymbolType() == stParam)
     {
       cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), _ind is : <" << _ind << ">." << endl;
-      cout << _ind << "#" << setw(7) << lsym->GetOffset() << "(" << lsym->GetBaseRegister() << ")" << setw(4) << lsym->GetDataType()->GetDataSize() << setw(2) << lsym << endl;
       _out << _ind 
            << "#" 
            << std::right
@@ -817,7 +940,7 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
            << lsym->GetBaseRegister() 
            << ")" 
            << setw(4) 
-           << lsym->GetDataType()->GetDataSize()
+           << lsym->GetDataType()->GetSize()
            << setw(2)
            << lsym
            << endl;
