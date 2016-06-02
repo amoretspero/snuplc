@@ -60,4 +60,22 @@ At <code>CBackendx86::EmitScope</code>, <code>CBackendx86::EmitCodeBlock</code> 
 Fixed bug for stack initialization. When stack offset used is zero, need not to initialize.  
 Implemented <code>CBackendx86::EmitInstruction</code> function for case of <code>opAddress</code>, <code>opGoto</code>, <code>relOp</code>, <code>opParam</code>, <code>opCall</code>.  
 Added array and pointer type support at <code>CBackendx86::ComputeStackOffset</code> for local and parameter.  
-Implemented <code>CBackendx86::OperandSize</code> function. Simple method is used, so verification is needed for complex cases.
+Implemented <code>CBackendx86::OperandSize</code> function. Simple method is used, so verification is needed for complex cases.  
+  
+**2016-06-02 10:13 KST**  
+Implemented <code>CBackendx86::EmitLocalData</code> function.  
+This function takes charge of emitting local array initialization instructions. Array meta data insertion will be address here.  
+Implemented <code>opNeg</code> for <code>CBackendx86::EmitInstruction</code>.  
+Changed <code>opCall</code>, <code>opReturn</code> case for <code>CBackendx86::EmitInstruction</code>.  
+After returning from callee function fo caller function, we increase stack pointer <code>%esp</code> for amount of stack that parameter to callee function occupies.  
+For reference temporary symbol, modified <code>CBackendx86::Operand</code> function to make use of <code>%edi</code>.  
+For <Code>CBackendx86::OperandSize</code>, added support for reference types. <code>CTacReference</code> should be for array or pointer to array.
+So we get the size of base type for them. For temporary symbols, we get the size of itself.  
+Alignment for array is done as follows.  
+The need for alignment is calculated with information of stack when array is pushed into stack without alignment.  
+For example, let's assume that one boolean variable is already present in stack. This occupies 1 byte of stack.  
+If we want to push integer array of 2 elements, this array's size is 16 bytes. When this is pushed into stack without alignment, we use 17 bytes, so we need alignment.  
+In this case, we align before pushing into stack. So after align-and-push, total stack usage will be 20 bytes.  
+If we want to push boolean array of 3 elements, this array's size is 11 bytes. When this is pushed into stack without alignment, we use 12 bytes, so we do not need alignment.  
+In this case, we do not align before pushing into stack. After pushing, total stack usage will be 12 bytes.  
+After allocating all local stack variable, check if alignment is needed and if needed, alignment is done once more.

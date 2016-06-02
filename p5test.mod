@@ -27,6 +27,7 @@ end bar;
 
 begin
 	i := j + 1;
+	b := !b;
 	foo(i);
 	foo(1);
 	bar(j, arr0);

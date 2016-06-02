@@ -126,10 +126,11 @@ l_bar_exit:
 main:
     # stack offsets:
     #    -16(%ebp)   4  [ $t0       <int> %ebp-16 ]
-    #    -20(%ebp)   4  [ $t1       <int> %ebp-20 ]
+    #    -17(%ebp)   1  [ $t1       <bool> %ebp-17 ]
     #    -24(%ebp)   4  [ $t2       <int> %ebp-24 ]
-    #    -28(%ebp)   4  [ $t3       <ptr(4) to <array 5 of <int>>> %ebp-28 ]
+    #    -28(%ebp)   4  [ $t3       <int> %ebp-28 ]
     #    -32(%ebp)   4  [ $t4       <ptr(4) to <array 5 of <int>>> %ebp-32 ]
+    #    -36(%ebp)   4  [ $t5       <ptr(4) to <array 5 of <int>>> %ebp-36 ]
 
     # prologue
     pushl   %ebp                   
@@ -137,11 +138,11 @@ main:
     pushl   %ebx                    # save callee saved registers
     pushl   %esi                   
     pushl   %edi                   
-    subl    $20, %esp               # make room for locals
+    subl    $24, %esp               # make room for locals
 
     cld                             # memset local stack area to 0
     xorl    %eax, %eax             
-    movl    $5, %ecx               
+    movl    $6, %ecx               
     mov     %esp, %edi             
     rep     stosl                  
 
@@ -152,36 +153,49 @@ main:
     movl    %eax, -16(%ebp)        
     movl    -16(%ebp), %eax         #   1:     assign i <- t0
     movl    %eax, i                
-    movl    i, %eax                 #   2:     param  0 <- i
+    movzbl  b, %eax                 #   2:     if     b = 1 goto 3
+    movl    $1, %ebx               
+    cmpl    %ebx, %eax             
+    je      l_hello_3              
+    movl    $1, %eax                #   3:     assign t1 <- 1
+    movb    %al, -17(%ebp)         
+    jmp     l_hello_4               #   4:     goto   4
+l_hello_3:
+    movl    $0, %eax                #   6:     assign t1 <- 0
+    movb    %al, -17(%ebp)         
+l_hello_4:
+    movzbl  -17(%ebp), %eax         #   8:     assign b <- t1
+    movb    %al, b                 
+    movl    i, %eax                 #   9:     param  0 <- i
     pushl   %eax                   
-    call    foo                     #   3:     call   t1 <- foo
-    addl    $4, %esp               
-    movl    %eax, -20(%ebp)        
-    movl    $1, %eax                #   4:     param  0 <- 1
-    pushl   %eax                   
-    call    foo                     #   5:     call   t2 <- foo
+    call    foo                     #  10:     call   t2 <- foo
     addl    $4, %esp               
     movl    %eax, -24(%ebp)        
-    leal    arr0, %eax              #   6:     &()    t3 <- arr0
+    movl    $1, %eax                #  11:     param  0 <- 1
+    pushl   %eax                   
+    call    foo                     #  12:     call   t3 <- foo
+    addl    $4, %esp               
     movl    %eax, -28(%ebp)        
-    movl    -28(%ebp), %eax         #   7:     param  1 <- t3
-    pushl   %eax                   
-    movl    j, %eax                 #   8:     param  0 <- j
-    pushl   %eax                   
-    call    bar                     #   9:     call   bar
-    addl    $8, %esp               
-    leal    arr0, %eax              #  10:     &()    t4 <- arr0
+    leal    arr0, %eax              #  13:     &()    t4 <- arr0
     movl    %eax, -32(%ebp)        
-    movl    -32(%ebp), %eax         #  11:     param  1 <- t4
+    movl    -32(%ebp), %eax         #  14:     param  1 <- t4
     pushl   %eax                   
-    movl    $2, %eax                #  12:     param  0 <- 2
+    movl    j, %eax                 #  15:     param  0 <- j
     pushl   %eax                   
-    call    bar                     #  13:     call   bar
+    call    bar                     #  16:     call   bar
+    addl    $8, %esp               
+    leal    arr0, %eax              #  17:     &()    t5 <- arr0
+    movl    %eax, -36(%ebp)        
+    movl    -36(%ebp), %eax         #  18:     param  1 <- t5
+    pushl   %eax                   
+    movl    $2, %eax                #  19:     param  0 <- 2
+    pushl   %eax                   
+    call    bar                     #  20:     call   bar
     addl    $8, %esp               
 
 l_hello_exit:
     # epilogue
-    addl    $20, %esp               # remove locals
+    addl    $24, %esp               # remove locals
     popl    %edi                   
     popl    %esi                   
     popl    %ebx                   
