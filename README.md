@@ -78,4 +78,12 @@ If we want to push integer array of 2 elements, this array's size is 16 bytes. W
 In this case, we align before pushing into stack. So after align-and-push, total stack usage will be 20 bytes.  
 If we want to push boolean array of 3 elements, this array's size is 11 bytes. When this is pushed into stack without alignment, we use 12 bytes, so we do not need alignment.  
 In this case, we do not align before pushing into stack. After pushing, total stack usage will be 12 bytes.  
-After allocating all local stack variable, check if alignment is needed and if needed, alignment is done once more.
+After allocating all local stack variable, check if alignment is needed and if needed, alignment is done once more.  
+  
+**2016-06-07 11:50 KST**  
+Fixed bug with typechecking.  
+Relational operator type matching is added.  
+Now compiler will support only integer type operands for <code>opAdd</code>, <code>opSub</code>, <code>opMul</code>, <code>opDiv</code>.  
+Boolean, Integer, Char types are all supported for <code>opEqual</code>, <code>opNotEqual</code>.  
+Boolean type only for <code>opAnd</code>, <code>opOr</code>.  
+Integer type only for <code>opBiggerThan</code>, <code>opBiggerEqual</code>, <code>opLessThan</code>, <code>opLessEqual</code>.

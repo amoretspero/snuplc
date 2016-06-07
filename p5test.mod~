@@ -1,0 +1,9 @@
+module hello;
+
+procedure bar ();
+var arr : boolean[2147483624];
+begin
+end bar;
+
+begin
+end hello.

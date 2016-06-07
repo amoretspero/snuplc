@@ -21,8 +21,8 @@
     # scope foo
 foo:
     # stack offsets:
-    #    -16(%ebp)   4  [ $t0       <int> %ebp-16 ]
-    #    -20(%ebp)   4  [ $t1       <int> %ebp-20 ]
+    #    -16(%ebp)   4  [ $t1       <int> %ebp-16 ]
+    #    -20(%ebp)   4  [ $t2       <int> %ebp-20 ]
     #      8(%ebp)   4  [ %v        <int> %ebp+8 ]
 
     # prologue
@@ -38,15 +38,15 @@ foo:
     movl    %eax, 0(%esp)          
 
     # function body
-    movl    $1, %eax                #   0:     add    t0 <- 1, 2
+    movl    $1, %eax                #   0:     add    t1 <- 1, 2
     movl    $2, %ebx               
     addl    %ebx, %eax             
     movl    %eax, -16(%ebp)        
-    movl    -16(%ebp), %eax         #   1:     mul    t1 <- t0, v
+    movl    -16(%ebp), %eax         #   1:     mul    t2 <- t1, v
     movl    8(%ebp), %ebx          
     imull   %ebx                   
     movl    %eax, -20(%ebp)        
-    movl    -20(%ebp), %eax         #   2:     assign i <- t1
+    movl    -20(%ebp), %eax         #   2:     assign i <- t2
     movl    %eax, i                
 
 l_foo_exit:
@@ -65,9 +65,9 @@ bar:
     #     12(%ebp)   4  [ %p2       <int> %ebp+12 ]
     #     16(%ebp)   4  [ %p3       <int> %ebp+16 ]
     #     20(%ebp)   4  [ %p4       <int> %ebp+20 ]
-    #    -16(%ebp)   4  [ $t0       <int> %ebp-16 ]
-    #    -20(%ebp)   4  [ $t1       <int> %ebp-20 ]
-    #    -24(%ebp)   4  [ $t2       <int> %ebp-24 ]
+    #    -16(%ebp)   4  [ $t1       <int> %ebp-16 ]
+    #    -20(%ebp)   4  [ $t2       <int> %ebp-20 ]
+    #    -24(%ebp)   4  [ $t3       <int> %ebp-24 ]
 
     # prologue
     pushl   %ebp                   
@@ -83,19 +83,19 @@ bar:
     movl    %eax, 0(%esp)          
 
     # function body
-    movl    8(%ebp), %eax           #   0:     add    t0 <- p1, p2
+    movl    8(%ebp), %eax           #   0:     add    t1 <- p1, p2
     movl    12(%ebp), %ebx         
     addl    %ebx, %eax             
     movl    %eax, -16(%ebp)        
-    movl    16(%ebp), %eax          #   1:     mul    t1 <- p3, p4
+    movl    16(%ebp), %eax          #   1:     mul    t2 <- p3, p4
     movl    20(%ebp), %ebx         
     imull   %ebx                   
     movl    %eax, -20(%ebp)        
-    movl    -16(%ebp), %eax         #   2:     add    t2 <- t0, t1
+    movl    -16(%ebp), %eax         #   2:     add    t3 <- t1, t2
     movl    -20(%ebp), %ebx        
     addl    %ebx, %eax             
     movl    %eax, -24(%ebp)        
-    movl    -24(%ebp), %eax         #   3:     return t2
+    movl    -24(%ebp), %eax         #   3:     return t3
     jmp     l_bar_exit             
 
 l_bar_exit:

@@ -425,6 +425,17 @@ CCodeBlock* CScope::GetCodeBlock(void) const
 CTacTemp* CScope::CreateTemp(const CType *type)
 {
   ostringstream tmp;
+  stringstream strChk;
+  strChk << "t";
+  strChk << _temp_id;
+  
+  while (this->GetSymbolTable()->FindSymbol(strChk.str(), sLocal) != NULL || this->GetSymbolTable()->FindSymbol(strChk.str(), sGlobal) != NULL)
+  {
+    _temp_id++;
+    strChk.str("");
+    strChk << "t";
+    strChk << _temp_id;
+  }
   tmp << "t" << _temp_id++;
 
   CSymbol *s = new CSymLocal(tmp.str(), type);

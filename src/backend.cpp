@@ -449,6 +449,7 @@ void CBackendx86::EmitLocalData(CScope *scope)
         content.str("");
         cmt.str("");
         dimElemCnt++;
+        arrType = dynamic_cast<const CArrayType*>(arrType->GetInnerType());
       }
       
       //_out << endl;
@@ -1065,7 +1066,8 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
            << "(" 
            << lsym->GetBaseRegister() 
            << ")" 
-           << setw(4) 
+           << "  "
+           << setw(2) 
            << lsym->GetDataType()->GetSize()
            << setw(2)
            << lsym

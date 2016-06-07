@@ -17,7 +17,7 @@ def main():
   total = 0
   success = 0
 
-  for root, dirs, files in os.walk("./test/semanal"):
+  for root, dirs, files in os.walk("./test/claim"):
     for f in files:
       if f.endswith(".mod"):
         total += 1

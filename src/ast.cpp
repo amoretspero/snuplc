@@ -1256,10 +1256,10 @@ bool CAstBinaryOp::TypeCheck(CToken *t, string *msg) const
     else if (GetOperation() == opOr) { opStr = "or"; }
     else if (GetOperation() == opEqual) { opStr = "equal"; }
     else if (GetOperation() == opNotEqual) { opStr = "notequal"; }
-    else if (GetOperation() == opBiggerEqual) { opStr = "biggerequal"; }
-    else if (GetOperation() == opBiggerThan) { opStr = "biggerthan"; }
-    else if (GetOperation() == opLessEqual) { opStr = "lessequal"; }
-    else if (GetOperation() == opLessThan) { opStr = "lessthan"; }
+    else if (GetOperation() == opBiggerEqual) { opStr = ">="; }
+    else if (GetOperation() == opBiggerThan) { opStr = ">"; }
+    else if (GetOperation() == opLessEqual) { opStr = "<="; }
+    else if (GetOperation() == opLessThan) { opStr = "<"; }
     else { opStr = "invalid"; }
     
     *msg = opStr + ": type mismatch.\n" + "  " + "left  operand: " + ssLeft.str() + "\n  " + "right operand: " + ssRight.str();
@@ -1272,21 +1272,37 @@ bool CAstBinaryOp::TypeCheck(CToken *t, string *msg) const
 const CType* CAstBinaryOp::GetType(void) const
 {
   EOperation _operator = GetOperation(); // Performed operation.
-  if (_operator == opAdd || _operator == opSub || _operator == opMul || _operator == opDiv) // When integer/char operator.
+  if (_operator == opAdd || _operator == opSub || _operator == opMul || _operator == opDiv) // When integer operator.
   {
-    if (GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL || !GetLeft()->GetType()->Match(GetRight()->GetType())) // If LHS or RHS is NULL.
+    if (GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL || !GetLeft()->GetType()->IsInt() || !GetRight()->GetType()->IsInt() || !GetLeft()->GetType()->Match(GetRight()->GetType())) // If LHS or RHS is NULL.
     {
       return NULL;
     }
     return GetLeft()->GetType(); // When LHS and RHS are both non-NULL.
   }
-  else // When boolean operator.
+  else if (_operator == opEqual || _operator == opNotEqual) // When boolean operator of equal or notEqual.
   {
     if (GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL || !GetLeft()->GetType()->Match(GetRight()->GetType())) // If LHS or RHS is NULL.
     {
       return NULL;
     }
     return CTypeManager::Get()->GetBool(); // When LHS and RHS are both non-NULL.
+  }
+  else if (_operator == opOr || _operator == opAnd) // When boolean operator of bool OP bool type.
+  {
+    if (GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL || !GetLeft()->GetType()->IsBoolean() || !GetRight()->GetType()->IsBoolean() || !GetLeft()->GetType()->Match(GetRight()->GetType()))
+    {
+      return NULL;
+    }
+    return CTypeManager::Get()->GetBool();
+  }
+  else
+  {
+    if (GetLeft()->GetType() == NULL || GetRight()->GetType() == NULL || !GetLeft()->GetType()->IsInt() || !GetRight()->GetType()->IsInt() || !GetLeft()->GetType()->Match(GetRight()->GetType()))
+    {
+      return NULL;
+    }
+    return CTypeManager::Get()->GetBool();
   }
 }
 

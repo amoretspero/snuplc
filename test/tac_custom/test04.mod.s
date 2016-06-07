@@ -23,7 +23,7 @@ foo:
     # stack offsets:
     #      8(%ebp)   4  [ %a        <int> %ebp+8 ]
     #    -16(%ebp)   4  [ $p1       <int> %ebp-16 ]
-    #    -20(%ebp)   4  [ $t0       <int> %ebp-20 ]
+    #    -20(%ebp)   4  [ $t8       <int> %ebp-20 ]
 
     # prologue
     pushl   %ebp                   
@@ -40,11 +40,11 @@ foo:
     # function body
     movl    i, %eax                 #   0:     assign a <- i
     movl    %eax, 8(%ebp)          
-    movl    8(%ebp), %eax           #   1:     add    t0 <- a, 1
+    movl    8(%ebp), %eax           #   1:     add    t8 <- a, 1
     movl    $1, %ebx               
     addl    %ebx, %eax             
     movl    %eax, -20(%ebp)        
-    movl    -20(%ebp), %eax         #   2:     assign a <- t0
+    movl    -20(%ebp), %eax         #   2:     assign a <- t8
     movl    %eax, 8(%ebp)          
     jmp     l_foo_exit             
 
@@ -61,9 +61,9 @@ l_foo_exit:
 bar:
     # stack offsets:
     #      8(%ebp)   1  [ %d        <bool> %ebp+8 ]
-    #    -13(%ebp)   1  [ $t0       <bool> %ebp-13 ]
-    #    -20(%ebp)   4  [ $t1       <int> %ebp-20 ]
-    #    -21(%ebp)   1  [ $t2       <bool> %ebp-21 ]
+    #    -13(%ebp)   1  [ $t10      <bool> %ebp-13 ]
+    #    -14(%ebp)   1  [ $t8       <bool> %ebp-14 ]
+    #    -20(%ebp)   4  [ $t9       <int> %ebp-20 ]
 
     # prologue
     pushl   %ebp                   
@@ -71,10 +71,9 @@ bar:
     pushl   %ebx                    # save callee saved registers
     pushl   %esi                   
     pushl   %edi                   
-    subl    $12, %esp               # make room for locals
+    subl    $8, %esp                # make room for locals
 
     xorl    %eax, %eax              # memset local stack area to 0
-    movl    %eax, 8(%esp)          
     movl    %eax, 4(%esp)          
     movl    %eax, 0(%esp)          
 
@@ -93,21 +92,21 @@ l_bar_2_if_false:
     movl    $1, %ebx               
     cmpl    %ebx, %eax             
     je      l_bar_6                
-    movl    $1, %eax                #   7:     assign t0 <- 1
-    movb    %al, -13(%ebp)         
+    movl    $1, %eax                #   7:     assign t8 <- 1
+    movb    %al, -14(%ebp)         
     jmp     l_bar_7                 #   8:     goto   7
 l_bar_6:
-    movl    $0, %eax                #  10:     assign t0 <- 0
-    movb    %al, -13(%ebp)         
+    movl    $0, %eax                #  10:     assign t8 <- 0
+    movb    %al, -14(%ebp)         
 l_bar_7:
-    movzbl  -13(%ebp), %eax         #  12:     assign b <- t0
+    movzbl  -14(%ebp), %eax         #  12:     assign b <- t8
     movb    %al, b                 
 l_bar_0:
-    movl    j, %eax                 #  14:     add    t1 <- j, k
+    movl    j, %eax                 #  14:     add    t9 <- j, k
     movl    k, %ebx                
     addl    %ebx, %eax             
     movl    %eax, -20(%ebp)        
-    movl    -20(%ebp), %eax         #  15:     assign i <- t1
+    movl    -20(%ebp), %eax         #  15:     assign i <- t9
     movl    %eax, i                
     movzbl  8(%ebp), %eax           #  16:     if     d = 1 goto 11
     movl    $1, %ebx               
@@ -119,19 +118,19 @@ l_bar_0:
     je      l_bar_10               
     jmp     l_bar_11                #  18:     goto   11
 l_bar_10:
-    movl    $1, %eax                #  20:     assign t2 <- 1
-    movb    %al, -21(%ebp)         
+    movl    $1, %eax                #  20:     assign t10 <- 1
+    movb    %al, -13(%ebp)         
     jmp     l_bar_12                #  21:     goto   12
 l_bar_11:
-    movl    $0, %eax                #  23:     assign t2 <- 0
-    movb    %al, -21(%ebp)         
+    movl    $0, %eax                #  23:     assign t10 <- 0
+    movb    %al, -13(%ebp)         
 l_bar_12:
-    movzbl  -21(%ebp), %eax         #  25:     return t2
+    movzbl  -13(%ebp), %eax         #  25:     return t10
     jmp     l_bar_exit             
 
 l_bar_exit:
     # epilogue
-    addl    $12, %esp               # remove locals
+    addl    $8, %esp                # remove locals
     popl    %edi                   
     popl    %esi                   
     popl    %ebx                   

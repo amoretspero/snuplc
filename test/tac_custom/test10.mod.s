@@ -24,13 +24,13 @@ foo:
     #      8(%ebp)   1  [ %p1       <bool> %ebp+8 ]
     #     12(%ebp)   4  [ %p2       <ptr(4) to <array 5 of <bool>>> %ebp+12 ]
     #     16(%ebp)   4  [ %p3       <ptr(4) to <array 5 of <array 5 of <bool>>>> %ebp+16 ]
-    #    -16(%ebp)   4  [ $t0       <int> %ebp-16 ]
-    #    -20(%ebp)   4  [ $t1       <int> %ebp-20 ]
-    #    -24(%ebp)   4  [ $t2       <int> %ebp-24 ]
-    #    -28(%ebp)   4  [ $t3       <int> %ebp-28 ]
-    #    -32(%ebp)   4  [ $t4       <int> %ebp-32 ]
-    #    -36(%ebp)   4  [ $t5       <int> %ebp-36 ]
-    #    -40(%ebp)   4  [ $t6       <int> %ebp-40 ]
+    #    -16(%ebp)   4  [ $t318     <int> %ebp-16 ]
+    #    -20(%ebp)   4  [ $t319     <int> %ebp-20 ]
+    #    -24(%ebp)   4  [ $t320     <int> %ebp-24 ]
+    #    -28(%ebp)   4  [ $t321     <int> %ebp-28 ]
+    #    -32(%ebp)   4  [ $t322     <int> %ebp-32 ]
+    #    -36(%ebp)   4  [ $t323     <int> %ebp-36 ]
+    #    -40(%ebp)   4  [ $t324     <int> %ebp-40 ]
 
     # prologue
     pushl   %ebp                   
@@ -51,36 +51,36 @@ foo:
     pushl   %eax                   
     movl    16(%ebp), %eax          #   1:     param  0 <- p3
     pushl   %eax                   
-    call    DIM                     #   2:     call   t0 <- DIM
+    call    DIM                     #   2:     call   t318 <- DIM
     addl    $8, %esp               
     movl    %eax, -16(%ebp)        
-    movl    $1, %eax                #   3:     mul    t1 <- 1, t0
+    movl    $1, %eax                #   3:     mul    t319 <- 1, t318
     movl    -16(%ebp), %ebx        
     imull   %ebx                   
     movl    %eax, -20(%ebp)        
-    movl    -20(%ebp), %eax         #   4:     add    t2 <- t1, 2
+    movl    -20(%ebp), %eax         #   4:     add    t320 <- t319, 2
     movl    $2, %ebx               
     addl    %ebx, %eax             
     movl    %eax, -24(%ebp)        
-    movl    -24(%ebp), %eax         #   5:     mul    t3 <- t2, 1
+    movl    -24(%ebp), %eax         #   5:     mul    t321 <- t320, 1
     movl    $1, %ebx               
     imull   %ebx                   
     movl    %eax, -28(%ebp)        
     movl    16(%ebp), %eax          #   6:     param  0 <- p3
     pushl   %eax                   
-    call    DOFS                    #   7:     call   t4 <- DOFS
+    call    DOFS                    #   7:     call   t322 <- DOFS
     addl    $4, %esp               
     movl    %eax, -32(%ebp)        
-    movl    -28(%ebp), %eax         #   8:     add    t5 <- t3, t4
+    movl    -28(%ebp), %eax         #   8:     add    t323 <- t321, t322
     movl    -32(%ebp), %ebx        
     addl    %ebx, %eax             
     movl    %eax, -36(%ebp)        
-    movl    16(%ebp), %eax          #   9:     add    t6 <- p3, t5
+    movl    16(%ebp), %eax          #   9:     add    t324 <- p3, t323
     movl    -36(%ebp), %ebx        
     addl    %ebx, %eax             
     movl    %eax, -40(%ebp)        
     movl    -40(%ebp), %edi        
-    movzbl  (%edi), %eax            #  10:     return @t6
+    movzbl  (%edi), %eax            #  10:     return @t324
     jmp     l_foo_exit             
 
 l_foo_exit:
