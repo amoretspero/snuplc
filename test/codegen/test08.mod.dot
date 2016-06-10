@@ -1,0 +1,10 @@
+digraph IR {
+  graph [fontname="Times New Roman",fontsize=10];
+  node  [fontname="Courier New",fontsize=10];
+  edge  [fontname="Times New Roman",fontsize=10];
+
+  // scope 'test08'
+  test08_cb [label="test08\r  0:     call   test\l",shape=box]
+  // scope 'test'
+  test_cb [label="test\r  0:     &()    t0 <- a\l  1:     mul    t1 <- 0, 4\l  2:     &()    t2 <- a\l  3:     param  0 <- t2\l  4:     call   t3 <- DOFS\l  5:     add    t4 <- t1, t3\l  6:     add    t5 <- t0, t4\l  7:     assign @t5 <- 1\l  8:     assign i <- 1\l  9: 3_while_cond:\l 10:     if     i < 10 goto 4_while_body\l 11:     goto   2\l 12: 4_while_body:\l 13:     sub    t6 <- 10, i\l 14:     &()    t7 <- a\l 15:     mul    t8 <- i, 4\l 16:     &()    t9 <- a\l 17:     param  0 <- t9\l 18:     call   t10 <- DOFS\l 19:     add    t11 <- t8, t10\l 20:     add    t12 <- t7, t11\l 21:     assign @t12 <- t6\l 22:     add    t13 <- i, 1\l 23:     assign i <- t13\l 24:     goto   3_while_cond\l 25: 2:\l 26:     assign i <- 0\l 27: 10_while_cond:\l 28:     if     i < 10 goto 11_while_body\l 29:     goto   9\l 30: 11_while_body:\l 31:     &()    t14 <- a\l 32:     mul    t15 <- i, 4\l 33:     &()    t16 <- a\l 34:     param  0 <- t16\l 35:     call   t17 <- DOFS\l 36:     add    t18 <- t15, t17\l 37:     add    t19 <- t14, t18\l 38:     param  0 <- @t19\l 39:     call   WriteInt\l 40:     add    t20 <- i, 1\l 41:     assign i <- t20\l 42:     goto   10_while_cond\l 43: 9:\l",shape=box]
+};

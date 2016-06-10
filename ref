@@ -1,0 +1,5 @@
+parsing './test/semanal/semantics43.mod'...
+parse error : at 121:3 : undefined identifier.
+
+
+Done.

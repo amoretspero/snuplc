@@ -86,4 +86,8 @@ Relational operator type matching is added.
 Now compiler will support only integer type operands for <code>opAdd</code>, <code>opSub</code>, <code>opMul</code>, <code>opDiv</code>.  
 Boolean, Integer, Char types are all supported for <code>opEqual</code>, <code>opNotEqual</code>.  
 Boolean type only for <code>opAnd</code>, <code>opOr</code>.  
-Integer type only for <code>opBiggerThan</code>, <code>opBiggerEqual</code>, <code>opLessThan</code>, <code>opLessEqual</code>.
+Integer type only for <code>opBiggerThan</code>, <code>opBiggerEqual</code>, <code>opLessThan</code>, <code>opLessEqual</code>.  
+  
+**2016-06-10 23:18 KST**  
+Submitted phase 5.  
+LAST COMMIT of CODE GENERATION PHASE.

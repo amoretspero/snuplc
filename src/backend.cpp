@@ -133,24 +133,20 @@ void CBackendx86::EmitCode(void)
        << _ind << ".extern WriteLn" << endl
        << endl;
 
-  // TODO
-  // forall s in subscopes do
-  //   EmitScope(s)
-  // EmitScope(program)
   
-  SetScope(_m);  
+  SetScope(_m); // Set scope to module.
   
-  const vector<CScope*> subscopes = GetScope()->GetSubscopes();
+  const vector<CScope*> subscopes = GetScope()->GetSubscopes(); // Get subscopes.
   vector<CScope*>::const_iterator subscopesIter = subscopes.begin();
-  while (subscopesIter != subscopes.end())
+  while (subscopesIter != subscopes.end()) // Iterates through subscopes and emit each of them.
   {
-    SetScope(*subscopesIter);
-    EmitScope(*subscopesIter);
-    SetScope(_m);
-    subscopesIter++;
+    SetScope(*subscopesIter); // Set current scope to subscope.
+    EmitScope(*subscopesIter); // Emit subscope.
+    SetScope(_m); // Set current scope to module.
+    subscopesIter++; // Go to next subscope.
   }
   
-  EmitScope(GetScope());
+  EmitScope(GetScope()); // Emit current scope.
 
   _out << _ind << "# end of text section" << endl
        << _ind << "#-----------------------------------------" << endl
@@ -201,20 +197,9 @@ void CBackendx86::EmitScope(CScope *scope)
   // label
   _out << _ind << "# scope " << scope->GetName() << endl
        << label << ":" << endl;
-
-  // TODO
-  // ComputeStackOffsets(scope)
-  //
-  // emit function prologue
-  //
-  // forall i in instructions do
-  //   EmitInstruction(i)
-  //
-  // emit function epilogue
   
   // Compute stack offsets.
-  int stackOffsetResult = 0;
-  cout << "===(DEBUG)===At CBackendx86::EmitScope(CScope *scope), when GetParent() is not NULL, scope name is : " << scope->GetName() << endl;
+  size_t stackOffsetResult = 0;
   stackOffsetResult = ComputeStackOffsets(scope->GetSymbolTable(), 8, -12); // Compute stack offset.
   _out << endl;
   
@@ -391,28 +376,27 @@ void CBackendx86::EmitGlobalData(CScope *scope)
 
 void CBackendx86::EmitLocalData(CScope *scope)
 {
-  assert(scope != NULL);
+  assert(scope != NULL); // Scope should not be NULL.
 
-  // TODO TODO!
-  CSymtab* st = scope->GetSymbolTable();
+  CSymtab* st = scope->GetSymbolTable(); // Get symbol table.
   assert(st != NULL);
   
-  vector<CSymbol*> slist = st->GetSymbols();
+  vector<CSymbol*> slist = st->GetSymbols(); // List of symbols for current scope.
   
   stringstream content;
   stringstream cmt;
   
-  cout << "===(DEBUG)=== At CBackendx86::EmitLocalData(CScope *scope), scope name is : " << scope->GetName() << ", size of slist is : " << slist.size() << endl;
   
   vector<CSymbol*>::const_iterator symbolIter = slist.begin();
   while (symbolIter != slist.end())
   {
     CSymbol* sym = *symbolIter;
-    if (sym->GetDataType()->IsArray())
+    if (sym->GetDataType()->IsArray()) // In EmitLocalData, we only initialize local arrays.
     {
       const CArrayType* arrType = dynamic_cast<const CArrayType*>(sym->GetDataType());
-      int dimCnt = arrType->GetNDim();
+      int dimCnt = arrType->GetNDim(); // Number of dimensions.
       
+      // Write first metadata, i.e. number of dimensions.
       content << "$";
       content << dimCnt;
       content << ",";
@@ -430,12 +414,12 @@ void CBackendx86::EmitLocalData(CScope *scope)
       cmt.str("");
       
       int dimElemCnt = 0;
-      while (dimElemCnt < dimCnt)
+      while (dimElemCnt < dimCnt) // Iterates through dimensions and write each dimention's size.
       {
         content << "$";
         content << arrType->GetNElem();
         content << ",";
-        content << sym->GetOffset() + 4 * (dimElemCnt + 1);
+        content << sym->GetOffset() + 4 * (dimElemCnt + 1); // Metadata for each dimension is stored in order.
         content << "(";
         content << sym->GetBaseRegister();
         content << ")";
@@ -449,12 +433,12 @@ void CBackendx86::EmitLocalData(CScope *scope)
         content.str("");
         cmt.str("");
         dimElemCnt++;
-        arrType = dynamic_cast<const CArrayType*>(arrType->GetInnerType());
+        arrType = dynamic_cast<const CArrayType*>(arrType->GetInnerType()); // Get into inner array.
       }
       
       //_out << endl;
     }
-    symbolIter++;
+    symbolIter++; // Go to next symbol.
   }
   _out << endl;
 }
@@ -483,10 +467,6 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
   switch (op) {
     // binary operators
     // dst = src1 op src2
-    // TODO
-    // unary operators
-    // dst = op src1
-    // TODO
     case opAdd:
     case opSub: 
       //
@@ -531,9 +511,10 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
       
       Store(i->GetDest(), 'a', "");
       break;
-    
+
+    // unary operators
+    // dst = op src1
     case opNeg:
-    //case opPos:
       //
       // For unary negative, positive of dst <- src1, we follow the rule:
       // 1) Load operand src1 to eax.
@@ -549,7 +530,6 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
 
     // memory operations
     // dst = src1
-    // TODO
     case opAssign:
       //
       // For assignment of dst <- src1, we follow the rule:
@@ -564,7 +544,6 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
 
     // pointer operations
     // dst = &src1
-    // TODO
     // dst = *src1
     case opAddress:
       //
@@ -589,7 +568,6 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
 
     // unconditional branching
     // goto dst
-    // TODO
     case opGoto:
       //
       // For goto of goto dst, we follow the rule:
@@ -600,7 +578,6 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
 
     // conditional branching
     // if src1 relOp src2 then goto dst
-    // TODO
     case opEqual:
     case opNotEqual:
     case opBiggerEqual:
@@ -631,7 +608,6 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
       break;
 
     // function call-related operations
-    // TODO
     case opParam:
       //
       // For adding parameter(s) of param (idx) <- src1, we follow the rule:
@@ -654,7 +630,7 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
       
       EmitInstruction("call", dynamic_cast<CTacName*>(i->GetSrc(1))->GetSymbol()->GetName(), cmt.str());
       
-      if (dynamic_cast<const CSymProc*>(dynamic_cast<CTacName*>(i->GetSrc(1))->GetSymbol())->GetNParams() > 0)
+      if (dynamic_cast<const CSymProc*>(dynamic_cast<CTacName*>(i->GetSrc(1))->GetSymbol())->GetNParams() > 0) // When parameters exist, add them.
       {
         content << "$";
         content << 4 * dynamic_cast<const CSymProc*>(dynamic_cast<CTacName*>(i->GetSrc(1))->GetSymbol())->GetNParams();
@@ -678,7 +654,7 @@ void CBackendx86::EmitInstruction(CTacInstr *i)
       // 2) Jump to l_(scopeName)_exit.
       //
       
-      if (i->GetSrc(1) != NULL)
+      if (i->GetSrc(1) != NULL) // When return value exist, load that.
       {
         Load(i->GetSrc(1), "%eax", cmt.str());
       }
@@ -754,43 +730,40 @@ void CBackendx86::Store(CTac *dst, char src_base, string comment)
 
 string CBackendx86::Operand(const CTac *op)
 {
-  string operand;
+  string operand; // Result of making operand string.
 
-  stringstream content;
-  // TODO
-  // return a string representing op
-  // hint: take special care of references (op of type CTacReference)
+  stringstream content; // Content of operand string.
   
-  const CTacConst* constCast = dynamic_cast<const CTacConst*>(op);
-  const CTacTemp* tempCast = dynamic_cast<const CTacTemp*>(op);
-  const CTacName* nameCast = dynamic_cast<const CTacName*>(op);
-  const CTacReference* refCast = dynamic_cast<const CTacReference*>(op);
+  const CTacConst* constCast = dynamic_cast<const CTacConst*>(op); // To check if constant.
+  const CTacTemp* tempCast = dynamic_cast<const CTacTemp*>(op); // To check if temporary symbol.
+  const CTacName* nameCast = dynamic_cast<const CTacName*>(op); // To check if name.
+  const CTacReference* refCast = dynamic_cast<const CTacReference*>(op); // To check if reference.
   
-  if (constCast != NULL)
+  if (constCast != NULL) // When constant.
   {
     content << "$";
-    content << constCast->GetValue();
+    content << constCast->GetValue(); // Get value of constant.
     operand = content.str();
   }
-  else if (tempCast != NULL)
+  else if (tempCast != NULL) // When temporary symbol.
   {
     op->print(cout);
-    const CSymbol* sym = tempCast->GetSymbol(); // TODO
-    content << sym->GetOffset();
+    const CSymbol* sym = tempCast->GetSymbol(); // Get symbol for temporary symbol.
+    content << sym->GetOffset(); // Get offset.
     content << "(";
-    content << sym->GetBaseRegister();
+    content << sym->GetBaseRegister(); // Get base register.
     content << ")";
     operand = content.str();
   }
-  else if (refCast != NULL)
+  else if (refCast != NULL) // When reference.
   {
-    const CSymbol* sym = refCast->GetSymbol();
-    content << sym->GetOffset();
+    const CSymbol* sym = refCast->GetSymbol(); // Get symbol for reference.
+    content << sym->GetOffset(); // Get offset.
     content << "(";
-    content << sym->GetBaseRegister();
+    content << sym->GetBaseRegister(); // Get base register.
     content << ")";
     content << ", ";
-    content << "%edi";
+    content << "%edi"; // Reference is stored at edi.
     EmitInstruction("movl", content.str());
     
     content.str("");
@@ -799,25 +772,25 @@ string CBackendx86::Operand(const CTac *op)
     content << ")";
     operand = content.str();
   }
-  else if (nameCast != NULL)
+  else if (nameCast != NULL) // When name.
   {
-    const CSymbol* sym = nameCast->GetSymbol();
-    if (sym->GetSymbolType() == stGlobal)
+    const CSymbol* sym = nameCast->GetSymbol(); // Get symbol.
+    if (sym->GetSymbolType() == stGlobal) // Global symbol.
     {
-      content << sym->GetName();
+      content << sym->GetName(); // For global symbols, we can use name as it is.
       operand = content.str();
     }
-    else
+    else // Local.
     {
-      content << sym->GetOffset();
+      content << sym->GetOffset(); // Gets offset for symbol.
       content << "(";
-      content << sym->GetBaseRegister();
+      content << sym->GetBaseRegister(); // Gets base register for symbol.
       content << ")";
       operand = content.str();
     }
   }
 
-  return operand;
+  return operand; // Return generated result.
 }
 
 string CBackendx86::Imm(int value) const
@@ -862,36 +835,30 @@ string CBackendx86::Condition(EOperation cond) const
 int CBackendx86::OperandSize(CTac *t) const
 {
   int size = 4;
-
-  // TODO
-  // compute the size for operand t of type CTacName
-  // Hint: you need to take special care of references (incl. references to pointers!)
-  //       and arrays. Compare your output to that of the reference implementation
-  //       if you are not sure.
   
-  CTacTemp* tempCast = dynamic_cast<CTacTemp*>(t);
-  CTacReference* refCast = dynamic_cast<CTacReference*>(t);
-  CTacName* nameCast = dynamic_cast<CTacName*>(t);
-  if (tempCast != NULL)
+  CTacTemp* tempCast = dynamic_cast<CTacTemp*>(t); // To check if temporary symbol.
+  CTacReference* refCast = dynamic_cast<CTacReference*>(t); // To check if reference.
+  CTacName* nameCast = dynamic_cast<CTacName*>(t); // To check if name.
+  if (tempCast != NULL) // When temporary symbol.
   {
-    return tempCast->GetSymbol()->GetDataType()->GetDataSize();
+    return tempCast->GetSymbol()->GetDataType()->GetDataSize(); // Get the size of temporary symbol's data type.
   }
-  else if (refCast != NULL)
+  else if (refCast != NULL) // When reference.
   {
-    const CSymbol* derefSym = refCast->GetDerefSymbol();
-    if (derefSym->GetDataType()->IsArray())
+    const CSymbol* derefSym = refCast->GetDerefSymbol(); // Get the original data symbol.
+    if (derefSym->GetDataType()->IsArray()) // When original data is array.
     {
-      return dynamic_cast<const CArrayType*>(derefSym->GetDataType())->GetBaseType()->GetDataSize();
+      return dynamic_cast<const CArrayType*>(derefSym->GetDataType())->GetBaseType()->GetDataSize(); // Return the array's size.
     }
-    else if (derefSym->GetDataType()->IsPointer())
+    else if (derefSym->GetDataType()->IsPointer()) // When original data is pointer.
     {
-      return dynamic_cast<const CArrayType*>(dynamic_cast<const CPointerType*>(derefSym->GetDataType())->GetBaseType())->GetBaseType()->GetDataSize();
+      return dynamic_cast<const CArrayType*>(dynamic_cast<const CPointerType*>(derefSym->GetDataType())->GetBaseType())->GetBaseType()->GetDataSize(); // Return the size of array that pointer points to.
     }
-    return derefSym->GetDataType()->GetDataSize();
+    return derefSym->GetDataType()->GetDataSize(); // Not array, nor pointer. Return dereferenced symbol's size.
   }
-  else if (nameCast != NULL)
+  else if (nameCast != NULL) // When name.
   {
-    return nameCast->GetSymbol()->GetDataType()->GetSize();
+    return nameCast->GetSymbol()->GetDataType()->GetSize(); // Get symbol and return data size.
   }
 
   return size;
@@ -905,34 +872,18 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
   
   size_t localSymCnt = 0;
   
-  int currentParamOffset = param_ofs;
-  int currentLocalOffset = local_ofs;
-  size_t occupiedStack = 0;
-
-  // TODO
-  // foreach local symbol l in slist do
-  //   compute aligned offset on stack and store in symbol l
-  //   set base register to %ebp
-  //
-  // foreach parameter p in slist do
-  //   compute offset on stack and store in symbol p
-  //   set base register to %ebp
-  //
-  // align size
-  //
-  // dump stack frame to assembly file
+  int currentParamOffset = param_ofs; // This variable keeps track of parameter offset.
+  int currentLocalOffset = local_ofs; // This variable keeps track of stack offset.
+  size_t occupiedStack = 0; // This variable keeps track of how many stack is used.
   
   // For local symbols.
   for (; localSymCnt < slist.size(); localSymCnt++)
   {
-    CSymbol* lsym = slist[localSymCnt];
-    
-    cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), lsym is : " << lsym->GetName() << ", symbol type is : " << lsym->GetSymbolType() << endl;
-    
-    if (lsym->GetSymbolType() == stLocal)
+    CSymbol* lsym = slist[localSymCnt]; // Symbol.
+        
+    if (lsym->GetSymbolType() == stLocal) // Local symbol.
     {
-      // Case when symbol is integer type.
-      if (lsym->GetDataType()->IsInt())
+      if (lsym->GetDataType()->IsInt()) // Case when symbol is integer type.
       {
         // Check for alignment
         if (occupiedStack%4 != 0)
@@ -942,41 +893,41 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
           currentLocalOffset -= (4 - alignRemainder);
         }
         
-        currentLocalOffset -= 4;
-        occupiedStack += 4;
-        lsym->SetOffset(currentLocalOffset);
-        lsym->SetBaseRegister("%ebp");
+        currentLocalOffset -= 4; // Occupy 4 bytes.
+        occupiedStack += 4; // Occupy 4 bytes.
+        lsym->SetOffset(currentLocalOffset); // Set offset of this symbol.
+        lsym->SetBaseRegister("%ebp"); // Set base register of this symbol.
       }
-      else if (lsym->GetDataType()->IsBoolean())
+      else if (lsym->GetDataType()->IsBoolean()) // Case when symbol is boolean type.
       {
-        currentLocalOffset -= 1;
-        occupiedStack += 1;
-        lsym->SetOffset(currentLocalOffset);
-        lsym->SetBaseRegister("%ebp");
+        currentLocalOffset -= 1; // Occupy 1 byte.
+        occupiedStack += 1; // Occupy 1 byte.
+        lsym->SetOffset(currentLocalOffset); // Set offset of this symbol.
+        lsym->SetBaseRegister("%ebp"); // Set base register of this symbol.
       }
-      else if (lsym->GetDataType()->IsChar())
+      else if (lsym->GetDataType()->IsChar()) // Case when symbol is char type.
       {
-        currentLocalOffset -= 1;
-        occupiedStack += 1;
-        lsym->SetOffset(currentLocalOffset);
-        lsym->SetBaseRegister("%ebp");
+        currentLocalOffset -= 1; // Occupy 1 byte.
+        occupiedStack += 1; // Occupy 1 byte.
+        lsym->SetOffset(currentLocalOffset); // Set offset of this symbol.
+        lsym->SetBaseRegister("%ebp"); // Set base register of this symbol.
       }
-      else if (lsym->GetDataType()->IsArray())
+      else if (lsym->GetDataType()->IsArray()) // Case when symbol is array type.
       {
         // Check for alignment
         if ((occupiedStack + lsym->GetDataType()->GetSize())%4 != 0)
         {
-          int alignRemainder = (occupiedStack + lsym->GetDataType()->GetSize())%4;
+          int alignRemainder = (occupiedStack + lsym->GetDataType()->GetSize())%4; // For array, we align with after-pushing stack.
           occupiedStack += (4 - alignRemainder);
           currentLocalOffset -= (4 - alignRemainder);
         }
-        int dataSize = lsym->GetDataType()->GetSize();
-        currentLocalOffset -= dataSize;
-        occupiedStack += dataSize;
-        lsym->SetOffset(currentLocalOffset);
-        lsym->SetBaseRegister("%ebp");
+        int dataSize = lsym->GetDataType()->GetSize(); // Get the data size for this array, including metadata.
+        currentLocalOffset -= dataSize; // Occupy (datasize) bytes.
+        occupiedStack += dataSize; // Occupy (datasize) bytes.
+        lsym->SetOffset(currentLocalOffset); // Set offset of this symbol.
+        lsym->SetBaseRegister("%ebp"); // Set base register of this symbol.
       }
-      else if (lsym->GetDataType()->IsPointer())
+      else if (lsym->GetDataType()->IsPointer()) // Case when symbol is pointer type.
       {
         // Check for alignment
         if (occupiedStack%4 != 0)
@@ -985,10 +936,10 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
           occupiedStack += (4 - alignRemainder);
           currentLocalOffset -= (4 - alignRemainder);
         }
-        currentLocalOffset -= 4;
-        occupiedStack += 4;
-        lsym->SetOffset(currentLocalOffset);
-        lsym->SetBaseRegister("%ebp");
+        currentLocalOffset -= 4; // Occupy 4 bytes.
+        occupiedStack += 4; // Occupy 4 bytes.
+        lsym->SetOffset(currentLocalOffset); // Set offset of this symbol.
+        lsym->SetBaseRegister("%ebp"); // Set base register of this symbol.
       }
     }
   }
@@ -996,62 +947,42 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
   // For parameters.
   for (localSymCnt = 0; localSymCnt < slist.size(); localSymCnt++)
   {
-    CSymbol* lsym = slist[localSymCnt];
-    
-    cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), lsym is : " << lsym->GetName() << ", symbol type is : " << lsym->GetSymbolType() << endl;
-    
-    // TODO: Need to get parameter order to set correct offset.
-    
-    if (lsym->GetSymbolType() == stParam)
+    CSymbol* lsym = slist[localSymCnt]; // Symbol.
+        
+    if (lsym->GetSymbolType() == stParam) // Parameter.
     {
-      // Case when symbol is integer type.
-      if (lsym->GetDataType()->IsInt())
+      if (lsym->GetDataType()->IsInt()) // Case when symbol is integer type.
       {
-        //lsym->SetOffset(currentParamOffset);
-        //lsym->SetBaseRegister("%ebp");
-        //currentParamOffset += 4;
-        cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), index of lsym is : " << dynamic_cast<CSymParam*>(lsym)->GetIndex() << endl;
-        lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1));
-        lsym->SetBaseRegister("%ebp");
+        lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1)); // Set offset of this symbol.
+        lsym->SetBaseRegister("%ebp"); // Set base register of this symbol.
       }
-      else if (lsym->GetDataType()->IsBoolean())
+      else if (lsym->GetDataType()->IsBoolean()) // Case when symbol is boolean type.
       {
-        //lsym->SetOffset(currentParamOffset);
-        //lsym->SetBaseRegister("%ebp");
-        //currentParamOffset += 4;
-        cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), index of lsym is : " << dynamic_cast<CSymParam*>(lsym)->GetIndex() << endl;
-        lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1));
-        lsym->SetBaseRegister("%ebp");
+        lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1)); // Set offset of this symbol.
+        lsym->SetBaseRegister("%ebp"); // Set base register of this symbol.
       }
-      else if (lsym->GetDataType()->IsChar())
+      else if (lsym->GetDataType()->IsChar()) // Case when symbol is char type.
       {
-        //lsym->SetOffset(currentParamOffset);
-        //lsym->SetBaseRegister("%ebp");
-        //currentParamOffset += 4;
-        cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), index of lsym is : " << dynamic_cast<CSymParam*>(lsym)->GetIndex() << endl;
-        lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1));
-        lsym->SetBaseRegister("%ebp");
+        lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1)); // Set offset of this symbol.
+        lsym->SetBaseRegister("%ebp"); // Set base register of this symbol.
       }
-      else if (lsym->GetDataType()->IsPointer())
+      else if (lsym->GetDataType()->IsPointer()) // Case when symbol is pointer type.
       {
-        cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), index of lsym is : " << dynamic_cast<CSymParam*>(lsym)->GetIndex() << endl;
-        lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1));
-        lsym->SetBaseRegister("%ebp");
+        lsym->SetOffset(currentParamOffset + 4 * (dynamic_cast<CSymParam*>(lsym)->GetIndex() - 1)); // Set offset of this symbol.
+        lsym->SetBaseRegister("%ebp"); // Set base register of this symbol.
       }
     }
   }
   
-  // Align size.
   
   // Dump stack frame to assembly file.
   
   _out << _ind << "# stack offsets:" << endl;
   for (localSymCnt = 0; localSymCnt < slist.size(); localSymCnt++)
   {
-    CSymbol* lsym = slist[localSymCnt];
-    if (lsym->GetSymbolType() == stLocal || lsym->GetSymbolType() == stParam)
+    CSymbol* lsym = slist[localSymCnt]; // Symbol.
+    if (lsym->GetSymbolType() == stLocal || lsym->GetSymbolType() == stParam) // Local symbols and parameters are on stack.
     {
-      cout << "===(DEBUG)===At CBackendx86::ComputeStackOffsets(CSymtab *symtab, int param_ofs,int local_ofs), _ind is : <" << _ind << ">." << endl;
       int offsetInd = 7;
       if (currentLocalOffset <= -1000)
       {
@@ -1084,5 +1015,5 @@ size_t CBackendx86::ComputeStackOffsets(CSymtab *symtab,
   }
   
   int size = 4;
-  return occupiedStack;
+  return occupiedStack; // Return the total occupied size of stack.
 }

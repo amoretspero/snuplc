@@ -1,0 +1,10 @@
+digraph IR {
+  graph [fontname="Times New Roman",fontsize=10];
+  node  [fontname="Courier New",fontsize=10];
+  edge  [fontname="Times New Roman",fontsize=10];
+
+  // scope 'arrays'
+  arrays_cb [label="arrays\r  0:     &()    t0 <- A\l  1:     mul    t1 <- 0, 4\l  2:     &()    t2 <- A\l  3:     param  0 <- t2\l  4:     call   t3 <- DOFS\l  5:     add    t4 <- t1, t3\l  6:     add    t5 <- t0, t4\l  7:     assign i <- @t5\l  8:     &()    t6 <- B\l  9:     mul    t7 <- 5, 1\l 10:     &()    t8 <- B\l 11:     param  0 <- t8\l 12:     call   t9 <- DOFS\l 13:     add    t10 <- t7, t9\l 14:     add    t11 <- t6, t10\l 15:     assign b <- @t11\l 16:     &()    t12 <- C\l 17:     mul    t13 <- -1, 1\l 18:     &()    t14 <- C\l 19:     param  0 <- t14\l 20:     call   t15 <- DOFS\l 21:     add    t16 <- t13, t15\l 22:     add    t17 <- t12, t16\l 23:     assign c <- @t17\l 24:     &()    t18 <- A\l 25:     param  0 <- t18\l 26:     call   print_array\l",shape=box]
+  // scope 'print_array'
+  print_array_cb [label="print_array\r",shape=box]
+};

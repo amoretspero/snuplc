@@ -1,0 +1,16 @@
+digraph IR {
+  graph [fontname="Times New Roman",fontsize=10];
+  node  [fontname="Courier New",fontsize=10];
+  edge  [fontname="Times New Roman",fontsize=10];
+
+  // scope 'test12'
+  test12_cb [label="test12\r  0:     call   Test\l",shape=box]
+  // scope 'Int'
+  Int_cb [label="Int\r",shape=box]
+  // scope 'Char'
+  Char_cb [label="Char\r",shape=box]
+  // scope 'Bool'
+  Bool_cb [label="Bool\r",shape=box]
+  // scope 'Test'
+  Test_cb [label="Test\r  0:     call   t0 <- Bool\l  1:     assign b <- t0\l  2:     call   t1 <- Char\l  3:     assign c <- t1\l  4:     call   t2 <- Int\l  5:     assign i <- t2\l",shape=box]
+};

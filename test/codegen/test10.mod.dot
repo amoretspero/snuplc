@@ -1,0 +1,16 @@
+digraph IR {
+  graph [fontname="Times New Roman",fontsize=10];
+  node  [fontname="Courier New",fontsize=10];
+  edge  [fontname="Times New Roman",fontsize=10];
+
+  // scope 'test10'
+  test10_cb [label="test10\r  0:     &()    t0 <- _str_1\l  1:     param  0 <- t0\l  2:     call   WriteStr\l  3:     &()    t1 <- _str_2\l  4:     param  0 <- t1\l  5:     call   t2 <- ReadNumber\l  6:     assign i <- t2\l  7: 3_while_cond:\l  8:     if     i > 0 goto 4_while_body\l  9:     goto   2\l 10: 4_while_body:\l 11:     &()    t3 <- _str_3\l 12:     param  0 <- t3\l 13:     call   WriteStr\l 14:     param  0 <- i\l 15:     call   t4 <- sum_rec\l 16:     param  0 <- t4\l 17:     call   WriteInt\l 18:     call   WriteLn\l 19:     &()    t5 <- _str_4\l 20:     param  0 <- t5\l 21:     call   WriteStr\l 22:     param  0 <- i\l 23:     call   t6 <- sum_iter\l 24:     param  0 <- t6\l 25:     call   WriteInt\l 26:     call   WriteLn\l 27:     &()    t7 <- _str_5\l 28:     param  0 <- t7\l 29:     call   WriteStr\l 30:     param  0 <- i\l 31:     call   t8 <- sum_alg\l 32:     param  0 <- t8\l 33:     call   WriteInt\l 34:     call   WriteLn\l 35:     &()    t9 <- _str_6\l 36:     param  0 <- t9\l 37:     call   t10 <- ReadNumber\l 38:     assign i <- t10\l 39:     goto   3_while_cond\l 40: 2:\l",shape=box]
+  // scope 'sum_rec'
+  sum_rec_cb [label="sum_rec\r  0:     if     n > 0 goto 1_if_true\l  1:     goto   2_if_false\l  2: 1_if_true:\l  3:     sub    t11 <- n, 1\l  4:     param  0 <- t11\l  5:     call   t12 <- sum_rec\l  6:     add    t13 <- n, t12\l  7:     return t13\l  8:     goto   0\l  9: 2_if_false:\l 10:     return 0\l 11: 0:\l",shape=box]
+  // scope 'sum_iter'
+  sum_iter_cb [label="sum_iter\r  0:     assign sum <- 0\l  1:     assign i <- 0\l  2: 3_while_cond:\l  3:     if     i <= n goto 4_while_body\l  4:     goto   2\l  5: 4_while_body:\l  6:     add    t11 <- sum, i\l  7:     assign sum <- t11\l  8:     add    t12 <- i, 1\l  9:     assign i <- t12\l 10:     goto   3_while_cond\l 11: 2:\l 12:     return sum\l",shape=box]
+  // scope 'sum_alg'
+  sum_alg_cb [label="sum_alg\r  0:     add    t11 <- n, 1\l  1:     mul    t12 <- n, t11\l  2:     div    t13 <- t12, 2\l  3:     return t13\l",shape=box]
+  // scope 'ReadNumber'
+  ReadNumber_cb [label="ReadNumber\r  0:     param  0 <- str\l  1:     call   WriteStr\l  2:     call   t11 <- ReadInt\l  3:     assign i <- t11\l  4:     return i\l",shape=box]
+};
